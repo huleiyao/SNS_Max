@@ -6,10 +6,14 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytemax.snsmax.main.mvp.ui.adapter.CommunityPostListAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -18,7 +22,14 @@ import com.bytemax.snsmax.main.di.component.DaggerCommunityListComponent;
 import com.bytemax.snsmax.main.mvp.contract.CommunityListContract;
 import com.bytemax.snsmax.main.mvp.presenter.CommunityListPresenter;
 
-import com.bytemax.snsmax.main.R;
+import com.bytemax.snsmax.R;
+import com.liaoinstan.springview.container.DefaultFooter;
+import com.liaoinstan.springview.container.DefaultHeader;
+import com.liaoinstan.springview.widget.SpringView;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -36,10 +47,22 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class CommunityListFragment extends BaseFragment<CommunityListPresenter> implements CommunityListContract.View {
+    int type;
+    @Inject
+    CommunityPostListAdapter adapter;
+    @BindView(R.id.springview)
+    SpringView springView;
+    @BindView(R.id.recycle_view)
+    RecyclerView recyclerView;
 
-    public static CommunityListFragment newInstance() {
+    public static CommunityListFragment newInstance(int type) {
         CommunityListFragment fragment = new CommunityListFragment();
+        fragment.setType(type);
         return fragment;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
@@ -59,7 +82,32 @@ public class CommunityListFragment extends BaseFragment<CommunityListPresenter> 
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        initList();
+    }
 
+    private void initList() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        springView.setType(SpringView.Type.FOLLOW);
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                springView.setEnableFooter(false);
+//                loadData(true);
+            }
+
+            @Override
+            public void onLoadmore() {
+//                loadData(false);
+            }
+        });
+
+        springView.setEnableFooter(false);
+//        adapter.setOnItemChildClickListener(mPresenter);
+//        adapter.setOnItemClickListener(mPresenter);
+        springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
+        springView.setFooter(new DefaultFooter(getActivity()));
     }
 
     /**

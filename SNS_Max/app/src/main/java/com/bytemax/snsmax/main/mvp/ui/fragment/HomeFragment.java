@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
-import com.bytegem.snsmax.community.mvp.ui.fragment.CommunityListFragment;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;

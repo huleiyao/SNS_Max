@@ -1,5 +1,9 @@
 package com.bytemax.snsmax.main.di.module;
 
+import android.support.v7.widget.RecyclerView;
+
+import com.bytemax.snsmax.main.mvp.ui.adapter.CommunityPostListAdapter;
+import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.di.scope.FragmentScope;
 
 import dagger.Binds;
@@ -8,6 +12,9 @@ import dagger.Provides;
 
 import com.bytemax.snsmax.main.mvp.contract.CommunityListContract;
 import com.bytemax.snsmax.main.mvp.model.CommunityListModel;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 
 /**
@@ -27,4 +34,10 @@ public abstract class CommunityListModule {
 
     @Binds
     abstract CommunityListContract.Model bindCommunityListModel(CommunityListModel model);
+
+    @ActivityScope
+    @Provides
+    static CommunityPostListAdapter provideCommunityPostListAdapter() {
+        return new CommunityPostListAdapter();
+    }
 }
