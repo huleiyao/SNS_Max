@@ -25,6 +25,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.jess.arms.R;
 import com.jess.arms.base.delegate.IActivity;
@@ -93,6 +95,10 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Window window = getWindow();
+        //设置虚拟键盘跟着屏幕自动
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initSwipeBackFinish();
         super.onCreate(savedInstanceState);
         try {

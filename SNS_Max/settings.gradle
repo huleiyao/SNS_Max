@@ -1,1 +1,1 @@
-include ':app',':arms',':arms-autolayout',':arms-imageloader-glide'
+include ':app',':arms',':arms-autolayout',':arms-imageloader-glide', ':common', ':imagepicker', ':community'

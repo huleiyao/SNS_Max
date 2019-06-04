@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bytemax.snsmax">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,15 +12,18 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".main.app.MApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppThemeHasActionBar"
+        tools:replace="theme,label,icon">
         <!-- Arms 配置 -->
         <meta-data
-            android:name="me.jessyan.mvparms.demo.app.GlobalConfiguration"
+            android:name="com.bytemax.snsmax.main.app.GlobalConfiguration"
             android:value="ConfigModule" />
         <meta-data
             android:name="design_width_in_dp"
@@ -30,7 +34,9 @@
 
         <activity
             android:name=".main.mvp.ui.activity.HomeActivity"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

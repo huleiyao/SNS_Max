@@ -1,0 +1,24 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
+}
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation(rootProject.ext.dependencies["appcompat-v7"])
+    implementation rootProject.ext.dependencies["recyclerview-v7"]
+    implementation rootProject.ext.dependencies["support-v4"]
+//    compile 'com.android.support:recyclerview-v7:25.3.1'
+    api 'com.github.chrisbanes.photoview:library:1.2.4'
+    implementation rootProject.ext.dependencies["glide"]
+    implementation project(':arms')
+    api rootProject.ext.dependencies["album"]
+    api rootProject.ext.dependencies["glide-transformations"]
+    api 'com.lzy.net:okhttputils:1.6.5'  //可以单独使用，不需要依赖下方的扩展包
+}

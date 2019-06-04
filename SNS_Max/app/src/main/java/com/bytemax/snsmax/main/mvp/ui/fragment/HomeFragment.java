@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
+import com.bytegem.snsmax.common.bean.FragmentBean;
+import com.bytegem.snsmax.community.mvp.ui.fragment.CommunityListFragment;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -19,6 +24,10 @@ import com.bytemax.snsmax.main.mvp.contract.HomeContract;
 import com.bytemax.snsmax.main.mvp.presenter.HomePresenter;
 
 import com.bytemax.snsmax.R;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -36,10 +45,17 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View {
+    private static HomeFragment instance;
+    @BindView(R.id.tabs)
+    TabLayout tabs;
+    @BindView(R.id.projectPager)
+    ViewPager viewPager;
 
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+//        if (instance == null)
+//            instance = new HomeFragment();
+//        return instance;
+        return new HomeFragment();
     }
 
     @Override
@@ -59,7 +75,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        ArrayList<FragmentBean> fragmentList = new ArrayList<>();
+        fragmentList.add(new FragmentBean("推荐", CommunityListFragment.newInstance(0)));
+        fragmentList.add(new FragmentBean("附近", CommunityListFragment.newInstance(1)));
+        showFragment(fragmentList);
+    }
 
+    public void showFragment(ArrayList<FragmentBean> fragmenList) {
+        viewPager.setAdapter(new VPFragmentAdapter(getChildFragmentManager(), fragmenList));
+        viewPager.setOffscreenPageLimit(fragmenList.size() - 1);
+//        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabs.setupWithViewPager(viewPager);
     }
 
     /**

@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#3FA862</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
+
+    <!-- 底部导航栏 -->
+    <color name="home_bottom_selected_color">@color/colorPrimary</color>
+    <color name="home_unselected_color">@color/color_78</color>
+
+
 </resources>

@@ -8,13 +8,14 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
-
+        classpath 'com.library.tangxiaolv:dexknife-plus:1.0.4'
         //Gradle Android Maven plugin
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         //Gradle Bintray Plugin
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.4.0'
     }
 }
 
@@ -23,6 +24,8 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+        maven { url "http://maven.aliyun.com/nexus/content/repositories/releases" }
     }
 }
 

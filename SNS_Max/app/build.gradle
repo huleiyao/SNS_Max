@@ -37,6 +37,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':arms')
+    implementation project(':common')
+    implementation project(':community')
     implementation rootProject.ext.dependencies["androideventbus"]
     implementation rootProject.ext.dependencies["cardview-v7"]
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
@@ -49,6 +51,7 @@ dependencies {
     implementation rootProject.ext.dependencies["paginate"]
     implementation rootProject.ext.dependencies["autosize"]
     implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
+    implementation 'com.github.forvv231:EasyNavigation:1.0.2'
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]

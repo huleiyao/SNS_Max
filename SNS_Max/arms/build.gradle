@@ -111,6 +111,7 @@ dependencies {
 
     api rootProject.ext.dependencies["bga-swipitem"]
     api rootProject.ext.dependencies["swipebacklayout"]
+
 }
 
 //apply from: '../bintray.gradle'
