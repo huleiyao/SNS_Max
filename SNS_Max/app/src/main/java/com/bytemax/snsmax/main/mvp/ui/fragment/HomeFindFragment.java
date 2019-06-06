@@ -18,9 +18,9 @@ import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytemax.snsmax.main.di.component.DaggerHomeComponent;
-import com.bytemax.snsmax.main.mvp.contract.HomeContract;
-import com.bytemax.snsmax.main.mvp.presenter.HomePresenter;
+import com.bytemax.snsmax.main.di.component.DaggerHomeFindComponent;
+import com.bytemax.snsmax.main.mvp.contract.HomeFindContract;
+import com.bytemax.snsmax.main.mvp.presenter.HomeFindPresenter;
 
 import com.bytemax.snsmax.R;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -36,7 +36,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/03/2019 15:24
+ * Created by MVPArmsTemplate on 06/05/2019 16:17
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -44,23 +44,22 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View {
-    private static HomeFragment instance;
+public class HomeFindFragment extends BaseFragment<HomeFindPresenter> implements HomeFindContract.View {
     @BindView(R.id.tabs)
     SmartTabLayout tabs;
     @BindView(R.id.projectPager)
     ViewPager viewPager;
+    private static HomeFindFragment instance;
 
-    public static HomeFragment newInstance() {
-//        if (instance == null)
-//            instance = new HomeFragment();
-//        return instance;
-        return new HomeFragment();
+    public static HomeFindFragment newInstance() {
+        if (instance == null)
+            instance = new HomeFindFragment();
+        return instance;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerHomeComponent //如找不到该类,请编译一下项目
+        DaggerHomeFindComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -70,14 +69,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_home_find, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         ArrayList<FragmentBean> fragmentList = new ArrayList<>();
-        fragmentList.add(new FragmentBean("推荐", CommunityPostListFragment.newInstance(0)));
-        fragmentList.add(new FragmentBean("附近", CommunityPostListFragment.newInstance(1)));
+        fragmentList.add(new FragmentBean("圈子", CommunityGroupListFragment.newInstance(0)));
+        fragmentList.add(new FragmentBean("热议", CommunityGroupListFragment.newInstance(1)));
         showFragment(fragmentList);
     }
 

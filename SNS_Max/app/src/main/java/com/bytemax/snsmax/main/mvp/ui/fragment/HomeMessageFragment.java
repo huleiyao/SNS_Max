@@ -8,9 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
@@ -18,9 +20,9 @@ import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytemax.snsmax.main.di.component.DaggerHomeComponent;
-import com.bytemax.snsmax.main.mvp.contract.HomeContract;
-import com.bytemax.snsmax.main.mvp.presenter.HomePresenter;
+import com.bytemax.snsmax.main.di.component.DaggerHomeMessageComponent;
+import com.bytemax.snsmax.main.mvp.contract.HomeMessageContract;
+import com.bytemax.snsmax.main.mvp.presenter.HomeMessagePresenter;
 
 import com.bytemax.snsmax.R;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -36,7 +38,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/03/2019 15:24
+ * Created by MVPArmsTemplate on 06/05/2019 16:51
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -44,23 +46,22 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View {
-    private static HomeFragment instance;
+public class HomeMessageFragment extends BaseFragment<HomeMessagePresenter> implements HomeMessageContract.View {
+    private static HomeMessageFragment instance;
     @BindView(R.id.tabs)
     SmartTabLayout tabs;
     @BindView(R.id.projectPager)
     ViewPager viewPager;
 
-    public static HomeFragment newInstance() {
-//        if (instance == null)
-//            instance = new HomeFragment();
-//        return instance;
-        return new HomeFragment();
+    public static HomeMessageFragment newInstance() {
+        if (instance == null)
+            instance = new HomeMessageFragment();
+        return instance;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerHomeComponent //如找不到该类,请编译一下项目
+        DaggerHomeMessageComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -70,14 +71,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_home_message, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         ArrayList<FragmentBean> fragmentList = new ArrayList<>();
-        fragmentList.add(new FragmentBean("推荐", CommunityPostListFragment.newInstance(0)));
-        fragmentList.add(new FragmentBean("附近", CommunityPostListFragment.newInstance(1)));
+        fragmentList.add(new FragmentBean("通知", MessageListFragment.newInstance(0)));
+        fragmentList.add(new FragmentBean("聊天", MessageListFragment.newInstance(1)));
         showFragment(fragmentList);
     }
 

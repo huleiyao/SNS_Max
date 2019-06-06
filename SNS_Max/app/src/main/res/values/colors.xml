@@ -8,6 +8,7 @@
     <!-- 底部导航栏 -->
     <color name="home_bottom_selected_color">@color/colorPrimary</color>
     <color name="home_unselected_color">@color/color_78</color>
-
-
+    <!--首页顶部tab字体颜色-->
+    <color name="home_tab_text_selected_color">@color/color_151b26</color>
+    <color name="home_tab_text_unselected_color">@color/color_b0b8bf</color>
 </resources>

@@ -10,14 +10,14 @@ import com.jess.arms.di.scope.FragmentScope;
 
 import javax.inject.Inject;
 
-import com.bytemax.snsmax.main.mvp.contract.CommunityListContract;
+import com.bytemax.snsmax.main.mvp.contract.CommunityPostListContract;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/04/2019 17:04
+ * Created by MVPArmsTemplate on 06/05/2019 11:20
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -26,14 +26,14 @@ import com.bytemax.snsmax.main.mvp.contract.CommunityListContract;
  * ================================================
  */
 @FragmentScope
-public class CommunityListModel extends BaseModel implements CommunityListContract.Model {
+public class CommunityPostListModel extends BaseModel implements CommunityPostListContract.Model {
     @Inject
     Gson mGson;
     @Inject
     Application mApplication;
 
     @Inject
-    public CommunityListModel(IRepositoryManager repositoryManager) {
+    public CommunityPostListModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
     }
 

@@ -5,18 +5,18 @@ import dagger.Component;
 
 import com.jess.arms.di.component.AppComponent;
 
-import com.bytemax.snsmax.main.di.module.CommunityListModule;
-import com.bytemax.snsmax.main.mvp.contract.CommunityListContract;
+import com.bytemax.snsmax.main.di.module.HomeFindModule;
+import com.bytemax.snsmax.main.mvp.contract.HomeFindContract;
 
 import com.jess.arms.di.scope.FragmentScope;
-import com.bytemax.snsmax.main.mvp.ui.fragment.CommunityListFragment;
+import com.bytemax.snsmax.main.mvp.ui.fragment.HomeFindFragment;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/04/2019 17:04
+ * Created by MVPArmsTemplate on 06/05/2019 16:17
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -25,17 +25,17 @@ import com.bytemax.snsmax.main.mvp.ui.fragment.CommunityListFragment;
  * ================================================
  */
 @FragmentScope
-@Component(modules = CommunityListModule.class, dependencies = AppComponent.class)
-public interface CommunityListComponent {
-    void inject(CommunityListFragment fragment);
+@Component(modules = HomeFindModule.class, dependencies = AppComponent.class)
+public interface HomeFindComponent {
+    void inject(HomeFindFragment fragment);
 
     @Component.Builder
     interface Builder {
         @BindsInstance
-        CommunityListComponent.Builder view(CommunityListContract.View view);
+        HomeFindComponent.Builder view(HomeFindContract.View view);
 
-        CommunityListComponent.Builder appComponent(AppComponent appComponent);
+        HomeFindComponent.Builder appComponent(AppComponent appComponent);
 
-        CommunityListComponent build();
+        HomeFindComponent build();
     }
 }

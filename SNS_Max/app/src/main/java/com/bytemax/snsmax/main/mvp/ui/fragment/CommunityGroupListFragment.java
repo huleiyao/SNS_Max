@@ -6,30 +6,19 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bytemax.snsmax.main.mvp.ui.adapter.CommunityPostListAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytemax.snsmax.main.di.component.DaggerCommunityListComponent;
-import com.bytemax.snsmax.main.mvp.contract.CommunityListContract;
-import com.bytemax.snsmax.main.mvp.presenter.CommunityListPresenter;
+import com.bytemax.snsmax.main.di.component.DaggerCommunityGroupListComponent;
+import com.bytemax.snsmax.main.mvp.contract.CommunityGroupListContract;
+import com.bytemax.snsmax.main.mvp.presenter.CommunityGroupListPresenter;
 
 import com.bytemax.snsmax.R;
-import com.liaoinstan.springview.container.DefaultFooter;
-import com.liaoinstan.springview.container.DefaultHeader;
-import com.liaoinstan.springview.widget.SpringView;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -38,7 +27,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/04/2019 17:04
+ * Created by MVPArmsTemplate on 06/05/2019 11:25
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -46,17 +35,11 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class CommunityListFragment extends BaseFragment<CommunityListPresenter> implements CommunityListContract.View {
+public class CommunityGroupListFragment extends BaseFragment<CommunityGroupListPresenter> implements CommunityGroupListContract.View {
     int type;
-    @Inject
-    CommunityPostListAdapter adapter;
-    @BindView(R.id.springview)
-    SpringView springView;
-    @BindView(R.id.recycle_view)
-    RecyclerView recyclerView;
 
-    public static CommunityListFragment newInstance(int type) {
-        CommunityListFragment fragment = new CommunityListFragment();
+    public static CommunityGroupListFragment newInstance(int type) {
+        CommunityGroupListFragment fragment = new CommunityGroupListFragment();
         fragment.setType(type);
         return fragment;
     }
@@ -67,7 +50,7 @@ public class CommunityListFragment extends BaseFragment<CommunityListPresenter> 
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerCommunityListComponent //如找不到该类,请编译一下项目
+        DaggerCommunityGroupListComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -77,37 +60,12 @@ public class CommunityListFragment extends BaseFragment<CommunityListPresenter> 
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_community_list, container, false);
+        return inflater.inflate(R.layout.fragment_community_group_list, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        initList();
-    }
 
-    private void initList() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        springView.setType(SpringView.Type.FOLLOW);
-        springView.setListener(new SpringView.OnFreshListener() {
-            @Override
-            public void onRefresh() {
-                springView.setEnableFooter(false);
-//                loadData(true);
-            }
-
-            @Override
-            public void onLoadmore() {
-//                loadData(false);
-            }
-        });
-
-        springView.setEnableFooter(false);
-//        adapter.setOnItemChildClickListener(mPresenter);
-//        adapter.setOnItemClickListener(mPresenter);
-        springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
-        springView.setFooter(new DefaultFooter(getActivity()));
     }
 
     /**

@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bytemax.snsmax.main.mvp.ui.fragment.HomeFindFragment;
 import com.bytemax.snsmax.main.mvp.ui.fragment.HomeFragment;
+import com.bytemax.snsmax.main.mvp.ui.fragment.HomeMessageFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -114,9 +116,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         fragments.add(HomeFragment.newInstance());
-        fragments.add(HomeFragment.newInstance());
-        fragments.add(HomeFragment.newInstance());
-        fragments.add(HomeFragment.newInstance());
+        fragments.add(HomeFindFragment.newInstance());
+        fragments.add(HomeMessageFragment.newInstance());
         fragments.add(HomeFragment.newInstance());
         navigationBar.titleItems(tabText)      //必传  Tab文字集合
                 .normalIconItems(normalIcon)   //必传  Tab未选中图标集合
