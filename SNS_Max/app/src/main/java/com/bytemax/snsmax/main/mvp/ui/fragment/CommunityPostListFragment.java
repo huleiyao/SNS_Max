@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytemax.snsmax.R;
 import com.bytemax.snsmax.main.mvp.ui.adapter.CommunityPostListAdapter;
 import com.jess.arms.base.BaseFragment;
@@ -27,6 +28,8 @@ import com.bytemax.snsmax.R;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -110,6 +113,11 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
 //        adapter.setOnItemClickListener(mPresenter);
         springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
         springView.setFooter(new DefaultFooter(getActivity()));
+        ArrayList<MBaseBean> list = new ArrayList<>();
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        adapter.setNewData(list);
     }
 
     /**

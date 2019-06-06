@@ -1,5 +1,6 @@
 package com.bytemax.snsmax.main.di.module;
 
+import com.bytemax.snsmax.main.mvp.ui.adapter.ChatListAdapter;
 import com.jess.arms.di.scope.FragmentScope;
 
 import dagger.Binds;
@@ -27,4 +28,5 @@ public abstract class HomeMessageModule {
 
     @Binds
     abstract HomeMessageContract.Model bindHomeMessageModel(HomeMessageModel model);
+
 }
