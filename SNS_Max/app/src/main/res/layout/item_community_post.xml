@@ -84,6 +84,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -92,15 +93,34 @@
             android:textColor="@color/color_646F79"
             android:textSize="30sp" />
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/more_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:visibility="gone">
 
+            <FrameLayout
+                android:id="@+id/f_one_img"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/one_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/is_video"
+                    android:layout_width="158dp"
+                    android:layout_height="158dp"
+                    android:layout_gravity="bottom|left"
+                    android:src="@drawable/ic_ico_moment_video" />
+            </FrameLayout>
+
             <include layout="@layout/include_recyclerview" />
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/address"

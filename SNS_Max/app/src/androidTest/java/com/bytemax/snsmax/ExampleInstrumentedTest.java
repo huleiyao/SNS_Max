@@ -1,4 +1,4 @@
-package com.bytemax.snsmax;
+package com.bytegem.snsmax;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.bytemax.snsmax", appContext.getPackageName());
+        assertEquals("com.bytegem.snsmax", appContext.getPackageName());
     }
 }

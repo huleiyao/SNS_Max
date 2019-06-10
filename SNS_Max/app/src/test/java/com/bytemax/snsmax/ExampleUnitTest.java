@@ -1,4 +1,4 @@
-package com.bytemax.snsmax;
+package com.bytegem.snsmax;
 
 import org.junit.Test;
 
