@@ -20,6 +20,10 @@
         <item name="android:background">#dfe6e8</item>
     </style>
 
+    <style name="CollapsingToolbarTitleStyle.About" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/transparent</item>
+    </style>
+
     <style name="AppThemeHasActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -28,6 +32,7 @@
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:fontFamily">@font/pingfangscregular</item>
     </style>
 
     <style name="AppThemeHasActionBar.NoBar">

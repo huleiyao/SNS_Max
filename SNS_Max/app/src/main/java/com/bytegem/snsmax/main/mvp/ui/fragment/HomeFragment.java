@@ -8,9 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
@@ -87,6 +90,41 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 //        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
 //        tabs.setupWithViewPager(viewPager);
         tabs.setViewPager(viewPager);
+        try {
+            changeTextSize(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (i == defaultPosition) return;
+                changeTextSize(false);
+                defaultPosition = i;
+                changeTextSize(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
+    }
+
+    int defaultPosition = 0;
+
+    private void changeTextSize(boolean isSelect) {
+        View view = tabs.getTabAt(defaultPosition).findViewById(R.id.custom_text);
+        if (view != null)
+            if (view instanceof TextView) {
+                ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(isSelect ? R.dimen.sp_40 : R.dimen.sp_34));
+            }
     }
 
     /**

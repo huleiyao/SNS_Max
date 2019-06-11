@@ -17,5 +17,6 @@ dependencies {
     api rootProject.ext.dependencies["SpringView"]
     api rootProject.ext.dependencies["BaseAdapterHelper"]
     api 'com.ogaclejapan.smarttablayout:library:1.7.0@aar'
+    api project(':banner')
 //    api 'com.ogaclejapan.smarttablayout:utils-v4:2.0.0@aar'
 }

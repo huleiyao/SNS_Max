@@ -22,6 +22,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="24dp"
                 android:paddingTop="24dp">
@@ -49,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_marginTop="32dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
@@ -60,6 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="24dp"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
@@ -83,11 +86,12 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
+        <com.bytegem.snsmax.main.app.widget.TagTextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:lineSpacingExtra="8dp"
             android:maxLines="7"
             android:text="我不喜欢主人公克服弱点，守护家人并拯救世界这样的情节，更想描述没有英雄，只有平凡人生活的，有点肮脏的世界忽然变得美好的瞬间。"
             android:textColor="@color/color_646F79"

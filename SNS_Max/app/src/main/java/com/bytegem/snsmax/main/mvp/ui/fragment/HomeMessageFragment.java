@@ -88,6 +88,40 @@ public class HomeMessageFragment extends BaseFragment<HomeMessagePresenter> impl
 //        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
 //        tabs.setupWithViewPager(viewPager);
         tabs.setViewPager(viewPager);
+        try {
+            changeTextSize(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (i == defaultPosition) return;
+                changeTextSize(false);
+                defaultPosition = i;
+                changeTextSize(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+    }
+
+    int defaultPosition = 0;
+
+    private void changeTextSize(boolean isSelect) {
+        View view = tabs.getTabAt(defaultPosition).findViewById(R.id.custom_text);
+        if (view != null)
+            if (view instanceof TextView) {
+                ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(isSelect ? R.dimen.sp_40 : R.dimen.sp_34));
+            }
     }
 
     /**

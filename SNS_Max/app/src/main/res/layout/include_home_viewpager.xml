@@ -22,7 +22,7 @@
             app:stl_customTabTextLayoutId="@layout/custom_tab"
             app:stl_customTabTextViewId="@id/custom_text"
             app:stl_defaultTabTextColor="@color/color_b0b8bf"
-            app:stl_defaultTabTextSize="17sp"
+            app:stl_defaultTabTextSize="34sp"
             app:stl_distributeEvenly="true"
             app:stl_dividerColor="@color/albumTransparent"
             app:stl_dividerThickness="0dp"

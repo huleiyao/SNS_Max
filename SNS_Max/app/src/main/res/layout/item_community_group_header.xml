@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="316dp"
-    android:paddingRight="24dp"
     android:background="@color/white"
     android:orientation="vertical"
+    android:paddingRight="24dp"
     android:paddingTop="36dp">
 
     <FrameLayout
@@ -17,6 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shape_find_group_header_frame" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_frame_image_round20_30" />
 
         <TextView
             android:id="@+id/content"

@@ -19,6 +19,7 @@ import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.CommunityPostBean;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CommunityPostListAdapter;
+import com.bytegem.snsmax.main.mvp.ui.view.HomeBannerView;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -95,11 +96,19 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
     }
 
     private void initList() {
-        if (type == 0)
-            address.setVisibility(View.GONE);
-        else if (type == 1)
-            address.setVisibility(View.VISIBLE);
         if (adapter == null) adapter = new CommunityPostListAdapter();
+        if (type == 0) {
+            address.setVisibility(View.GONE);
+            HomeBannerView homeBannerView = new HomeBannerView(getContext());
+            ArrayList<String> list = new ArrayList<>();
+            list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3393469149,4171153724&fm=26&gp=0.jpg");
+            list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560254065616&di=b83592403fdff36401fd21144b30e8fc&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F110123%2F292-11012313544655.jpg");
+            list.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3650575962,3895995272&fm=11&gp=0.jpg");
+            list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560254004596&di=9fb27d55f52bbe73ac4cf4643cdabb1f&imgtype=0&src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz%2F3ofw5loYQ3LOsoX9gacMNhcchYX0nG6dVMvhBqZEdj4bvlBUVFnictHVicOCc7Pr1dP3CI1B1P3D5L4zjDJUEgxQ%2F0.jpg");
+            homeBannerView.showBanner(list);
+            adapter.setHeaderView(homeBannerView.getView());
+        } else if (type == 1)
+            address.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

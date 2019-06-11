@@ -139,7 +139,21 @@ public class GlideLoaderUtil {
                 .into(imageView);
 
     }
+    /**
+     * 圆角图片
+     *
+     * @param context   上下文
+     * @param url       图片链接
+     * @param imageView 目标view
+     */
+    public static void LoadRoundImage6(Context context, Object url, ImageView imageView) {
+        Glide.with(context).load(url)
+                .apply(bitmapTransform(new MultiTransformation<>(new CenterCrop(),
+                        new MaskTransformation(R.drawable.shape_frame_image_round6))))
+                .transition(new DrawableTransitionOptions().crossFade(800))
+                .into(imageView);
 
+    }
 
     /**
      * 圆形图片
