@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeHasActionBar"
         tools:replace="theme,label,icon">
+
         <!-- Arms 配置 -->
         <meta-data
             android:name="com.bytegem.snsmax.main.app.GlobalConfiguration"
@@ -43,5 +44,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".main.mvp.ui.activity.SettingsActivity"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.OwnerQRCodeActivity"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".main.mvp.ui.activity.AddressSelectActivity"></activity>
     </application>
+
 </manifest>

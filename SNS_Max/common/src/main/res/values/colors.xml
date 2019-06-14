@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="default_background">@color/color_f0f0f2</color>
+
     <color name="color_1">#111111</color>
     <color name="color_3">#333333</color>
     <color name="color_4">#444444</color>

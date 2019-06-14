@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -19,6 +21,8 @@ import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
 import com.bytegem.snsmax.main.mvp.presenter.OwnerPresenter;
 
 import com.bytegem.snsmax.R;
+
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -37,6 +41,18 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  */
 public class OwnerFragment extends BaseFragment<OwnerPresenter> implements OwnerContract.View {
     private static OwnerFragment instance;
+
+    @OnClick({R.id.setting, R.id.owner_qrcode})
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.setting:
+                launchActivity(new Intent(getContext(), SettingsActivity.class));
+                break;
+            case R.id.owner_qrcode:
+                launchActivity(new Intent(getContext(), OwnerQRCodeActivity.class));
+                break;
+        }
+    }
 
     public static OwnerFragment newInstance() {
         if (instance == null)

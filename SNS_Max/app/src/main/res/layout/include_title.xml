@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="?attr/colorPrimary"
+    android:layout_height="128dp"
+    android:background="@color/white"
+    android:paddingTop="66dp"
     app:contentInsetStart="0dp">
 
     <RelativeLayout
@@ -18,8 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="20dp"
             android:src="@mipmap/ic_arrow_back_white_24dp" />
     </RelativeLayout>
 
@@ -28,8 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textColor="@color/color_151b26"
+        android:textSize="36sp"
         tools:text="@string/app_name" />
 
 </android.support.v7.widget.Toolbar>

@@ -49,11 +49,11 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View {
     @BindView(R.id.navigationBar)
     EasyNavigationBar navigationBar;
-    private String[] tabText = {"首页", "发现", "", "消息", "我"};
+    private String[] tabText = {"首页", "发现 ", "", "消息", "我"};
     //未选中icon
     private int[] normalIcon = {R.drawable.ic_ico_tabbar_homepage, R.drawable.ic_ico_tabbar_discover, R.drawable.ic_ico_tabbar_post, R.drawable.ic_ico_tabbar_massage, R.drawable.ic_ico_tabbar_me};
     //选中时icon
-    private int[] selectIcon = {R.drawable.ic_ico_tabbar_homepage_on, R.drawable.ic_ico_tabbar_discover_on, R.drawable.ic_ico_tabbar_post, R.drawable.ic_ico_tabbar_massage_on, R.drawable.ic_ico_tabbar_me};
+    private int[] selectIcon = {R.drawable.ic_ico_tabbar_homepage_on, R.drawable.ic_ico_tabbar_discover_on, R.drawable.ic_ico_tabbar_post, R.drawable.ic_ico_tabbar_massage_on, R.drawable.ic_ico_tabbar_me_on};
     private List<Fragment> fragments = new ArrayList<>();
 
     /*navigationBar.titleItems(tabText)      //必传  Tab文字集合
@@ -145,7 +145,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 //                .smoothScroll(false)  //点击Tab  Viewpager切换是否有动画
 //                .canScroll(false)    //Viewpager能否左右滑动
                 .mode(EasyNavigationBar.MODE_ADD)   //默认MODE_NORMAL 普通模式  //MODE_ADD 带加号模式
-                .anim(Anim.ZoomIn)                //点击Tab时的动画
+//                .anim(Anim.ZoomIn)                //点击Tab时的动画
                 .addIconSize(90)    //中间加号图片的大小
                 .addLayoutHeight(70)   //包含加号的布局高度 背景透明  所以加号看起来突出一块
                 .navigationHeight(98)  //导航栏高度
