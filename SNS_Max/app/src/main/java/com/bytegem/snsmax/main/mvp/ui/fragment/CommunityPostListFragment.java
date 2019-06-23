@@ -14,10 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.CommunityPostBean;
+import com.bytegem.snsmax.main.mvp.ui.activity.AddressSelectActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CommunityPostListAdapter;
 import com.bytegem.snsmax.main.mvp.ui.view.HomeBannerView;
 import com.jess.arms.base.BaseFragment;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -64,6 +68,17 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
     RecyclerView recyclerView;
     @BindView(R.id.address)
     FrameLayout address;
+    @BindView(R.id.city)
+    TextView city;
+
+    @OnClick({R.id.address})
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.address:
+                launchActivity(new Intent(getContext(), AddressSelectActivity.class));
+                break;
+        }
+    }
 
     public static CommunityPostListFragment newInstance(int type) {
         CommunityPostListFragment fragment = new CommunityPostListFragment();
@@ -96,6 +111,7 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
     }
 
     private void initList() {
+        mPresenter.getList(false);
         if (adapter == null) adapter = new CommunityPostListAdapter();
         if (type == 0) {
             address.setVisibility(View.GONE);
@@ -117,12 +133,12 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
             @Override
             public void onRefresh() {
                 springView.setEnableFooter(false);
-//                loadData(true);
+                mPresenter.getList(false);
             }
 
             @Override
             public void onLoadmore() {
-//                loadData(false);
+                mPresenter.getList(true);
             }
         });
 
@@ -138,6 +154,11 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
             list.add(communityPostBean0);
         }
         adapter.setNewData(list);
+    }
+
+    public void changeCity() {
+        if (MApplication.location != null)
+            city.setText(MApplication.location.getCity());
     }
 
     public ArrayList<String> getList(int number) {

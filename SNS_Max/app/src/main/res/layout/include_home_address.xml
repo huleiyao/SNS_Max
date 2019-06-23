@@ -24,6 +24,7 @@
             android:layout_height="48dp" />
 
         <TextView
+            android:id="@+id/city"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"

@@ -143,7 +143,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="关于迹记"
+                android:text="关于SNSMax"
                 android:textColor="@color/color_151b26"
                 android:textSize="30sp" />
 
@@ -164,7 +164,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="把迹记推荐给朋友"
+                android:text="把SNSMax推荐给朋友"
                 android:textColor="@color/color_151b26"
                 android:textSize="30sp" />
 
@@ -185,7 +185,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="给迹记评分"
+                android:text="给SNSMax评分"
                 android:textColor="@color/color_151b26"
                 android:textSize="30sp" />
 

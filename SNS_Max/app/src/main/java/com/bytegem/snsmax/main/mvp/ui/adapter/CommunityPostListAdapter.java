@@ -27,8 +27,8 @@ public class CommunityPostListAdapter extends BaseQuickAdapter<CommunityPostBean
         viewHolder.setText(R.id.group_name, bean.getCommunityGroupBean().getName());
         viewHolder.setText(R.id.user_name, bean.getUser().getName());
         viewHolder.setText(R.id.user_tag, bean.getUser().getContent());
-        viewHolder.setText(R.id.content, bean.getContent());
-        ((TagTextView) viewHolder.getView(R.id.content)).setContentAndTag(bean.getContent(), "健身房的风景");
+        viewHolder.setText(R.id.content, bean.getContents());
+        ((TagTextView) viewHolder.getView(R.id.content)).setContentAndTag(bean.getContents(), "健身房的风景");
         GlideLoaderUtil.LoadCircleImage(mContext, bean.getUser().getCover(), viewHolder.getView(R.id.head_image));
         GlideLoaderUtil.LoadRoundImage6(mContext, bean.getCommunityGroupBean().getCover(), viewHolder.getView(R.id.group_cover));
         if (bean.getImages() != null && bean.getImages().size() > 0) {

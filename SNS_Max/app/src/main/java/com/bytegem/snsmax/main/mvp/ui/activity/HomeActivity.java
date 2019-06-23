@@ -1,7 +1,10 @@
 package com.bytegem.snsmax.main.mvp.ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.LocationBean;
 import com.bytegem.snsmax.main.mvp.ui.fragment.HomeFindFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.HomeFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.HomeMessageFragment;
@@ -24,6 +29,10 @@ import com.bytegem.snsmax.main.mvp.presenter.HomePresenter;
 import com.bytegem.snsmax.R;
 import com.next.easynavigation.constant.Anim;
 import com.next.easynavigation.view.EasyNavigationBar;
+import com.tencent.map.geolocation.TencentLocation;
+import com.tencent.map.geolocation.TencentLocationListener;
+import com.tencent.map.geolocation.TencentLocationManager;
+import com.tencent.map.geolocation.TencentLocationRequest;
 
 
 import java.util.ArrayList;
@@ -46,7 +55,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View {
+public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View, TencentLocationListener {
     @BindView(R.id.navigationBar)
     EasyNavigationBar navigationBar;
     private String[] tabText = {"首页", "发现 ", "", "消息", "我"};
@@ -55,6 +64,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     //选中时icon
     private int[] selectIcon = {R.drawable.ic_ico_tabbar_homepage_on, R.drawable.ic_ico_tabbar_discover_on, R.drawable.ic_ico_tabbar_post, R.drawable.ic_ico_tabbar_massage_on, R.drawable.ic_ico_tabbar_me_on};
     private List<Fragment> fragments = new ArrayList<>();
+    private TencentLocationManager mLocationManager;
 
     /*navigationBar.titleItems(tabText)      //必传  Tab文字集合
                 .normalIconItems(normalIcon)   //必传  Tab未选中图标集合
@@ -116,7 +126,23 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        fragments.add(HomeFragment.newInstance());
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] permissions = {
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+//					Manifest.permission.ACCESS_BACKGROUND_LOCATION, //target为Q时，动态请求后台定位权限
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE //target为Q时，可以移除该权限申请
+            };
+            if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(permissions, 0);
+            }
+        }
+        mLocationManager = TencentLocationManager.getInstance(this);
+        // 设置坐标系为 gcj-02, 缺省坐标为 gcj-02, 所以通常不必进行如下调用
+        mLocationManager
+                .setCoordinateType(TencentLocationManager.COORDINATE_TYPE_GCJ02);
+        fragments.add(HomeFragment.getInstance());
         fragments.add(HomeFindFragment.newInstance());
         fragments.add(HomeMessageFragment.newInstance());
         fragments.add(OwnerFragment.newInstance());
@@ -136,7 +162,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                     @Override
                     public boolean onTabClickEvent(View view, int position) {
                         if (position == 2) {
-                            showMessage("+++++++++++++++++++");
+//                            launchActivity(new Intent(getApplicationContext(), GroupCreatedActivity.class));
+                            launchActivity(new Intent(getApplicationContext(), CreatNewsActivity.class));
                             return true;
                         }
                         return false;
@@ -168,6 +195,20 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 ////                .addSelectTextColor(Color.parseColor("#00ff00"))    //加号文字选中时字体颜色
                 .build();
         navigationBar.selectTab(0);
+
+        TencentLocationRequest request = TencentLocationRequest
+                .create()
+                .setRequestLevel(
+                        TencentLocationRequest.REQUEST_LEVEL_ADMIN_AREA)
+                /*.setInterval(10000)*/; // 设置定位周期, 建议值为 1s-20s
+
+        // 开始定位
+        mLocationManager.requestLocationUpdates(request, this, getMainLooper());
+    }
+
+    // 响应点击"停止"
+    public void stopLocation() {
+        mLocationManager.removeUpdates(this);
     }
 
     @Override
@@ -178,6 +219,12 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @Override
     public void hideLoading() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopLocation();
     }
 
     @Override
@@ -197,4 +244,35 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         finish();
     }
 
+    @Override
+    public void onLocationChanged(TencentLocation tencentLocation, int error, String reason) {
+        String msg = null;
+        if (error == TencentLocation.ERROR_OK) {
+            // 定位成功
+            /*
+             * 纬度=tencentLocation.getLatitude()
+             * 经度=tencentLocation.getLongitude()
+             * 精度=tencentLocation.getAccuracy()
+             * 来源=tencentLocation.getProvider()
+             * 城市=tencentLocation.getCity()
+             * citycode=tencentLocation.getCityCode()
+             * */
+            if (MApplication.location == null)
+                MApplication.location = new LocationBean();
+            MApplication.location.setCity(tencentLocation.getCity());
+            MApplication.location.setLatitude(tencentLocation.getLatitude());
+            MApplication.location.setLongitude(tencentLocation.getLongitude());
+            HomeFragment.getInstance().changeCity();
+
+//            showMessage("定位  " + tencentLocation.getAddress() + " ++ " + tencentLocation.getCity());
+        } else {
+            // 定位失败
+            msg = "定位失败: " + reason;
+        }
+    }
+
+    @Override
+    public void onStatusUpdate(String name, int status, String desc) {
+
+    }
 }

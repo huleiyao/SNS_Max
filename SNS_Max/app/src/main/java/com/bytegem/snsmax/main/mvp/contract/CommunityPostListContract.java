@@ -1,7 +1,11 @@
 package com.bytegem.snsmax.main.mvp.contract;
 
+import com.bytegem.snsmax.main.app.bean.CommunityPostList;
+import com.bytegem.snsmax.main.app.bean.LoginData;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+
+import io.reactivex.Observable;
 
 
 /**
@@ -24,6 +28,6 @@ public interface CommunityPostListContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-
+        Observable<CommunityPostList> getList(String latitude, String longitude, String per_page, String page);
     }
 }

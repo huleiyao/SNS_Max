@@ -53,12 +53,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     SmartTabLayout tabs;
     @BindView(R.id.projectPager)
     ViewPager viewPager;
+    int defaultPosition = 0;
+    private CommunityPostListFragment nearByCommuntiyPostList;
 
-    public static HomeFragment newInstance() {
-//        if (instance == null)
-//            instance = new HomeFragment();
-//        return instance;
-        return new HomeFragment();
+    public static HomeFragment getInstance() {
+        if (instance == null)
+            instance = new HomeFragment();
+        return instance;
     }
 
     @Override
@@ -80,7 +81,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void initData(@Nullable Bundle savedInstanceState) {
         ArrayList<FragmentBean> fragmentList = new ArrayList<>();
         fragmentList.add(new FragmentBean("推荐", CommunityPostListFragment.newInstance(0)));
-        fragmentList.add(new FragmentBean("附近", CommunityPostListFragment.newInstance(1)));
+        fragmentList.add(new FragmentBean("附近", nearByCommuntiyPostList = CommunityPostListFragment.newInstance(1)));
         showFragment(fragmentList);
     }
 
@@ -117,7 +118,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     }
 
-    int defaultPosition = 0;
+    public void changeCity() {
+        nearByCommuntiyPostList.changeCity();
+    }
 
     private void changeTextSize(boolean isSelect) {
         View view = tabs.getTabAt(defaultPosition).findViewById(R.id.custom_text);

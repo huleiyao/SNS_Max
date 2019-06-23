@@ -27,9 +27,11 @@ import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
 
+import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import timber.log.Timber;
 
 /**
@@ -83,6 +85,9 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
         response.body().close();
         如果使用 Okhttp 将新的请求, 请求成功后, 再将 Okhttp 返回的 Response return 出去即可
         如果不需要返回新的结果, 则直接把参数 response 返回出去即可*/
+
+//        String data = "{\"data\":[{\"id\":4,\"contents\":\"你好，我是一条最普通的内容\",\"media\":{\"type\":\"url\",\"contents\":{\"title\":\"来自腾讯视频的链接\",               \"image\":\"https://puui.qpic.cn/vupload/0/common_logo_square.png/0\",\"url\":\"https://v.qq.com\"}},\"geo\":{\"latitude\":\"32.235467237\",\"longitude\":\"162.23214421\"},\"user\":{},\"created_at\":\"2019-06-18T14:39:57Z\"}],\"links\":{\"first\":\"http://fans.local.medz.cn/nearbiespage=1\",\"last\":\"http://fans.local.medz.cn/nearbies?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"path\":\"http://fans.local.medz.cn/nearbies\",\"per_page\":30,\"to\":1,\"total\":1}}";
+//        response = response.newBuilder().body(ResponseBody.create(null, data)).build();
         return response;
     }
 
@@ -99,6 +104,11 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
         /* 如果需要在请求服务器之前做一些操作, 则重新构建一个做过操作的 Request 并 return, 如增加 Header、Params 等请求信息, 不做操作则直接返回参数 request
         return chain.request().newBuilder().header("token", tokenId)
                               .build(); */
-        return request;
+//        return request;
+        return chain.request().newBuilder()
+                .header("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .addHeader("Authorization", MApplication.token_type + " " + MApplication.token)
+                .build();
     }
 }

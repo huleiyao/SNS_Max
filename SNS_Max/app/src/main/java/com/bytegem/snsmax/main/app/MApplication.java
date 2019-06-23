@@ -2,11 +2,13 @@ package com.bytegem.snsmax.main.app;
 
 import android.content.Context;
 
+import com.bytegem.snsmax.main.app.bean.LocationBean;
 import com.jess.arms.base.BaseApplication;
 import com.lzy.imagepicker.GlideImageLoader;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.MediaLoader;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.tencent.map.geolocation.TencentLocationManagerOptions;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 
@@ -21,6 +23,10 @@ public class MApplication extends BaseApplication {
 
     private static MApplication instance;
     private static WeakReference<Context> contexts;
+    public static String token_type = "Bearer";
+    public static String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMzIuMjMyLjEzNC4yMjY6ODAwMlwvYXV0aFwvbG9naW4iLCJpYXQiOjE1NjExODc3MzYsImV4cCI6MTU2MTE5MTMzNiwibmJmIjoxNTYxMTg3NzM2LCJqdGkiOiJXT0M3Y0FFRWhaT0pNOENxIiwic3ViIjoyLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.zvy0bGI8VL7lZ0QAWkLnZdsW1JDZAZTZIb6MJmHYx0I";
+    public static LocationBean location = new LocationBean();
+
 
     public static MApplication getInstance() {
         if (instance == null) {

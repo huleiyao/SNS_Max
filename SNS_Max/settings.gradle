@@ -1,1 +1,3 @@
-include ':app',':arms',':arms-autolayout',':arms-imageloader-glide', ':common', ':imagepicker', ':banner'
+include ':app', ':arms', ':arms-autolayout'
+include ':arms-imageloader-glide', ':common'
+include ':imagepicker', ':banner', ':tencentlocation'

@@ -21,9 +21,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
+import com.google.gson.internal.ConstructorConstructor;
+import com.google.gson.internal.Excluder;
+import com.google.gson.internal.bind.TypeAdapters;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.gson_utils.CollectionTypeAdapterFactory;
+import com.jess.arms.gson_utils.GsonTools;
+import com.jess.arms.gson_utils.ReflectiveTypeAdapterFactory;
 import com.jess.arms.integration.ActivityLifecycle;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.FragmentLifecycle;
@@ -33,8 +41,11 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.ActivityLifecycleForRxLifecycle;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -58,10 +69,36 @@ public abstract class AppModule {
     @Singleton
     @Provides
     static Gson provideGson(Application application, @Nullable GsonConfiguration configuration) {
-        GsonBuilder builder = new GsonBuilder();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Class builderClass = (Class) gsonBuilder.getClass();
+        Field f = null;
+        try {
+            //通过反射得到构造器
+            f = builderClass.getDeclaredField("instanceCreators");
+            f.setAccessible(true);
+            final Map<Type, InstanceCreator<?>> val = (Map<Type, InstanceCreator<?>>) f.get(gsonBuilder);//得到此属性的值
+            //注册String类型处理器
+            gsonBuilder.registerTypeAdapterFactory(TypeAdapters.newFactory(String.class, GsonTools.stringTypeAdapter()));
+            //注册int.class, Integer.class处理器
+            gsonBuilder.registerTypeAdapterFactory(TypeAdapters.newFactory(int.class, Integer.class, GsonTools.longAdapter(0)));
+            //注册short.class, Short.class处理器
+            gsonBuilder.registerTypeAdapterFactory(TypeAdapters.newFactory(short.class, Short.class, GsonTools.longAdapter(1)));
+            //注册long.class, Long.class处理器
+            gsonBuilder.registerTypeAdapterFactory(TypeAdapters.newFactory(long.class, Long.class, GsonTools.longAdapter(2)));
+            //注册double.class, Double.class处理器
+            gsonBuilder.registerTypeAdapterFactory(TypeAdapters.newFactory(double.class, Double.class, GsonTools.longAdapter(3)));
+            //注册float.class, Float.class处理器
+            gsonBuilder.registerTypeAdapterFactory(TypeAdapters.newFactory(float.class, Float.class, GsonTools.longAdapter(4)));
+            //注册反射对象的处理器
+            gsonBuilder.registerTypeAdapterFactory(new ReflectiveTypeAdapterFactory(new ConstructorConstructor(val), FieldNamingPolicy.IDENTITY, Excluder.DEFAULT));
+            //注册集合的处理器
+            gsonBuilder.registerTypeAdapterFactory(new CollectionTypeAdapterFactory(new ConstructorConstructor(val)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (configuration != null)
-            configuration.configGson(application, builder);
-        return builder.create();
+            configuration.configGson(application, gsonBuilder);
+        return gsonBuilder.create();
     }
 
     /**

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -15,6 +16,8 @@ import com.bytegem.snsmax.main.mvp.presenter.AddressSelectPresenter;
 
 import com.bytegem.snsmax.R;
 
+
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -32,6 +35,15 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class AddressSelectActivity extends BaseActivity<AddressSelectPresenter> implements AddressSelectContract.View {
+
+    @OnClick({R.id.cancel})
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.cancel:
+                killMyself();
+                break;
+        }
+    }
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {

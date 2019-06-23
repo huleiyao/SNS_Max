@@ -26,7 +26,7 @@ import com.jess.arms.base.BaseService;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class DemoService extends BaseService {
+public class DomeService extends BaseService {
     @Override
     public void init() {
 

@@ -25,6 +25,7 @@ package com.bytegem.snsmax.main.app;
  * ================================================
  */
 public interface Api {
-    String APP_DOMAIN = "https://api.github.com";
+    String APP_DOMAIN = "http://132.232.134.226:8002";
+//    String APP_DOMAIN = "https://api.snsmax.com";
     String RequestSuccess = "0";
 }

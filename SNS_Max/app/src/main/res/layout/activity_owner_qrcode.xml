@@ -26,7 +26,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="20dp"
-                android:src="@mipmap/ic_arrow_back_white_24dp" />
+                android:src="@drawable/ic_ico_title_back" />
         </RelativeLayout>
 
         <TextView
@@ -103,10 +103,10 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="475dp"
-        android:layout_height="189dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="102dp"
-        android:background="@color/white" />
+        android:src="@drawable/ic_logo_login" />
 
 </LinearLayout>

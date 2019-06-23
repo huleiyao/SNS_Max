@@ -2,6 +2,10 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.bean.CommunityPostList;
+import com.bytegem.snsmax.main.app.bean.LoginData;
+import com.bytegem.snsmax.main.app.config.CommunityService;
+import com.bytegem.snsmax.main.app.config.LoginService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -11,6 +15,10 @@ import com.jess.arms.di.scope.FragmentScope;
 import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.CommunityPostListContract;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
+import retrofit2.http.Query;
 
 
 /**
@@ -35,6 +43,13 @@ public class CommunityPostListModel extends BaseModel implements CommunityPostLi
     @Inject
     public CommunityPostListModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
+    }
+
+    @Override
+    public Observable<CommunityPostList> getList(String latitude, String longitude, String per_page, String page) {
+        return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .getList(latitude, longitude, per_page, page);
     }
 
     @Override

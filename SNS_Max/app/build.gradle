@@ -38,6 +38,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':arms')
     implementation project(':common')
+    implementation project(':tencentlocation')
     implementation rootProject.ext.dependencies["androideventbus"]
     implementation rootProject.ext.dependencies["cardview-v7"]
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
