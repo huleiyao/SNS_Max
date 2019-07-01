@@ -61,6 +61,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="小丸子"
@@ -68,6 +69,7 @@
                     android:textSize="36sp" />
 
                 <TextView
+                    android:id="@+id/user_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25sp"
@@ -78,7 +80,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/head_img"
+                android:id="@+id/user_cover"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_marginLeft="20dp" />
@@ -99,6 +101,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/user_zan_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="387"
@@ -123,6 +126,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/user_follow_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="15"
@@ -147,6 +151,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/user_fans_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="109.6k"
@@ -170,6 +175,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/owner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
@@ -206,6 +212,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/owner_group"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -233,6 +240,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/owner_favorites"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -269,6 +277,7 @@
             android:visibility="gone">
 
             <ImageView
+                android:id="@+id/community_honor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_ico_me_honor" />
@@ -289,6 +298,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/owner_treasure"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -317,6 +327,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/owner_drafts"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -344,6 +355,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/owner_share"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -372,6 +384,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/help_or_feedback"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

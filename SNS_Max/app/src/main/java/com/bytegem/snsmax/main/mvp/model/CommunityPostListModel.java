@@ -3,9 +3,7 @@ package com.bytegem.snsmax.main.mvp.model;
 import android.app.Application;
 
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
-import com.bytegem.snsmax.main.app.bean.LoginData;
 import com.bytegem.snsmax.main.app.config.CommunityService;
-import com.bytegem.snsmax.main.app.config.LoginService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -17,8 +15,6 @@ import javax.inject.Inject;
 import com.bytegem.snsmax.main.mvp.contract.CommunityPostListContract;
 
 import io.reactivex.Observable;
-import okhttp3.RequestBody;
-import retrofit2.http.Query;
 
 
 /**

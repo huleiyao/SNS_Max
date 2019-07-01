@@ -4,7 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.bean.CommunityPostBean;
+import com.bytegem.snsmax.main.mvp.ui.adapter.ChatListAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.CommunityCommentsAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -14,7 +26,17 @@ import com.bytegem.snsmax.main.mvp.contract.CommunityPostDetailsContract;
 import com.bytegem.snsmax.main.mvp.presenter.CommunityPostDetailsPresenter;
 
 import com.bytegem.snsmax.R;
+import com.liaoinstan.springview.container.DefaultFooter;
+import com.liaoinstan.springview.container.DefaultHeader;
+import com.liaoinstan.springview.widget.SpringView;
 
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -32,6 +54,100 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDetailsPresenter> implements CommunityPostDetailsContract.View {
+    CommunityPostBean communityPostBean;
+    @Inject
+    CommunityCommentsAdapter adapter;//最新评论
+
+    @BindView(R.id.follow_the_user)
+    TextView follow_the_user;
+    @BindView(R.id.tv_address)
+    TextView tv_address;
+    @BindView(R.id.content)
+    TextView content;
+    @BindView(R.id.user_content)
+    TextView user_content;
+    @BindView(R.id.user_name)
+    TextView user_name;
+    @BindView(R.id.group_name)
+    TextView group_name;
+    @BindView(R.id.group_cotent)
+    TextView group_cotent;
+    @BindView(R.id.join_us)
+    TextView join_us;
+    @BindView(R.id.send_time)
+    TextView send_time;
+    @BindView(R.id.comment_content)
+    TextView comment_content;
+    @BindView(R.id.comment_zan_count)
+    TextView comment_zan_count;
+
+    @BindView(R.id.user_cover)
+    ImageView user_cover;
+    @BindView(R.id.group_cover)
+    ImageView group_cover;
+    @BindView(R.id.comment_user_cover)
+    ImageView comment_user_cover;
+
+    @BindView(R.id.springview)
+    SpringView springview;
+    @BindView(R.id.comment_recycleview)
+    RecyclerView comment_recycleview;//最新评论列表
+    @BindView(R.id.comment_image_recycleview)
+    RecyclerView comment_image_recycleview;//最热评论的图片列表
+    @BindView(R.id.comment_comment_recycleview)
+    RecyclerView comment_comment_recycleview;//最热评论的评论列表
+    @BindView(R.id.recycle_view)
+    RecyclerView recycle_view;//动态图片列表
+    @BindView(R.id.more_comment)
+    LinearLayout more_comment;
+    @BindView(R.id.address)
+    LinearLayout address;
+    @BindView(R.id.comment_zan)
+    LinearLayout comment_zan;
+
+    @BindView(R.id.more_img)
+    FrameLayout more_img;
+
+    @OnClick({R.id.follow_the_user, R.id.join_us, R.id.user_cover, R.id.one_img, R.id.share_to_wechat
+            , R.id.share_to_moments, R.id.share_to_qq, R.id.zan_the_post, R.id.comment_the_post, R.id.share_the_post, R.id.tv_address})
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.follow_the_user://关注动态发起人
+                mPresenter.changeUserFollowState(communityPostBean.getUser().getId());
+                break;
+            case R.id.user_cover://动态发起人
+                showMessage("进入用户信息界面");
+                break;
+            case R.id.one_img://只有一张图的时候   从这里打开全图
+
+                break;
+            case R.id.join_us://只有一张图的时候   从这里打开全图
+                showMessage("加入圈子");
+                break;
+            case R.id.share_to_wechat://分享到微信
+                showMessage("分享到微信");
+                break;
+            case R.id.share_to_moments://朋友圈
+                showMessage("分享到朋友圈");
+                break;
+            case R.id.share_to_qq://qq
+                showMessage("分享到qq");
+                break;
+            case R.id.zan_the_post://底部赞
+                showMessage("赞");
+                mPresenter.changeLikeState(communityPostBean.getId());
+                break;
+            case R.id.comment_the_post://发评论
+                showMessage("发评论");
+                break;
+            case R.id.share_the_post://分享
+                showMessage("去分享");
+                break;
+            case R.id.tv_address://地址
+                showMessage("地址，定位");
+                break;
+        }
+    }
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -50,6 +166,34 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        communityPostBean = (CommunityPostBean) getIntent().getSerializableExtra("data");
+        if (communityPostBean == null) {
+            killMyself();
+            return;
+        }
+        comment_recycleview.setLayoutManager(new LinearLayoutManager(this));// 布局管理器
+        comment_recycleview.setAdapter(adapter);
+        comment_recycleview.setItemAnimator(new DefaultItemAnimator());
+        springview.setType(SpringView.Type.FOLLOW);
+        springview.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                springview.setEnableFooter(false);
+                mPresenter.getList(false, communityPostBean.getId(), 0);
+            }
+
+            @Override
+            public void onLoadmore() {
+                mPresenter.getList(true, communityPostBean.getId(), 0);
+            }
+        });
+
+        springview.setEnableFooter(false);
+//        adapter.setOnItemChildClickListener(mPresenter);
+//        adapter.setOnItemClickListener(mPresenter);
+        springview.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字
+        springview.setFooter(new DefaultFooter(this));
+        mPresenter.getList(false, communityPostBean.getId(), 0);
 
     }
 
@@ -78,5 +222,10 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public void onFinishFreshAndLoad() {
+        springview.onFinishFreshAndLoad();
     }
 }

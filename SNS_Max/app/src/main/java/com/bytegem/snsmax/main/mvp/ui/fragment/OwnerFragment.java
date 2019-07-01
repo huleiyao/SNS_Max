@@ -9,7 +9,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
 import com.jess.arms.base.BaseFragment;
@@ -22,6 +26,7 @@ import com.bytegem.snsmax.main.mvp.presenter.OwnerPresenter;
 
 import com.bytegem.snsmax.R;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -42,7 +47,24 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class OwnerFragment extends BaseFragment<OwnerPresenter> implements OwnerContract.View {
     private static OwnerFragment instance;
 
-    @OnClick({R.id.setting, R.id.owner_qrcode})
+    @BindView(R.id.user_name)
+    TextView user_name;
+    @BindView(R.id.user_content)
+    TextView user_content;
+    @BindView(R.id.user_zan_count)
+    TextView user_zan_count;
+    @BindView(R.id.user_follow_count)
+    TextView user_follow_count;
+    @BindView(R.id.user_fans_count)
+    TextView user_fans_count;
+
+    @BindView(R.id.user_cover)
+    ImageView user_cover;
+
+
+    @OnClick({R.id.setting, R.id.owner_qrcode, R.id.scan, R.id.user_cover
+            , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
+            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting:
@@ -51,6 +73,37 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
             case R.id.owner_qrcode:
                 launchActivity(new Intent(getContext(), OwnerQRCodeActivity.class));
                 break;
+            case R.id.scan:
+                showMessage("我的迹记");
+                break;
+            case R.id.user_cover:
+                launchActivity(new Intent(getContext(), OwnerHomeActivity.class).putExtra(OwnerHomeActivity.ISME, true));
+                break;
+            case R.id.owner:
+                showMessage("我的圈子");
+                break;
+            case R.id.owner_group:
+                showMessage("去扫码");
+                break;
+            case R.id.owner_favorites:
+                showMessage("我的收藏");
+                break;
+            case R.id.community_honor:
+                showMessage("社区荣誉");
+                break;
+            case R.id.owner_treasure:
+                showMessage("财富积分");
+                break;
+            case R.id.owner_drafts:
+                showMessage("草稿箱");
+                break;
+            case R.id.owner_share:
+                showMessage("邀请分享");
+                break;
+            case R.id.help_or_feedback:
+                showMessage("帮助与反馈");
+                break;
+
         }
     }
 

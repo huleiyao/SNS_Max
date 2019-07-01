@@ -6,6 +6,7 @@ import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
 import com.bytegem.snsmax.main.app.bean.LocationBean;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -69,9 +70,9 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 .doFinally(() -> {
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<MBaseBean>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
                     @Override
-                    public void onNext(MBaseBean data) {
+                    public void onNext(NetDefaultBean data) {
                         mRootView.killMyself();
                     }
                 });

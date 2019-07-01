@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:layout_marginTop="20dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="32dp"
+        android:text="最新评论"
+        android:textColor="@color/color_b0b8bf"
+        android:textSize="24sp" />
+
+    <View style="@style/default_line_hor" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/comment_recycleview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
+
+    <LinearLayout
+        android:id="@+id/more_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View style="@style/default_line_hor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="28dp"
+            android:paddingTop="28dp"
+            android:text="查看全部评论"
+            android:textColor="@color/color_5e6ce7"
+            android:textSize="26sp" />
+    </LinearLayout>
+
+</LinearLayout>

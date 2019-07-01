@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/user_cover"
+                android:layout_width="114dp"
+                android:layout_height="114dp" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="小丸子"
+                android:textColor="@color/white"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_user_info_send_message"
+                android:paddingBottom="12dp"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp"
+                android:paddingTop="12dp"
+                android:text="发消息"
+                android:textColor="@color/white"
+                android:textSize="26sp" />
+
+            <Button
+                android:id="@+id/follow_the_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/selector_user_info_follow"
+                android:paddingBottom="12dp"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp"
+                android:paddingTop="12dp"
+                android:text="已关注"
+                android:textColor="@color/white"
+                android:textSize="26sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="35dp"
+            android:background="@color/color_646F79" />
+
+        <TextView
+            android:id="@+id/user_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="我现在还有梦想 心中的城堡辉煌 不轻狂 不迷惘 浪漫飞翔 追每
+个希望 遥望耀眼光芒 照亮梦的模样"
+            android:textColor="#b2ffffff"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/follow_count_and_fans_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:text="788  关注  |  98.9k 粉丝"
+            android:textColor="#b2ffffff"
+            android:textSize="24sp" />
+    </LinearLayout>
+</LinearLayout>

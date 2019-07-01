@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="50dp"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:paddingBottom="20dp"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:paddingTop="20dp">
+
+    <ImageView
+        android:id="@+id/group_cover"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/shape_frame_image_round20" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="牛奶可乐经济学"
+            android:textColor="@color/color_151b26"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/group_cotent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="普通人的经济学入门书籍"
+            android:textColor="@color/color_b0b8bf"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/join_us"
+        android:layout_width="130dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/shape_group_join_us_frame"
+        android:gravity="center"
+        android:text="+ 加入"
+        android:textColor="@color/color_5e6ce7"
+        android:textSize="26sp" />
+
+</LinearLayout>

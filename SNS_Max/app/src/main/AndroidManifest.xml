@@ -118,8 +118,17 @@
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".main.mvp.ui.activity.OwnerHomeActivity" />
-        <activity android:name=".main.mvp.ui.activity.CommunityPostDetailsActivity"></activity>
+        <activity
+            android:name=".main.mvp.ui.activity.OwnerHomeActivity"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.CommunityPostDetailsActivity"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".main.mvp.ui.activity.CreatGroupActivity"></activity>
     </application>
 
 </manifest>

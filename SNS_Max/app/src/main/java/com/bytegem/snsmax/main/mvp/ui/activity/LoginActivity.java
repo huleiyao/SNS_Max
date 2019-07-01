@@ -1,7 +1,9 @@
 package com.bytegem.snsmax.main.mvp.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -81,13 +84,22 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 mPresenter.login(phone_, code_);
                 break;
             case R.id.wechat_login:
-                toHome();
+                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                MApplication.token = sharedPreferences.getString("token", null);
+                MApplication.token_type = sharedPreferences.getString("token_type", null);
+                if (MApplication.token == null || MApplication.token_type == null)
+                    showMessage("没登陆过，需要先登录一次");
+                else
+                    toHome();
                 break;
         }
     }
 
     @Override
     public void toHome() {
+        getSharedPreferences("user", Context.MODE_PRIVATE).edit().putString("token", MApplication.token)
+                .putString("token_type", MApplication.token_type)
+                .commit();
         launchActivity(new Intent(this, HomeActivity.class));
     }
 

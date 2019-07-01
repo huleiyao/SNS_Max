@@ -1,6 +1,7 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
+import android.content.Intent;
 import android.view.View;
 
 import com.bytegem.snsmax.common.utils.M;
@@ -9,6 +10,7 @@ import com.bytegem.snsmax.main.app.bean.CommunityPostBean;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
 import com.bytegem.snsmax.main.app.bean.LocationBean;
 import com.bytegem.snsmax.main.app.bean.LoginData;
+import com.bytegem.snsmax.main.mvp.ui.activity.CommunityPostDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CommunityPostListAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
@@ -97,7 +99,10 @@ public class CommunityPostListPresenter extends BasePresenter<CommunityPostListC
                 .subscribe(new ErrorHandleSubscriber<CommunityPostList>(mErrorHandler) {
                     @Override
                     public void onNext(CommunityPostList data) {
-                        ArrayList<CommunityPostBean> s = data.getData();
+                        ArrayList<CommunityPostBean> communityPostBeans = data.getData();
+                        if (isLoadMore) adapter.addData(communityPostBeans);
+                        else adapter.setNewData(communityPostBeans);
+                        mRootView.onFinishFreshAndLoad();
                     }
                 });
     }
@@ -109,6 +114,6 @@ public class CommunityPostListPresenter extends BasePresenter<CommunityPostListC
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+        mRootView.launchActivity(new Intent(mApplication, CommunityPostDetailsActivity.class).putExtra("data", (CommunityPostBean) adapter.getItem(position)));
     }
 }

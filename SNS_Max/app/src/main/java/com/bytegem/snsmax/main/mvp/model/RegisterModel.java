@@ -2,11 +2,9 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.common.bean.MBaseBean;
-import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.bean.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
-import com.bytegem.snsmax.main.app.config.LoginService;
+import com.bytegem.snsmax.main.app.config.UserService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -17,10 +15,7 @@ import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.RegisterContract;
 
-import java.net.URLEncoder;
-
 import io.reactivex.Observable;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 
@@ -51,14 +46,14 @@ public class RegisterModel extends BaseModel implements RegisterContract.Model {
     @Override
     public Observable<NetDefaultBean> getCode(String jsonData){
         return mRepositoryManager
-                .obtainRetrofitService(LoginService.class)
+                .obtainRetrofitService(UserService.class)
                 .getCode(RequestBody.create(mediaType, jsonData));
     }
 
     @Override
     public Observable<LoginData> register(String jsonData){
         return mRepositoryManager
-                .obtainRetrofitService(LoginService.class)
+                .obtainRetrofitService(UserService.class)
                 .register(RequestBody.create(mediaType, jsonData));
     }
 

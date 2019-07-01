@@ -4,7 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
+import com.bytegem.snsmax.common.bean.FragmentBean;
+import com.bytegem.snsmax.main.app.bean.User;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerFeedsFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerGroupsFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerRecordFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -14,7 +26,12 @@ import com.bytegem.snsmax.main.mvp.contract.OwnerHomeContract;
 import com.bytegem.snsmax.main.mvp.presenter.OwnerHomePresenter;
 
 import com.bytegem.snsmax.R;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -32,6 +49,28 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implements OwnerHomeContract.View {
+    @BindView(R.id.tabs)
+    SmartTabLayout tabs;
+    @BindView(R.id.projectPager)
+    ViewPager viewPager;
+    @BindView(R.id.user_cover)
+    ImageView user_cover;
+
+    @BindView(R.id.user_name)
+    TextView user_name;
+    @BindView(R.id.send_message)
+    TextView send_message;
+    @BindView(R.id.user_content)
+    TextView user_content;
+    @BindView(R.id.follow_count_and_fans_count)
+    TextView follow_count_and_fans_count;
+
+    @BindView(R.id.follow_the_user)
+    Button follow_the_user;
+    boolean isMe = false;
+    public static final String ISME = "IS-ME";
+    public static final String ID = "ID";
+    private int id;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -50,6 +89,27 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        isMe = getIntent().getBooleanExtra(ISME, false);
+        id = getIntent().getIntExtra(ID, 0);
+        ArrayList<FragmentBean> fragmentBeans = new ArrayList<>();
+        fragmentBeans.add(new FragmentBean("动态", OwnerFeedsFragment.newInstance()));
+        fragmentBeans.add(new FragmentBean("圈子", OwnerGroupsFragment.newInstance(isMe)));
+        fragmentBeans.add(new FragmentBean("档案", OwnerRecordFragment.newInstance()));
+        showFragment(fragmentBeans);
+        mPresenter.getUserData(isMe, id);
+    }
+
+    public void initUserData(User user) {
+        GlideLoaderUtil.LoadCircleImage(this, user.getCover(), user_cover);
+        user_name.setText(user.getName());
+        user_content.setText(user.getContent());
+        follow_count_and_fans_count.setText(Utils.getNumberIfPeople(user.getFollowings_count()) + "  关注  |  " + Utils.getNumberIfPeople(user.getFollowers_count()) + " 粉丝");
+    }
+
+    public void showFragment(ArrayList<FragmentBean> fragmenList) {
+        viewPager.setAdapter(new VPFragmentAdapter(getSupportFragmentManager(), fragmenList));
+        viewPager.setOffscreenPageLimit(fragmenList.size() - 1);
+        tabs.setViewPager(viewPager);
 
     }
 

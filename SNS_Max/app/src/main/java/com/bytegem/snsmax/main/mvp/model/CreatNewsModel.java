@@ -3,8 +3,8 @@ package com.bytegem.snsmax.main.mvp.model;
 import android.app.Application;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.config.CommunityService;
-import com.bytegem.snsmax.main.app.config.LoginService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -44,7 +44,7 @@ public class CreatNewsModel extends BaseModel implements CreatNewsContract.Model
     }
 
     @Override
-    public Observable<MBaseBean> send(String jsonData) {
+    public Observable<NetDefaultBean> send(String jsonData) {
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
                 .send(RequestBody.create(mediaType, jsonData));

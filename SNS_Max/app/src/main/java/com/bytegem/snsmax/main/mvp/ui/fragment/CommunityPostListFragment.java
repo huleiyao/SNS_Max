@@ -128,6 +128,8 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        adapter.setOnItemClickListener(mPresenter);
+        adapter.setOnItemChildClickListener(mPresenter);
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
@@ -147,13 +149,14 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
 //        adapter.setOnItemClickListener(mPresenter);
         springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
         springView.setFooter(new DefaultFooter(getActivity()));
-        ArrayList<CommunityPostBean> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            CommunityPostBean communityPostBean0 = new CommunityPostBean();
-            communityPostBean0.setImages(getList(i));
-            list.add(communityPostBean0);
-        }
-        adapter.setNewData(list);
+//        ArrayList<CommunityPostBean> list = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            CommunityPostBean communityPostBean0 = new CommunityPostBean();
+//            communityPostBean0.setImages(getList(i));
+//            list.add(communityPostBean0);
+//        }
+//        adapter.setNewData(list);
+        mPresenter.getList(false);
     }
 
     public void changeCity() {
@@ -166,6 +169,10 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
         for (int i = 0; i < number; i++)
             arrayList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560157380928&di=a5fcba2094b5d96612a2a77b4873115e&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F9b671d17b52639d35e7c76c23f79fbabebe769d43140-xjB5Tw_fw658");
         return arrayList;
+    }
+
+    public void onFinishFreshAndLoad() {
+        springView.onFinishFreshAndLoad();
     }
 
     /**
