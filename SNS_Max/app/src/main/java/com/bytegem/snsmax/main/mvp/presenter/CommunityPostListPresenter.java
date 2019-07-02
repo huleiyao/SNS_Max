@@ -61,6 +61,7 @@ public class CommunityPostListPresenter extends BasePresenter<CommunityPostListC
     CommunityPostListAdapter adapter;
     private int per_page = 15;
     private int page = 1;
+    int type;
 
     @Inject
     public CommunityPostListPresenter(CommunityPostListContract.Model model, CommunityPostListContract.View rootView) {
@@ -76,6 +77,11 @@ public class CommunityPostListPresenter extends BasePresenter<CommunityPostListC
         this.mApplication = null;
     }
 
+    public void setType(int type, boolean isLoadMore) {
+        this.type = type;
+        getList(isLoadMore);
+    }
+
     public void getList(boolean isLoadMore) {
         if (isLoadMore) page++;
         else {
@@ -83,13 +89,8 @@ public class CommunityPostListPresenter extends BasePresenter<CommunityPostListC
         }
         if (location == null)
             location = new LocationBean();
-        mModel.getList(location.getLatitude() + "", location.getLongitude() + "", per_page + "", page + ""
-               /* M.getMapString(
-                        "latitude", location.getLatitude()
-                        , "longitude", location.getLongitude()
-                        , "per_page", per_page
-                        , "page", page
-                )*/)
+        (type == 0 ? mModel.getRecommendList(per_page + "", page + "") :
+                mModel.getList(location.getLatitude() + "", location.getLongitude() + "", per_page + "", page + ""))
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())

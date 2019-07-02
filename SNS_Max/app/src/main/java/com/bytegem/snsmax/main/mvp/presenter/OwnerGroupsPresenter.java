@@ -1,7 +1,9 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
+import android.content.Intent;
 
+import com.bytegem.snsmax.main.mvp.ui.activity.CreatGroupActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.OwnerGroupsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.view.CreatGroupHeaderView;
 import com.jess.arms.integration.AppManager;
@@ -58,6 +60,7 @@ public class OwnerGroupsPresenter extends BasePresenter<OwnerGroupsContract.Mode
     @Override
     public void creatGroup() {
         //点击创建圈子按钮后的操作
-        mRootView.showMessage("创建圈子");
+//        mRootView.showMessage("创建圈子");
+        mRootView.launchActivity(new Intent(mApplication, CreatGroupActivity.class));
     }
 }

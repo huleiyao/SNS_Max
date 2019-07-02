@@ -33,6 +33,10 @@ public interface CommunityPostDetailsContract {
 
         Observable<NetDefaultBean> changeLikeState(int id, boolean isLike);
 
+        Observable<NetDefaultBean> changeCommentLikeState(int id, boolean isLike);
+
         Observable<NetDefaultBean> changeUserFollowState(int id, boolean isFollow);
+
+        Observable<NetDefaultBean> commit(int id, String jsonData);
     }
 }

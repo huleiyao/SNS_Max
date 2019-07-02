@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import com.bytegem.snsmax.main.mvp.contract.CommunityPostDetailsContract;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -75,6 +76,17 @@ public class CommunityPostDetailsModel extends BaseModel implements CommunityPos
     }
 
     @Override
+    public Observable<NetDefaultBean> changeCommentLikeState(int id, boolean isLike) {
+        if (isLike)
+            return mRepositoryManager
+                    .obtainRetrofitService(CommunityService.class)
+                    .changeCommentDislikeState(id);
+        else return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .changeCommentLikeState(id);
+    }
+
+    @Override
     public Observable<NetDefaultBean> changeUserFollowState(int id, boolean isFollow) {
         if (isFollow)
             return mRepositoryManager
@@ -83,6 +95,13 @@ public class CommunityPostDetailsModel extends BaseModel implements CommunityPos
         else return mRepositoryManager
                 .obtainRetrofitService(UserService.class)
                 .changeUserFollowState(id);
+    }
+
+    @Override
+    public Observable<NetDefaultBean> commit(int id, String jsonData) {
+        return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .sendFeedComment(id, RequestBody.create(mediaType, jsonData));
     }
 
     @Override

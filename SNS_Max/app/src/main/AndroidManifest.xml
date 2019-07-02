@@ -74,26 +74,31 @@
 
         <activity
             android:name=".main.mvp.ui.activity.HomeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.OwnerQRCodeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.AddressSelectActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -105,30 +110,46 @@
         </activity>
         <activity
             android:name=".main.mvp.ui.activity.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.GroupCreatedActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.CreatNewsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.OwnerHomeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.CommunityPostDetailsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".main.mvp.ui.activity.CreatGroupActivity"></activity>
+        <activity
+            android:name=".main.mvp.ui.activity.CreatGroupActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.CommunityPostCommentsOfCommentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

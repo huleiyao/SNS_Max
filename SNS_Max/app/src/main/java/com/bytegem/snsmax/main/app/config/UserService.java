@@ -49,7 +49,7 @@ public interface UserService {
     Observable<UserData> getUser();
 
     //通过id获取用户资料
-    @GET("/user/{id}")
+    @GET("/users/{id}")
     Observable<UserData> getUserFromId(@Path("id") int id);
 
     //取消/关注一个用户

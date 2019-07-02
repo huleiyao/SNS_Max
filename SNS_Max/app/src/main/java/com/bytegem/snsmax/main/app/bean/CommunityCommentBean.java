@@ -2,6 +2,8 @@ package com.bytegem.snsmax.main.app.bean;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 
+import java.util.ArrayList;
+
 public class CommunityCommentBean extends MBaseBean {
     private int id;
     private String contents;
@@ -11,6 +13,15 @@ public class CommunityCommentBean extends MBaseBean {
     private int likes_count;
     private int comments_count;
     private String created_at;//创建时间
+    private ArrayList<CommunityCommentBean> comments;
+
+    public ArrayList<CommunityCommentBean> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<CommunityCommentBean> comments) {
+        this.comments = comments;
+    }
 
     public int getId() {
         return id;

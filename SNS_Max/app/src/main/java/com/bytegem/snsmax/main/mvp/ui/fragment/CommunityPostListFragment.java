@@ -111,7 +111,6 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
     }
 
     private void initList() {
-        mPresenter.getList(false);
         if (adapter == null) adapter = new CommunityPostListAdapter();
         if (type == 0) {
             address.setVisibility(View.GONE);
@@ -149,14 +148,7 @@ public class CommunityPostListFragment extends BaseFragment<CommunityPostListPre
 //        adapter.setOnItemClickListener(mPresenter);
         springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
         springView.setFooter(new DefaultFooter(getActivity()));
-//        ArrayList<CommunityPostBean> list = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            CommunityPostBean communityPostBean0 = new CommunityPostBean();
-//            communityPostBean0.setImages(getList(i));
-//            list.add(communityPostBean0);
-//        }
-//        adapter.setNewData(list);
-        mPresenter.getList(false);
+        mPresenter.setType(type, false);
     }
 
     public void changeCity() {

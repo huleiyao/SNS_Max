@@ -49,6 +49,13 @@ public class CommunityPostListModel extends BaseModel implements CommunityPostLi
     }
 
     @Override
+    public Observable<CommunityPostList> getRecommendList(String per_page, String page) {
+        return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .getRecommendList(per_page, page);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         this.mGson = null;

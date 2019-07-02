@@ -12,6 +12,7 @@
         android:id="@+id/uploading_header"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="32dp"
@@ -47,7 +48,10 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@color/white"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,6 +64,7 @@
                 android:id="@+id/group_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
                 android:background="@color/albumTransparent"
                 android:hint="不超过20个字"
                 android:maxLines="1"
@@ -79,11 +84,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
+                android:gravity="center_vertical"
                 android:text="圈子简介"
                 android:textColor="@color/color_646F79"
                 android:textSize="30sp" />
@@ -104,6 +112,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="20dp"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="32dp"
@@ -118,11 +127,13 @@
             android:textSize="30sp" />
     </LinearLayout>
 
-    <TextView
+    <Button
+        android:id="@+id/creat_group"
         android:layout_width="686dp"
         android:layout_height="90dp"
         android:layout_marginTop="80dp"
+        android:background="@drawable/shape_group_not_create_bg"
         android:text="创建圈子"
-        android:textColor="@drawable/white_radius"
+        android:textColor="@color/create_group_txt_unclickable"
         android:textSize="30sp" />
 </LinearLayout>

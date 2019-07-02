@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,7 +55,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDetailsPresenter> implements CommunityPostDetailsContract.View {
+public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDetailsPresenter> implements CommunityPostDetailsContract.View, View.OnClickListener {
     CommunityPostBean communityPostBean;
     @Inject
     CommunityCommentsAdapter adapter;//最新评论
@@ -104,13 +106,18 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
     LinearLayout address;
     @BindView(R.id.comment_zan)
     LinearLayout comment_zan;
-
+    @BindView(R.id.group)
+    LinearLayout group;//圈子相关，如果没有关联圈子  这部分需要隐藏
+    EditText commit_content;//发送评论的edittext
     @BindView(R.id.more_img)
     FrameLayout more_img;
 
+    BottomSheetDialog bottomSheetDialog;
+    BottomSheetDialog commitBottomSheetDialog;
+
     @OnClick({R.id.follow_the_user, R.id.join_us, R.id.user_cover, R.id.one_img, R.id.share_to_wechat
             , R.id.share_to_moments, R.id.share_to_qq, R.id.zan_the_post, R.id.comment_the_post, R.id.share_the_post, R.id.tv_address})
-    void onClick(View view) {
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.follow_the_user://关注动态发起人
                 mPresenter.changeUserFollowState(communityPostBean.getUser().getId());
@@ -134,11 +141,10 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
                 showMessage("分享到qq");
                 break;
             case R.id.zan_the_post://底部赞
-                showMessage("赞");
                 mPresenter.changeLikeState(communityPostBean.getId());
                 break;
             case R.id.comment_the_post://发评论
-                showMessage("发评论");
+                bottomSheetDialog.show();
                 break;
             case R.id.share_the_post://分享
                 showMessage("去分享");
@@ -146,8 +152,33 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
             case R.id.tv_address://地址
                 showMessage("地址，定位");
                 break;
+            case R.id.to_commit:
+                bottomSheetDialog.dismiss();
+                commitBottomSheetDialog.show();
+                break;
+            case R.id.to_report:
+                showMessage("举报");
+                bottomSheetDialog.dismiss();
+                break;
+            case R.id.cancel:
+                bottomSheetDialog.dismiss();
+                break;
+            case R.id.send:
+                if (commit_content != null) {
+                    String content = commit_content.getText().toString();
+                    if (content.isEmpty()) {
+//                        showMessage("请输入评论内容");
+                        commit_content.setError("请输入评论内容");
+                        return;
+                    }
+                    mPresenter.commit(communityPostBean.getId(), content);
+                    commit_content.setText("");
+                    commitBottomSheetDialog.dismiss();
+                }
+                break;
         }
     }
+
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -166,11 +197,14 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        setTitle("贴子详情");
         communityPostBean = (CommunityPostBean) getIntent().getSerializableExtra("data");
         if (communityPostBean == null) {
             killMyself();
             return;
         }
+        initCommitBottomSheetDialog();
+        initBottomSheetDialog();
         comment_recycleview.setLayoutManager(new LinearLayoutManager(this));// 布局管理器
         comment_recycleview.setAdapter(adapter);
         comment_recycleview.setItemAnimator(new DefaultItemAnimator());
@@ -189,12 +223,31 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
         });
 
         springview.setEnableFooter(false);
-//        adapter.setOnItemChildClickListener(mPresenter);
-//        adapter.setOnItemClickListener(mPresenter);
+        adapter.setOnItemChildClickListener(mPresenter);
+        adapter.setOnItemClickListener(mPresenter);
         springview.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字
         springview.setFooter(new DefaultFooter(this));
         mPresenter.getList(false, communityPostBean.getId(), 0);
 
+    }
+
+    private void initCommitBottomSheetDialog() {
+        commitBottomSheetDialog = new BottomSheetDialog(this);
+        commitBottomSheetDialog.setContentView(R.layout.view_commit);
+        commitBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        commitBottomSheetDialog.findViewById(R.id.send).setOnClickListener(this);
+        commit_content = commitBottomSheetDialog.findViewById(R.id.commit_content);
+    }
+
+    private void initBottomSheetDialog() {
+        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.dialog_community_commit);
+        bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        bottomSheetDialog.findViewById(R.id.to_commit).setOnClickListener(this);
+        bottomSheetDialog.findViewById(R.id.to_report).setOnClickListener(this);
+        bottomSheetDialog.findViewById(R.id.cancel).setOnClickListener(this);
     }
 
     @Override

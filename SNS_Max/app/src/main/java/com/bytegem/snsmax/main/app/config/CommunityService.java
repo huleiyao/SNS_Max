@@ -23,7 +23,7 @@ public interface CommunityService {
     String getCommentsListAndSendComment = "/feeds/{id}/comments";
     String getCommentsCommentListAndSendCommentComment = "/comments/{id}/children";
 
-    //获取动态列表
+    //获取推荐动态列表
     @GET("/recommend/temporary-feeds")
     Observable<CommunityPostList> getRecommendList(@Query("per_page") String per_page, @Query("page") String page);
 
@@ -37,7 +37,13 @@ public interface CommunityService {
 
     //取消/喜欢动态
     @DELETE("/feeds/{feedid}/like")
-    Observable<NetDefaultBean> changeDislikeState(@Path("feedid") int id);
+    Observable<NetDefaultBean> changeDislikeState(@Path("feedid") int id);    //取消/喜欢动态
+
+    @DELETE("/comments/{id}/like")
+    Observable<NetDefaultBean> changeCommentDislikeState(@Path("feedid") int id);    //取消/喜欢动态
+
+    @PUT("/comments/{id}/like")
+    Observable<NetDefaultBean> changeCommentLikeState(@Path("feedid") int id);
 
     //获取动态详情
     @GET("/feeds/{id}")
@@ -48,7 +54,7 @@ public interface CommunityService {
     Observable<NetDefaultBean> send(@Body RequestBody requestBody);
 
     //发布动态评论的评论
-    @GET(getCommentsCommentListAndSendCommentComment)
+    @POST(getCommentsCommentListAndSendCommentComment)
     Observable<NetDefaultBean> sendFeedCommentsComment(@Path("id") int id, @Body RequestBody requestBody);
 
     //第一次获取评论的评论列表
@@ -66,7 +72,7 @@ public interface CommunityService {
             , @Query("order") String order, @Query("before") int before);
 
     //发布动态评论
-    @GET(getCommentsListAndSendComment)
+    @POST(getCommentsListAndSendComment)
     Observable<NetDefaultBean> sendFeedComment(@Path("id") int id, @Body RequestBody requestBody);
 
     //第一次获取评论列表

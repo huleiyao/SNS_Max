@@ -12,5 +12,10 @@
     <color name="home_tab_text_selected_color">@color/color_151b26</color>
     <color name="home_tab_text_unselected_color">@color/color_b0b8bf</color>
 
+    <color name="create_group_txt_unclickable">#4cffffff</color>
+    <color name="create_group_bg_unclickable">#4c5e6ce7</color>
+    <color name="create_group_bg_clickable">#5e6ce7</color>
 
+
+    <color name="color_33ffffff">#33ffffff</color>
 </resources>

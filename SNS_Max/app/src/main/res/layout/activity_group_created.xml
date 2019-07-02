@@ -131,7 +131,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginTop="80dp"
-        android:background="@drawable/shape_group_created_bg"
+        android:background="@drawable/shape_group_not_create_bg"
         android:gravity="center"
         android:text="创建圈子"
         android:textColor="@color/white"
