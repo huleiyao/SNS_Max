@@ -38,7 +38,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="Beatrice"
                     android:textColor="@color/color_151b26"
                     android:textSize="26sp" />
 
@@ -47,7 +46,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="19dp"
-                    android:text="5-31 12:30"
                     android:textColor="@color/color_b0b8bf"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -87,7 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:lineSpacingExtra="7dp"
-            android:text="写的很棒，都很准确，并不是瞎说，不过人晚睡也有没有满足的原因，每个人在夜里基本上都是没有满足的，没有满足加上白天的劳累。"
             android:textColor="@color/color_646F79"
             android:textSize="28sp" />
 
@@ -103,7 +100,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/shape_comment_comment_frame"
-            android:padding="20dp"
+            android:paddingBottom="13dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="13dp"
             android:visibility="gone" />
 
     </LinearLayout>

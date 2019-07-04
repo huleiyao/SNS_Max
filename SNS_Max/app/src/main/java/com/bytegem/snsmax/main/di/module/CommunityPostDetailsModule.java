@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.di.module;
 
 import com.bytegem.snsmax.main.mvp.ui.adapter.CommunityCommentsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CommunityGroupHeaderListAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.CommuntiyCommentsOfCommentAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
@@ -35,5 +36,11 @@ public abstract class CommunityPostDetailsModule {
     @Provides
     static CommunityCommentsAdapter provideCommunityCommentsAdapter() {
         return new CommunityCommentsAdapter();
+    }
+
+    @ActivityScope
+    @Provides
+    static CommuntiyCommentsOfCommentAdapter provideCommuntiyCommentsOfCommentAdapter() {
+        return new CommuntiyCommentsOfCommentAdapter();
     }
 }

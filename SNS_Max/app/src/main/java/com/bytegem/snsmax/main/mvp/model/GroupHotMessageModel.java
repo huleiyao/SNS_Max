@@ -2,32 +2,22 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.main.app.bean.CommuntiyCommentData;
-import com.bytegem.snsmax.main.app.bean.FileSignBean;
-import com.bytegem.snsmax.main.app.config.CommunityService;
-import com.bytegem.snsmax.main.app.config.UpdataImageService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
 
-import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.di.scope.FragmentScope;
 
 import javax.inject.Inject;
 
-import com.bytegem.snsmax.main.mvp.contract.CreatGroupContract;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
-import io.reactivex.Observable;
+import com.bytegem.snsmax.main.mvp.contract.GroupHotMessageContract;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 07/01/2019 11:49
+ * Created by MVPArmsTemplate on 07/03/2019 08:46
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -35,23 +25,16 @@ import io.reactivex.Observable;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-@ActivityScope
-public class CreatGroupModel extends BaseModel implements CreatGroupContract.Model {
+@FragmentScope
+public class GroupHotMessageModel extends BaseModel implements GroupHotMessageContract.Model {
     @Inject
     Gson mGson;
     @Inject
     Application mApplication;
 
     @Inject
-    public CreatGroupModel(IRepositoryManager repositoryManager) {
+    public GroupHotMessageModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
-    }
-
-    @Override
-    public Observable<FileSignBean> updataCover(String type, File file, long length, String md5) {
-        return mRepositoryManager
-                .obtainRetrofitService(UpdataImageService.class)
-                .getImageSign(type, file, length, md5);
     }
 
     @Override

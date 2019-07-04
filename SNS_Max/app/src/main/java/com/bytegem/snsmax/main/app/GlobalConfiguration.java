@@ -26,6 +26,9 @@ import com.jess.arms.di.module.GlobalConfigModule;
 import com.jess.arms.http.imageloader.glide.GlideImageLoaderStrategy;
 import com.jess.arms.http.log.RequestInterceptor;
 import com.jess.arms.integration.ConfigModule;
+import com.lzy.okhttputils.https.HttpsUtils;
+
+import java.security.KeyStore;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -134,7 +137,7 @@ public final class GlobalConfiguration implements ConfigModule {
 //                    retrofitBuilder.addConverterFactory(FastJsonConverterFactory.create());//比如使用 FastJson 替代 Gson
                 })
                 .okhttpConfiguration((context1, okhttpBuilder) -> {//这里可以自己自定义配置 Okhttp 的参数
-//                    okhttpBuilder.sslSocketFactory(); //支持 Https, 详情请百度
+                    okhttpBuilder.sslSocketFactory(HttpsUtils.getSslSocketFactory(null, null, null)); //支持 Https, 详情请百度
                     okhttpBuilder.writeTimeout(10, TimeUnit.SECONDS);
                     //使用一行代码监听 Retrofit／Okhttp 上传下载进度监听,以及 Glide 加载进度监听, 详细使用方法请查看 https://github.com/JessYanCoding/ProgressManager
                     ProgressManager.getInstance().with(okhttpBuilder);

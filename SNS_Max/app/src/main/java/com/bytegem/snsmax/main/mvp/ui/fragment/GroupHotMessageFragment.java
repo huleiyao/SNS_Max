@@ -6,28 +6,33 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
-import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
-import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
+import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupHotMessageAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytegem.snsmax.main.di.component.DaggerOwnerComponent;
-import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
-import com.bytegem.snsmax.main.mvp.presenter.OwnerPresenter;
+import com.bytegem.snsmax.main.di.component.DaggerGroupHotMessageComponent;
+import com.bytegem.snsmax.main.mvp.contract.GroupHotMessageContract;
+import com.bytegem.snsmax.main.mvp.presenter.GroupHotMessagePresenter;
 
 import com.bytegem.snsmax.R;
+import com.liaoinstan.springview.container.DefaultFooter;
+import com.liaoinstan.springview.container.DefaultHeader;
+import com.liaoinstan.springview.widget.SpringView;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -36,7 +41,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/10/2019 16:10
+ * Created by MVPArmsTemplate on 07/03/2019 08:46
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -44,78 +49,24 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class OwnerFragment extends BaseFragment<OwnerPresenter> implements OwnerContract.View {
-    private static OwnerFragment instance;
+public class GroupHotMessageFragment extends BaseFragment<GroupHotMessagePresenter> implements GroupHotMessageContract.View {
+    @Inject
+    GroupHotMessageAdapter adapter;
+    static GroupHotMessageFragment instance;
+    @BindView(R.id.springview)
+    SpringView springView;
+    @BindView(R.id.recycle_view)
+    RecyclerView recyclerView;
 
-    @BindView(R.id.user_name)
-    TextView user_name;
-    @BindView(R.id.user_content)
-    TextView user_content;
-    @BindView(R.id.user_zan_count)
-    TextView user_zan_count;
-    @BindView(R.id.user_follow_count)
-    TextView user_follow_count;
-    @BindView(R.id.user_fans_count)
-    TextView user_fans_count;
-
-    @BindView(R.id.user_cover)
-    ImageView user_cover;
-
-
-    @OnClick({R.id.setting, R.id.owner_qrcode, R.id.scan, R.id.user_cover
-            , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
-            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner})
-    void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.setting:
-                launchActivity(new Intent(getContext(), SettingsActivity.class));
-                break;
-            case R.id.owner_qrcode:
-                launchActivity(new Intent(getContext(), OwnerQRCodeActivity.class));
-                break;
-            case R.id.scan:
-                showMessage("去扫码");
-                break;
-            case R.id.user_cover:
-                launchActivity(new Intent(getContext(), OwnerHomeActivity.class).putExtra(OwnerHomeActivity.ISME, true));
-                break;
-            case R.id.owner:
-                showMessage("我的圈子");
-                break;
-            case R.id.owner_group:
-                showMessage("我的迹记");
-                break;
-            case R.id.owner_favorites:
-                showMessage("我的收藏");
-                break;
-            case R.id.community_honor:
-                showMessage("社区荣誉");
-                break;
-            case R.id.owner_treasure:
-                showMessage("财富积分");
-                break;
-            case R.id.owner_drafts:
-                showMessage("草稿箱");
-                break;
-            case R.id.owner_share:
-                showMessage("邀请分享");
-                break;
-            case R.id.help_or_feedback:
-                showMessage("帮助与反馈");
-                break;
-
-        }
-    }
-
-    public static OwnerFragment newInstance() {
+    public static GroupHotMessageFragment newInstance() {
         if (instance == null)
-            instance = new OwnerFragment();
+            instance = new GroupHotMessageFragment();
         return instance;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerOwnerComponent //如找不到该类,请编译一下项目
+        DaggerGroupHotMessageComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -125,12 +76,40 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_owner, container, false);
+        return inflater.inflate(R.layout.fragment_group_hot_message, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        springView.setType(SpringView.Type.FOLLOW);
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                springView.setEnableFooter(false);
+//                loadData(true);
+            }
 
+            @Override
+            public void onLoadmore() {
+//                loadData(false);
+            }
+        });
+
+        springView.setEnableFooter(false);
+//        adapter.setOnItemChildClickListener(mPresenter);
+//        adapter.setOnItemClickListener(mPresenter);
+        springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
+        springView.setFooter(new DefaultFooter(getActivity()));
+        ArrayList<MBaseBean> arrayList = new ArrayList<>();
+        arrayList.add(null);
+        arrayList.add(null);
+        arrayList.add(null);
+        arrayList.add(null);
+        arrayList.add(null);
+        adapter.setNewData(arrayList);
     }
 
     /**

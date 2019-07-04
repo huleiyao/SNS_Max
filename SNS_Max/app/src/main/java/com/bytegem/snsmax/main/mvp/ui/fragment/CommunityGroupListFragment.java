@@ -53,26 +53,23 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class CommunityGroupListFragment extends BaseFragment<CommunityGroupListPresenter> implements CommunityGroupListContract.View {
-    int type;
     @Inject
     CommunityGroupListAdapter adapter;
     @Inject
     CommunityGroupHeaderListAdapter headerListAdapter;
+    static CommunityGroupListFragment instance;
     HomeFindTopGroupView header;
     @BindView(R.id.springview)
     SpringView springView;
     @BindView(R.id.recycle_view)
     RecyclerView recyclerView;
 
-    public static CommunityGroupListFragment newInstance(int type) {
-        CommunityGroupListFragment fragment = new CommunityGroupListFragment();
-        fragment.setType(type);
-        return fragment;
+    public static CommunityGroupListFragment newInstance() {
+        if (instance == null)
+            instance = new CommunityGroupListFragment();
+        return instance;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
@@ -95,11 +92,10 @@ public class CommunityGroupListFragment extends BaseFragment<CommunityGroupListP
     }
 
     private void initList() {
-        if (adapter == null) adapter = new CommunityGroupListAdapter();
         header = new HomeFindTopGroupView(getContext());
         header.initList(headerListAdapter);
 //        if (header != null && header.getView() != null)
-            adapter.setHeaderView(header.getView());
+        adapter.setHeaderView(header.getView());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

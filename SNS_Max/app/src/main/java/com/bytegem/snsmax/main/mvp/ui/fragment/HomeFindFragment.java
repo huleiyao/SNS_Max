@@ -77,8 +77,8 @@ public class HomeFindFragment extends BaseFragment<HomeFindPresenter> implements
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         ArrayList<FragmentBean> fragmentList = new ArrayList<>();
-        fragmentList.add(new FragmentBean("圈子", CommunityGroupListFragment.newInstance(0)));
-        fragmentList.add(new FragmentBean("热议", CommunityGroupListFragment.newInstance(1)));
+        fragmentList.add(new FragmentBean("圈子", CommunityGroupListFragment.newInstance()));
+        fragmentList.add(new FragmentBean("热议", GroupHotMessageFragment.newInstance()));
         showFragment(fragmentList);
     }
 

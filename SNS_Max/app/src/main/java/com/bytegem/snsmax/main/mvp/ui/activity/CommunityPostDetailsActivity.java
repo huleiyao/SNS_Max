@@ -16,9 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.bean.CommunityCommentBean;
 import com.bytegem.snsmax.main.app.bean.CommunityPostBean;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ChatListAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CommunityCommentsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.CommuntiyCommentsOfCommentAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -59,6 +62,8 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
     CommunityPostBean communityPostBean;
     @Inject
     CommunityCommentsAdapter adapter;//最新评论
+    @Inject
+    CommuntiyCommentsOfCommentAdapter communtiyCommentsOfCommentAdapter;//热门评论的二级评论
 
     @BindView(R.id.follow_the_user)
     TextView follow_the_user;
@@ -82,6 +87,8 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
     TextView comment_content;
     @BindView(R.id.comment_zan_count)
     TextView comment_zan_count;
+    @BindView(R.id.comment_user_name)
+    TextView comment_user_name;
 
     @BindView(R.id.user_cover)
     ImageView user_cover;
@@ -106,17 +113,20 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
     LinearLayout address;
     @BindView(R.id.comment_zan)
     LinearLayout comment_zan;
+    @BindView(R.id.hot_comment)
+    LinearLayout hot_comment;//热门评论
     @BindView(R.id.group)
     LinearLayout group;//圈子相关，如果没有关联圈子  这部分需要隐藏
     EditText commit_content;//发送评论的edittext
     @BindView(R.id.more_img)
     FrameLayout more_img;
-
+    CommunityCommentBean hotCommunityCommentBean;
     BottomSheetDialog bottomSheetDialog;
     BottomSheetDialog commitBottomSheetDialog;
 
     @OnClick({R.id.follow_the_user, R.id.join_us, R.id.user_cover, R.id.one_img, R.id.share_to_wechat
-            , R.id.share_to_moments, R.id.share_to_qq, R.id.zan_the_post, R.id.comment_the_post, R.id.share_the_post, R.id.tv_address})
+            , R.id.share_to_moments, R.id.share_to_qq, R.id.zan_the_post, R.id.comment_the_post
+            , R.id.share_the_post, R.id.tv_address, R.id.bg})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.follow_the_user://关注动态发起人
@@ -176,6 +186,13 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
                     commitBottomSheetDialog.dismiss();
                 }
                 break;
+            case R.id.bg:
+                //热门评论
+                if (hotCommunityCommentBean != null)
+                    launchActivity(new Intent(this, CommunityPostCommentsOfCommentActivity.class)
+                            .putExtra(CommunityPostCommentsOfCommentActivity.FEED_ID, communityPostBean.getId())
+                            .putExtra(CommunityPostCommentsOfCommentActivity.COMMENT_ID, hotCommunityCommentBean));
+                break;
         }
     }
 
@@ -208,12 +225,18 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
         comment_recycleview.setLayoutManager(new LinearLayoutManager(this));// 布局管理器
         comment_recycleview.setAdapter(adapter);
         comment_recycleview.setItemAnimator(new DefaultItemAnimator());
+
+        comment_comment_recycleview.setLayoutManager(new LinearLayoutManager(this));// 布局管理器
+        comment_comment_recycleview.setAdapter(communtiyCommentsOfCommentAdapter);
+        comment_comment_recycleview.setItemAnimator(new DefaultItemAnimator());
+
         springview.setType(SpringView.Type.FOLLOW);
         springview.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
                 springview.setEnableFooter(false);
                 mPresenter.getList(false, communityPostBean.getId(), 0);
+                mPresenter.getHotComment(communityPostBean.getId());
             }
 
             @Override
@@ -228,7 +251,7 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
         springview.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字
         springview.setFooter(new DefaultFooter(this));
         mPresenter.getList(false, communityPostBean.getId(), 0);
-
+        mPresenter.getHotComment(communityPostBean.getId());
     }
 
     private void initCommitBottomSheetDialog() {
@@ -280,5 +303,24 @@ public class CommunityPostDetailsActivity extends BaseActivity<CommunityPostDeta
     @Override
     public void onFinishFreshAndLoad() {
         springview.onFinishFreshAndLoad();
+    }
+
+    @Override
+    public void showHotComment(CommunityCommentBean communityCommentBean) {
+        if (communityCommentBean == null) hot_comment.setVisibility(View.GONE);
+        else {
+            hot_comment.setVisibility(View.VISIBLE);
+            hotCommunityCommentBean = communityCommentBean;
+            GlideLoaderUtil.LoadCircleImage(this, hotCommunityCommentBean.getUser().getCover(), comment_user_cover);
+            comment_user_name.setText(hotCommunityCommentBean.getUser().getName());
+            send_time.setText(hotCommunityCommentBean.getCreated_at());
+            comment_zan_count.setText(hotCommunityCommentBean.getLikes_count() + "");
+            comment_content.setText(hotCommunityCommentBean.getContents());
+            ArrayList<CommunityCommentBean> communityCommentBeans = hotCommunityCommentBean.getComments();
+            if (communityCommentBeans != null && communityCommentBeans.size() > 0) {
+                comment_comment_recycleview.setVisibility(View.VISIBLE);
+                communtiyCommentsOfCommentAdapter.setNewData(communityCommentBeans);
+            } else comment_comment_recycleview.setVisibility(View.GONE);
+        }
     }
 }

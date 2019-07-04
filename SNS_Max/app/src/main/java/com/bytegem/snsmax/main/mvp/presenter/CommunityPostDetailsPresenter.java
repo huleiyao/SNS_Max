@@ -11,6 +11,7 @@ import com.bytegem.snsmax.main.app.bean.CommunityCommentBean;
 import com.bytegem.snsmax.main.app.bean.CommunityCommentsList;
 import com.bytegem.snsmax.main.app.bean.CommunityPostBean;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
+import com.bytegem.snsmax.main.app.bean.CommuntiyCommentData;
 import com.bytegem.snsmax.main.app.bean.LocationBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.mvp.ui.activity.CommunityPostCommentsOfCommentActivity;
@@ -69,6 +70,22 @@ public class CommunityPostDetailsPresenter extends BasePresenter<CommunityPostDe
     @Inject
     public CommunityPostDetailsPresenter(CommunityPostDetailsContract.Model model, CommunityPostDetailsContract.View rootView) {
         super(model, rootView);
+    }
+
+    public void getHotComment(int postId) {
+        mModel.getHotComment(postId)
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CommuntiyCommentData>(mErrorHandler) {
+                    @Override
+                    public void onNext(CommuntiyCommentData data) {
+                        mRootView.showHotComment(data.getData());
+                    }
+                });
     }
 
     public void getList(boolean isLoadMore, int postId, int commentId) {

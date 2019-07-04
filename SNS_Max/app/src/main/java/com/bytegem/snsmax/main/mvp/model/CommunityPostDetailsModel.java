@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.bytegem.snsmax.main.app.bean.CommunityCommentsList;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
+import com.bytegem.snsmax.main.app.bean.CommuntiyCommentData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.User;
 import com.bytegem.snsmax.main.app.config.CommunityService;
@@ -62,6 +63,13 @@ public class CommunityPostDetailsModel extends BaseModel implements CommunityPos
         else return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
                     .getCommentsListAfter(id, limit, "asc", commentId);
+    }
+
+    @Override
+    public Observable<CommuntiyCommentData> getHotComment(int id) {
+        return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .getHotComment(id);
     }
 
     @Override

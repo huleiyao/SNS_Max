@@ -4,6 +4,7 @@ import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.CommunityCommentsList;
 import com.bytegem.snsmax.main.app.bean.CommunityPostData;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
+import com.bytegem.snsmax.main.app.bean.CommuntiyCommentData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.mvp.model.CommunityPostDetailsModel;
 
@@ -37,13 +38,19 @@ public interface CommunityService {
 
     //取消/喜欢动态
     @DELETE("/feeds/{feedid}/like")
-    Observable<NetDefaultBean> changeDislikeState(@Path("feedid") int id);    //取消/喜欢动态
+    Observable<NetDefaultBean> changeDislikeState(@Path("feedid") int id);
 
+    //取消/喜欢评论
     @DELETE("/comments/{id}/like")
-    Observable<NetDefaultBean> changeCommentDislikeState(@Path("feedid") int id);    //取消/喜欢动态
+    Observable<NetDefaultBean> changeCommentDislikeState(@Path("feedid") int id);
 
+    //取消/喜欢评论
     @PUT("/comments/{id}/like")
     Observable<NetDefaultBean> changeCommentLikeState(@Path("feedid") int id);
+
+    //获取热门评论
+    @GET("/feeds/{feedid}/hot-comment")
+    Observable<CommuntiyCommentData> getHotComment(@Path("feedid") int id);
 
     //获取动态详情
     @GET("/feeds/{id}")
