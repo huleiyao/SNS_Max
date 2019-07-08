@@ -6,8 +6,10 @@ import android.view.View;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.Api;
 import com.bytegem.snsmax.main.app.bean.CommunityMediaBean;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
+import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.LocationBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity;
@@ -28,9 +30,13 @@ import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.CreatNewsContract;
 import com.jess.arms.utils.RxLifecycleUtils;
+import com.lzy.imagepicker.bean.ImageItem;
 
+import java.io.EOFException;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import static com.bytegem.snsmax.main.app.MApplication.location;
 
@@ -59,32 +65,116 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     AppManager mAppManager;
     @Inject
     CreateImageAdapter adapter;
+    CommunityMediaBean mMediaBean;
+    String mContent;
+    boolean isStartSend = false;
 
     @Inject
     public CreatNewsPresenter(CreatNewsContract.Model model, CreatNewsContract.View rootView) {
         super(model, rootView);
     }
 
-    public void send(String content, CommunityMediaBean mediaBean) {
+    public void checkSend(String content, CommunityMediaBean mediaBean) {
+        mRootView.showLoading();
+        mContent = content;
+        mMediaBean = mediaBean;
+        switch (adapter.getFeedType()) {
+            case CAMERA:
+                List<ImageItem> imageItems = mMediaBean.getImageItems();
+                if (imageItems != null && imageItems.size() > 0) {
+                    if (imageItems.get(imageItems.size() - 1).path.equals("add"))
+                        imageItems.remove(imageItems.size() - 1);
+                    mMediaBean.setImages(new String[imageItems.size()]);
+                    for (int i = 0; i < imageItems.size(); i++) {
+                        getSign("image", imageItems.get(i), i);
+                    }
+                } else send();
+                break;
+            case VIDEO:
+//                getSign("video", imageItems.get(i), i);
+                break;
+            case LINK:
+
+                break;
+            default:
+        }
+    }
+
+    public void getSign(String type, ImageItem imageItem, int position) {
+        mRootView.showLoading();
+        File tempCover = M.getTempFile(mApplication, imageItem.mimeType);
+        if (tempCover == null) {
+            mRootView.showMessage("上传失败");
+            mRootView.hideLoading();
+            return;
+        }
+        mModel.getSign(type, tempCover, imageItem.size, M.getFileMD5(new File(imageItem.path)))
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError((Throwable onError) -> {
+                    mRootView.showMessage("上传失败");
+                    mRootView.hideLoading();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<FileSignBean>(mErrorHandler) {
+                    @Override
+                    public void onNext(FileSignBean data) {
+                        updataCover(data, imageItem, position);
+                    }
+                });
+    }
+
+    public void updataCover(FileSignBean fileSignBean, ImageItem imageItem, int position) {
+        mModel.updataCover(fileSignBean, imageItem)
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+//                    mRootView.hideLoading();
+                })
+                .doOnError((Throwable onError) -> {
+                    if (onError instanceof EOFException) {
+                        //无数据返回  成功
+                        mMediaBean.setImages(position, Api.FILE_LOOK_DOMAIN + fileSignBean.getPath());
+                        if (!isStartSend && mMediaBean.checkImage())
+                            send();
+                    } else {
+                        mRootView.showMessage("上传失败");
+                        mRootView.hideLoading();
+                    }
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<MBaseBean>(mErrorHandler) {
+                    @Override
+                    public void onNext(MBaseBean data) {
+                    }
+                });
+    }
+
+    public void send() {
         if (location == null)
             location = new LocationBean();
+        isStartSend = true;
         String jsonData = "";
-        mediaBean.setContents();
-        if (mediaBean.getContents() == null || mediaBean.getType().isEmpty() || mediaBean.getContents().isEmpty())
+        MBaseBean bean = mMediaBean.getMedia();
+        if (bean == null || mMediaBean.getType().isEmpty())
             jsonData = M.getMapString(
                     "geo", location.getGeo()
-                    , "contents", content
+                    , "contents", mContent
             );
         else jsonData = M.getMapString(
                 "geo", location.getGeo()
-                , "contents", content
-                , "media", mediaBean
+                , "contents", mContent
+                , "media", bean
         );
         mModel.send(jsonData)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    isStartSend = false;
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {

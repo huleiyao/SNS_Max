@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.bean.CommunityMediaBean;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
 import com.jess.arms.base.BaseActivity;
@@ -32,6 +33,7 @@ import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -81,6 +83,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @Inject
     CreateImageAdapter adapter;
     FeedType feedType;
+    MaterialDialog materialDialog;
 
     public enum FeedType {
         CAMERA, VIDEO, LINK, DEFAULT
@@ -95,7 +98,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                     showMessage("请输入内容！");
                     return;
                 }
-                mPresenter.send(content_str, mediaBean);
+                mPresenter.checkSend(content_str, mediaBean);
                 break;
             case R.id.select_group://选择圈子
                 break;
@@ -185,8 +188,9 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     public void openPhotos() {
         ArrayList<ImageItem> imageItems = (ArrayList<ImageItem>) adapter.getData();
         if (imageItems != null && imageItems.size() > 0) {//最后一个是默认的添加，需要移除
-            if (imageItems.get(imageItems.size() - 1).path.equals("add"))
-                imageItems.remove(imageItems.size() - 1);
+            ImageItem imageItem = imageItems.get(imageItems.size() - 1);
+            if (imageItem.path.equals("add"))
+                imageItems.remove(imageItem);
         }
         Intent intent1 = new Intent(this, ImageGridActivity.class);
         intent1.putParcelableArrayListExtra(ImageGridActivity.EXTRAS_IMAGES, imageItems);
@@ -220,6 +224,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     public void setAdapterData(ArrayList<ImageItem> imageItems) {
         if (imageItems == null)
             imageItems = new ArrayList<>();
+        mediaBean.setImageItems(imageItems);
         if (feedType == CAMERA) {
             if (imageItems.size() < 9) {
                 ImageItem imageItem = new ImageItem();
@@ -231,18 +236,24 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
             imageItem.path = "add";
             imageItems.add(imageItem);
         }
-        mediaBean.setImageItems(imageItems);
         adapter.setFeedType(feedType, imageItems);
     }
 
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = new MaterialDialog.Builder(this)
+//                .title("正在上传图片")
+                .content("上传图片中···")
+                .progress(true, 0)
+                .progressIndeterminateStyle(false)
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

@@ -15,14 +15,10 @@ public class CommunityMediaBean extends MBaseBean {
     @SerializedName("contents")
     private String contents;
 
-    @Expose(serialize = false, deserialize = false)
-    private String[] images;
-    @Expose(serialize = false, deserialize = false)
-    private List<ImageItem> imageItems;
-    @Expose(serialize = false, deserialize = false)
-    private CommunityMediaVideoContent mediaVideo;
-    @Expose(serialize = false, deserialize = false)
-    private CommunityMediaLinkContent mediaLink;
+    private transient String[] images;
+    private transient List<ImageItem> imageItems;
+    private transient CommunityMediaVideoContent mediaVideo;
+    private transient CommunityMediaLinkContent mediaLink;
 
     public String getType() {
         return type;
@@ -40,19 +36,94 @@ public class CommunityMediaBean extends MBaseBean {
         this.contents = contents;
     }
 
-    public void setContents() {
-        if (type == null || contents == null) return;
-        Gson gson = new Gson();
+    public MBaseBean getMedia() {
+        if (type == null) return null;
         switch (type) {
             case "video":
-                setContents(getMediaVideo() == null ? "" : gson.toJson(getMediaVideo()));
-                break;
+                return new MediaVideo(type, getMediaVideo());
             case "image":
-                setContents(getImages() == null ? "" : gson.toJson(getImages()));
-                break;
+                return new MediaImage(type, getImages());
             case "url":
-                setContents(getMediaLink() == null ? "" : gson.toJson(getMediaLink()));
-                break;
+                return new MediaLink(type, getMediaLink());
+        }
+        return null;
+    }
+
+    class MediaImage extends MBaseBean {
+        private String type;
+        private String[] contents;
+
+        public MediaImage(String type, String[] contents) {
+            this.type = type;
+            this.contents = contents;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String[] getContents() {
+            return contents;
+        }
+
+        public void setContents(String[] contents) {
+            this.contents = contents;
+        }
+    }
+
+    class MediaVideo extends MBaseBean {
+        private String type;
+        private CommunityMediaVideoContent contents;
+
+        public MediaVideo(String type, CommunityMediaVideoContent contents) {
+            this.type = type;
+            this.contents = contents;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public CommunityMediaVideoContent getContents() {
+            return contents;
+        }
+
+        public void setContents(CommunityMediaVideoContent contents) {
+            this.contents = contents;
+        }
+    }
+
+    class MediaLink extends MBaseBean {
+        private String type;
+        private CommunityMediaLinkContent contents;
+
+        public MediaLink(String type, CommunityMediaLinkContent contents) {
+            this.type = type;
+            this.contents = contents;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public CommunityMediaLinkContent getContents() {
+            return contents;
+        }
+
+        public void setContents(CommunityMediaLinkContent contents) {
+            this.contents = contents;
         }
     }
 
@@ -86,6 +157,17 @@ public class CommunityMediaBean extends MBaseBean {
     public String[] getImages() {
         if (images == null || images.length == 0) return null;
         return images;
+    }
+
+    public synchronized boolean checkImage() {
+        for (String image : images)
+            if (image == null || image.isEmpty())
+                return false;
+        return true;
+    }
+
+    public void setImages(int position, String image) {
+        this.images[position] = image;
     }
 
     public void setImages(String[] images) {

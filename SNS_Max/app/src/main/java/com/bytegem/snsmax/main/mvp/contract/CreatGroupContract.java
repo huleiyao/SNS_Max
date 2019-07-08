@@ -37,7 +37,5 @@ public interface CreatGroupContract {
         Observable<NetDefaultBean> createGroup(String name, String desc, String avatar, int is_private);
 
         Observable<FileSignBean> getSign(String type, File file, long length, String md5);
-
-
     }
 }
