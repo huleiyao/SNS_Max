@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class FileSignBean extends MBaseBean {
     private String path;
-    private Header header;
+    private Headers headers;
 
     public String getPath() {
         return path;
@@ -15,15 +15,15 @@ public class FileSignBean extends MBaseBean {
         this.path = path;
     }
 
-    public Header getHeader() {
-        return header;
+    public Headers getHeaders() {
+        return headers;
     }
 
-    public void setHeader(Header header) {
-        this.header = header;
+    public void setHeaders(Headers headers) {
+        this.headers = headers;
     }
 
-    public class Header {
+    public class Headers {
         private String Authorization;
         private String Host;
         @SerializedName("Content-MD5")

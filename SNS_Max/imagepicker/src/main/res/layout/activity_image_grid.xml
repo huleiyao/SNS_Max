@@ -19,15 +19,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="50dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:paddingTop="2dp"/>
+            android:paddingBottom="100dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp"/>
 
         <RelativeLayout
             android:id="@+id/footer_bar"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="96dp"
             android:layout_alignParentBottom="true"
             android:background="@color/ip_color_primary">
 
@@ -36,8 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp">
 
                 <TextView
                     android:id="@+id/tv_dir"
@@ -49,14 +49,14 @@
                     android:maxLines="1"
                     android:text="@string/ip_all_images"
                     android:textColor="#CFCFCF"
-                    android:textSize="16sp"/>
+                    android:textSize="32sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/tv_dir"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@id/tv_dir"
                     android:src="@mipmap/text_indicator"/>
 
@@ -70,12 +70,12 @@
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
                 android:text="预览(3)"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp"/>
+                android:textSize="32sp"/>
 
         </RelativeLayout>
     </RelativeLayout>

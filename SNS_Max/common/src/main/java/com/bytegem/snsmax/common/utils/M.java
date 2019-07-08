@@ -1,9 +1,13 @@
 package com.bytegem.snsmax.common.utils;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.HashMap;
 
@@ -37,22 +41,30 @@ public class M {
             e.printStackTrace();
             return null;
         }
-        return bytesToHexString(digest.digest());
+        BigInteger bigInt = new BigInteger(1, digest.digest());
+        return bigInt.toString(16);
     }
 
-    public static String bytesToHexString(byte[] src) {
-        StringBuilder stringBuilder = new StringBuilder("");
-        if (src == null || src.length <= 0) {
-            return null;
-        }
-        for (int i = 0; i < src.length; i++) {
-            int v = src[i] & 0xFF;
-            String hv = Integer.toHexString(v);
-            if (hv.length() < 2) {
-                stringBuilder.append(0);
+    public static File getTempFile(Context context, String mimeType) {
+        File tempCover = null;
+        try {
+            switch (mimeType) {
+                case "image/png":
+                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "png.png"));
+                    break;
+                case "image/jpeg":
+                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "jpg.jpg"));
+                    break;
+                case "image/gif":
+                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "gif.gif"));
+                    break;
+                case "video/mpeg":
+                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "mp4.mp4"));
+                    break;
             }
-            stringBuilder.append(hv);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return stringBuilder.toString();
+        return tempCover;
     }
 }

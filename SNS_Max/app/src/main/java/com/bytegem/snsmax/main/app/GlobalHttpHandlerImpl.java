@@ -106,9 +106,6 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
                               .build(); */
 //        return request;
         return chain.request().newBuilder()
-                .header("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .addHeader("Authorization", MApplication.token_type + " " + MApplication.token)
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package com.bytegem.snsmax.main.app.utils;
+package com.bytegem.snsmax.common.utils;
 
 import android.content.Context;
 import android.os.Environment;

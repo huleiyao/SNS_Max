@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.CommunityCommentsList;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.config.CommunityService;
@@ -48,20 +49,20 @@ public class CommunityPostCommentsOfCommentModel extends BaseModel implements Co
         if (isFirst)
             return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsCommentsListDefault( id, limit, isDefaultOrder ? "desc" : "asc");
+                    .getCommentsCommentsListDefault(id, limit, isDefaultOrder ? "desc" : "asc");
         else if (isDefaultOrder) return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
                 .getCommentsCommentsListBefore(id, limit, "desc", commentId);
         else return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsCommentsListAfter( id, limit, "asc", commentId);
+                    .getCommentsCommentsListAfter(id, limit, "asc", commentId);
     }
 
     @Override
     public Observable<NetDefaultBean> commit(int feedId, int id, String jsonData) {
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .sendFeedCommentsComment( id, RequestBody.create(mediaType, jsonData));
+                .sendFeedCommentsComment(MApplication.getTokenOrType(), id, RequestBody.create(mediaType, jsonData));
     }
 
     @Override

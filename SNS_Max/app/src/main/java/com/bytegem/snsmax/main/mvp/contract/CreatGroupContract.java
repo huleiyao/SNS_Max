@@ -1,16 +1,15 @@
 package com.bytegem.snsmax.main.mvp.contract;
 
-import com.bytegem.snsmax.main.app.bean.CommuntiyCommentData;
+import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+import com.lzy.imagepicker.bean.ImageItem;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
 import io.reactivex.Observable;
-import retrofit2.http.Part;
 
 
 /**
@@ -28,11 +27,17 @@ import retrofit2.http.Part;
 public interface CreatGroupContract {
     //对于经常使用的关于UI的方法可以定义到IView中,如显示隐藏进度条,和显示文字消息
     interface View extends IView {
-
+        void showGroupCover(String url);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<FileSignBean> updataCover(String type, File file, long length, String md5);
+        Observable<MBaseBean> updataCover(FileSignBean fileSignBean, ImageItem imageItem);
+
+        Observable<NetDefaultBean> createGroup(String name, String desc, String avatar, int is_private);
+
+        Observable<FileSignBean> getSign(String type, File file, long length, String md5);
+
+
     }
 }

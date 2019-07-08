@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.UserData;
 import com.bytegem.snsmax.main.app.config.UserService;
@@ -48,7 +49,7 @@ public class OwnerHomeModel extends BaseModel implements OwnerHomeContract.Model
         if (isMe)
             return mRepositoryManager
                     .obtainRetrofitService(UserService.class)
-                    .getUser();
+                    .getUser(MApplication.getTokenOrType());
         else return mRepositoryManager
                 .obtainRetrofitService(UserService.class)
                 .getUserFromId(id);

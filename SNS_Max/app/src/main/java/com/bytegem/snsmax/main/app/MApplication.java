@@ -15,6 +15,11 @@ import com.yanzhenjie.album.AlbumConfig;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
+import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
+
+import static com.bytegem.snsmax.main.app.Api.FILE_UPDATA_DOMAIN;
+import static com.bytegem.snsmax.main.app.Api.FILE_UPDATA_DOMAIN_NAME;
+
 /**
  * Created by addis on 2018/3/28.
  */
@@ -23,10 +28,13 @@ public class MApplication extends BaseApplication {
 
     private static MApplication instance;
     private static WeakReference<Context> contexts;
-    public static String token_type = "Bearer";
-    public static String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMzIuMjMyLjEzNC4yMjY6ODAwMlwvYXV0aFwvbG9naW4iLCJpYXQiOjE1NjExODc3MzYsImV4cCI6MTU2MTE5MTMzNiwibmJmIjoxNTYxMTg3NzM2LCJqdGkiOiJXT0M3Y0FFRWhaT0pNOENxIiwic3ViIjoyLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.zvy0bGI8VL7lZ0QAWkLnZdsW1JDZAZTZIb6MJmHYx0I";
+    public static String token_type = "";
+    public static String token = "";
     public static LocationBean location = new LocationBean();
 
+    public final static String getTokenOrType() {
+        return MApplication.token_type + " " + MApplication.token;
+    }
 
     public static MApplication getInstance() {
         if (instance == null) {
@@ -38,6 +46,7 @@ public class MApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        RetrofitUrlManager.getInstance().putDomain(FILE_UPDATA_DOMAIN_NAME, FILE_UPDATA_DOMAIN);
         initUMeng();
         initImagePicker();
         OkHttpUtils.init(this);

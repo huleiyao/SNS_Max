@@ -97,7 +97,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void toHome() {
-        getSharedPreferences("user", Context.MODE_PRIVATE).edit().putString("token", MApplication.token)
+        getSharedPreferences("user", Context.MODE_PRIVATE)
+                .edit()
+                .putString("token", MApplication.token)
                 .putString("token_type", MApplication.token_type)
                 .commit();
         launchActivity(new Intent(this, HomeActivity.class));

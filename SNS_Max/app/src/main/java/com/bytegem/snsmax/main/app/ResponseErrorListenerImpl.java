@@ -24,6 +24,7 @@ import com.jess.arms.utils.ArmsUtils;
 
 import org.json.JSONException;
 
+import java.io.EOFException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
@@ -57,6 +58,9 @@ public class ResponseErrorListenerImpl implements ResponseErrorListener {
             msg = convertStatusCode(httpException);
         } else if (t instanceof JsonParseException || t instanceof ParseException || t instanceof JSONException || t instanceof JsonIOException) {
             msg = "数据解析错误";
+        } else if (t instanceof EOFException) {
+            //没有数据不处理
+            return;
         }
         ArmsUtils.snackbarText(msg);
     }

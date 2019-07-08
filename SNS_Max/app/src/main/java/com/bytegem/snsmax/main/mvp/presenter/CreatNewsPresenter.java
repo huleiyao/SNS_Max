@@ -1,12 +1,18 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
+import android.view.View;
 
+import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.bean.CommunityMediaBean;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
 import com.bytegem.snsmax.main.app.bean.LocationBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity;
+import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -42,7 +48,7 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @ActivityScope
-public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, CreatNewsContract.View> {
+public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, CreatNewsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -51,19 +57,30 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
+    @Inject
+    CreateImageAdapter adapter;
 
     @Inject
     public CreatNewsPresenter(CreatNewsContract.Model model, CreatNewsContract.View rootView) {
         super(model, rootView);
     }
 
-    public void send(String content) {
+    public void send(String content, CommunityMediaBean mediaBean) {
         if (location == null)
             location = new LocationBean();
-        mModel.send(
-                M.getMapString("geo", location.getGeo()
-                        , "contents", content
-                ))
+        String jsonData = "";
+        mediaBean.setContents();
+        if (mediaBean.getContents() == null || mediaBean.getType().isEmpty() || mediaBean.getContents().isEmpty())
+            jsonData = M.getMapString(
+                    "geo", location.getGeo()
+                    , "contents", content
+            );
+        else jsonData = M.getMapString(
+                "geo", location.getGeo()
+                , "contents", content
+                , "media", mediaBean
+        );
+        mModel.send(jsonData)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,5 +102,26 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        switch (view.getId()) {
+            case R.id.delete:
+                mRootView.remove(position);
+                break;
+            case R.id.add:
+                CreatNewsActivity.FeedType feedType = ((CreateImageAdapter) adapter).getFeedType();
+                if (feedType == CreatNewsActivity.FeedType.CAMERA) mRootView.openPhotos();
+                else if (feedType == CreatNewsActivity.FeedType.VIDEO) {
+
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        mRootView.watchImagePicker(position);
     }
 }

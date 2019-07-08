@@ -4,10 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bytegem.snsmax.common.View.SwitchButton;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -51,7 +57,13 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
     EditText group_name;
     @BindView(R.id.group_detail)
     EditText group_detail;
+    @BindView(R.id.switch_button)
+    SwitchButton switch_button;
+    @BindView(R.id.creat_group)
+    Button creat_group;
     public static final int SELECT_IMAGE = 802;
+    MaterialDialog materialDialog;
+    boolean isHaveCover = false;
 
     @OnClick({R.id.uploading_header, R.id.creat_group})
     void onClick(View view) {
@@ -61,6 +73,11 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
                 startActivityForResult(new Intent(this, ImageGridActivity.class), SELECT_IMAGE);
                 break;
             case R.id.creat_group:
+                String name = group_name.getText().toString();
+                String detail = group_detail.getText().toString();
+                if (isHaveCover || name.isEmpty() || detail.isEmpty())
+                    return;
+                mPresenter.createGroup(name, detail, switch_button.getCurrstate() == SwitchButton.CLOSE ? 0 : 1);
                 break;
         }
     }
@@ -82,17 +99,56 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        setTitle("创建圈子");
+        ChangeListener changeListener = new ChangeListener();
+        group_name.addTextChangedListener(changeListener);
+        group_detail.addTextChangedListener(changeListener);
+    }
 
+    class ChangeListener implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            checkCreate();
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    }
+
+    private void checkCreate() {
+        if (isHaveCover && !group_name.getText().toString().isEmpty() && !group_detail.getText().toString().isEmpty()) {
+            creat_group.setBackground(getResources().getDrawable(R.drawable.shape_group_create_bg));
+            creat_group.setTextColor(getResources().getColor(R.color.white));
+            creat_group.setTextColor(getResources().getColor(R.color.create_group_txt_unclickable));
+        } else {
+            creat_group.setBackground(getResources().getDrawable(R.drawable.shape_group_not_create_bg));
+            creat_group.setTextColor(getResources().getColor(R.color.create_group_txt_unclickable));
+        }
     }
 
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = new MaterialDialog.Builder(this)
+//                .title("正在上传图片")
+                .content("上传图片中···")
+                .progress(true, 0)
+                .progressIndeterminateStyle(false)
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     ArrayList<ImageItem> imageItems;
@@ -104,7 +160,7 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
             if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
                 imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 if (imageItems != null && imageItems.size() > 0) {
-                    mPresenter.updataCover(imageItems.get(0));
+                    mPresenter.getSign(imageItems.get(0));
                 }
             }
     }
@@ -124,5 +180,12 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public void showGroupCover(String url) {
+        GlideLoaderUtil.LoadRoundImage20(this, url, group_cover);
+        isHaveCover = true;
+        checkCreate();
     }
 }

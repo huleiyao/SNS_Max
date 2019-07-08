@@ -123,15 +123,15 @@
         <activity
             android:name=".main.mvp.ui.activity.CreatNewsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
+            android:hardwareAccelerated="false"
             android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".main.mvp.ui.activity.OwnerHomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".main.mvp.ui.activity.CommunityPostDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

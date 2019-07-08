@@ -60,7 +60,8 @@ public final class GlobalConfiguration implements ConfigModule {
         if (!BuildConfig.LOG_DEBUG) { //Release 时, 让框架不再打印 Http 请求和响应的信息
             builder.printHttpLogLevel(RequestInterceptor.Level.NONE);
         }
-
+        RetrofitUrlManager.getInstance().putDomain("tencent_cloud_updata", "https://bytegem-1251005678.cos.ap-chengdu.myqcloud.com");
+        RetrofitUrlManager.getInstance().putDomain("tencent_cloud_image", "https://bytegem-1251005678.image.myqcloud.com");
         builder.baseurl(Api.APP_DOMAIN)
                 //强烈建议自己自定义图片加载逻辑, 因为 arms-imageloader-glide 提供的 GlideImageLoaderStrategy 并不能满足复杂的需求
                 //请参考 https://github.com/JessYanCoding/MVPArms/wiki#3.4

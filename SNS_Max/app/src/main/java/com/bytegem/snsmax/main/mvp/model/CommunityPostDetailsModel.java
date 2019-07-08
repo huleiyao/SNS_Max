@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.CommunityCommentsList;
 import com.bytegem.snsmax.main.app.bean.CommunityPostList;
 import com.bytegem.snsmax.main.app.bean.CommuntiyCommentData;
@@ -77,10 +78,10 @@ public class CommunityPostDetailsModel extends BaseModel implements CommunityPos
         if (isLike)
             return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .changeDislikeState(id);
+                    .changeDislikeState(MApplication.getTokenOrType(), id);
         else return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .changeLikeState(id);
+                .changeLikeState(MApplication.getTokenOrType(), id);
     }
 
     @Override
@@ -88,10 +89,10 @@ public class CommunityPostDetailsModel extends BaseModel implements CommunityPos
         if (isLike)
             return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .changeCommentDislikeState(id);
+                    .changeCommentDislikeState(MApplication.getTokenOrType(), id);
         else return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .changeCommentLikeState(id);
+                .changeCommentLikeState(MApplication.getTokenOrType(), id);
     }
 
     @Override
@@ -99,17 +100,17 @@ public class CommunityPostDetailsModel extends BaseModel implements CommunityPos
         if (isFollow)
             return mRepositoryManager
                     .obtainRetrofitService(UserService.class)
-                    .changeUserUnfollowState(id);
+                    .changeUserUnfollowState(MApplication.getTokenOrType(), id);
         else return mRepositoryManager
                 .obtainRetrofitService(UserService.class)
-                .changeUserFollowState(id);
+                .changeUserFollowState(MApplication.getTokenOrType(), id);
     }
 
     @Override
     public Observable<NetDefaultBean> commit(int id, String jsonData) {
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .sendFeedComment(id, RequestBody.create(mediaType, jsonData));
+                .sendFeedComment(MApplication.getTokenOrType(), id, RequestBody.create(mediaType, jsonData));
     }
 
     @Override

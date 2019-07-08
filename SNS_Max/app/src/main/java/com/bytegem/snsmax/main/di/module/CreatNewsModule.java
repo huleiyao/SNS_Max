@@ -1,5 +1,7 @@
 package com.bytegem.snsmax.main.di.module;
 
+import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupHotMessageAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
@@ -8,6 +10,7 @@ import dagger.Provides;
 
 import com.bytegem.snsmax.main.mvp.contract.CreatNewsContract;
 import com.bytegem.snsmax.main.mvp.model.CreatNewsModel;
+import com.jess.arms.di.scope.FragmentScope;
 
 
 /**
@@ -27,4 +30,10 @@ public abstract class CreatNewsModule {
 
     @Binds
     abstract CreatNewsContract.Model bindCreatNewsModel(CreatNewsModel model);
+
+    @ActivityScope
+    @Provides
+    static CreateImageAdapter provideCreateImageAdapter() {
+        return new CreateImageAdapter();
+    }
 }
