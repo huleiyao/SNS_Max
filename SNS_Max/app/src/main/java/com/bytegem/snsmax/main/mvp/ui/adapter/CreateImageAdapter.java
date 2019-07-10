@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.ui.adapter;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -54,7 +55,7 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
                                 .setVisible(R.id.delete, true)
                                 .setVisible(R.id.img, true)
                                 .setVisible(R.id.add, false);
-                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
+                        GlideLoaderUtil.LoadRoundImage20(mContext, Utils.checkUrl(bean.path), viewHolder.getView(R.id.cover));
                     }
                     break;
                 case VIDEO:
@@ -63,7 +64,7 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
                                 .setVisible(R.id.delete, true)
                                 .setVisible(R.id.img, true)
                                 .setVisible(R.id.add, false);
-                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
+                        GlideLoaderUtil.LoadRoundImage20(mContext, Utils.checkUrl(bean.path), viewHolder.getView(R.id.cover));
                     } else if (bean.path.equals("add")) {
                         //添加
                         viewHolder.setVisible(R.id.img, false)
@@ -74,7 +75,7 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
             }
         else {
             viewHolder.setVisible(R.id.delete, true);
-            GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
+            GlideLoaderUtil.LoadRoundImage20(mContext, Utils.checkUrl(bean.path), viewHolder.getView(R.id.cover));
         }
     }
 }

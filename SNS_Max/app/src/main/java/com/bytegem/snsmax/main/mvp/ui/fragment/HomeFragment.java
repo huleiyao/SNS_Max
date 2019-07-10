@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +52,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @BindView(R.id.projectPager)
     ViewPager viewPager;
     int defaultPosition = 0;
-    private CommunityPostListFragment nearByCommuntiyPostList;
+    private FeedsFragment nearByCommuntiyPostList;
 
     public static HomeFragment getInstance() {
         if (instance == null)
@@ -80,8 +78,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         ArrayList<FragmentBean> fragmentList = new ArrayList<>();
-        fragmentList.add(new FragmentBean("推荐", CommunityPostListFragment.newInstance(0)));
-        fragmentList.add(new FragmentBean("附近", nearByCommuntiyPostList = CommunityPostListFragment.newInstance(1)));
+        fragmentList.add(new FragmentBean("推荐", FeedsFragment.newInstance(0)));
+        fragmentList.add(new FragmentBean("附近", nearByCommuntiyPostList = FeedsFragment.newInstance(1)));
         showFragment(fragmentList);
     }
 

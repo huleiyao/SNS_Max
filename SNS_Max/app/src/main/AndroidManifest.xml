@@ -133,7 +133,7 @@
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".main.mvp.ui.activity.CommunityPostDetailsActivity"
+            android:name=".main.mvp.ui.activity.FeedDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
@@ -145,11 +145,30 @@
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".main.mvp.ui.activity.CommunityPostCommentsOfCommentActivity"
+            android:name=".main.mvp.ui.activity.FeedCommentsOfCommentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.CreatFeedAddUrlActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.SelectTopicActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.CreateTopicActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+        <activity android:name=".main.mvp.ui.activity.GroupDetailsActivity"></activity>
     </application>
 
 </manifest>

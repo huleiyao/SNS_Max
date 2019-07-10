@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.common.View.SwitchButton;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -184,7 +185,7 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
 
     @Override
     public void showGroupCover(String url) {
-        GlideLoaderUtil.LoadRoundImage20(this, url, group_cover);
+        GlideLoaderUtil.LoadRoundImage20(this, Utils.checkUrl(url), group_cover);
         isHaveCover = true;
         checkCreate();
     }

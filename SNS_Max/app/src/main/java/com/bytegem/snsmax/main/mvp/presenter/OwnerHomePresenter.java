@@ -2,9 +2,7 @@ package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.common.utils.M;
-import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
-import com.bytegem.snsmax.main.app.bean.UserData;
+import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -59,9 +57,9 @@ public class OwnerHomePresenter extends BasePresenter<OwnerHomeContract.Model, O
                 .doFinally(() -> {
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<UserData>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<DATAUser>(mErrorHandler) {
                     @Override
-                    public void onNext(UserData data) {
+                    public void onNext(DATAUser data) {
                         if (data != null && data.getData() != null)
                             mRootView.initUserData(data.getData());
                     }

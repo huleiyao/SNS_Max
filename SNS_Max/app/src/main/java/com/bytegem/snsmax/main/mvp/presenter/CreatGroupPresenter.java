@@ -7,6 +7,7 @@ import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.Api;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -94,7 +95,7 @@ public class CreatGroupPresenter extends BasePresenter<CreatGroupContract.Model,
                         //无数据返回  成功
                         mRootView.showMessage("上传成功");
                         avatar = fileSignBean.getPath();
-                        mRootView.showGroupCover(Api.FILE_LOOK_DOMAIN + fileSignBean.getPath());
+                        mRootView.showGroupCover(Utils.checkUrl(fileSignBean.getPath()));
                     } else {
                         mRootView.showMessage("上传失败");
                     }

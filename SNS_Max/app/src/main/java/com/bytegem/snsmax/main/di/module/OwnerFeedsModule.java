@@ -1,6 +1,5 @@
 package com.bytegem.snsmax.main.di.module;
 
-import com.bytegem.snsmax.main.mvp.ui.adapter.ChatListAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.OwnerFeedsAdapter;
 import com.jess.arms.di.scope.FragmentScope;
 

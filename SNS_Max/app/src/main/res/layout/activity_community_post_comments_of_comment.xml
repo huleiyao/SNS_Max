@@ -37,6 +37,7 @@
             android:background="@drawable/shape_communtiy_comment_ed_bg"
             android:gravity="center_vertical"
             android:hint="回复评论"
+            android:imeOptions="actionSend"
             android:maxLines="1"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
@@ -50,11 +51,12 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:background="@color/color_5e6ce7"
-            android:paddingLeft="20dp"
             android:gravity="center"
+            android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="发送"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

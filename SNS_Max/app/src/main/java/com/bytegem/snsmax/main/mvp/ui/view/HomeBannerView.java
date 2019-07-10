@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -64,7 +65,7 @@ public class HomeBannerView {
     public class GlideImageLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
-            GlideLoaderUtil.LoadRoundImage20(context, path, imageView);
+            GlideLoaderUtil.LoadRoundImage20(context, Utils.checkUrl(path.toString()), imageView);
         }
     }
 }

@@ -108,7 +108,7 @@
                     android:layout_height="1dp"
                     android:background="@color/color_DFE6E8" />
 
-                <EditText
+                <com.bytegem.snsmax.main.app.widget.TagEditTextView
                     android:id="@+id/content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -131,6 +131,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="156dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:background="@drawable/shape_creat_feed_url_bg_f0f1f2"
+                    android:layout_marginTop="18dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="156dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_img_link" />
+
+                    <TextView
+                        android:id="@+id/url_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:maxLines="3"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:text="在哪个电影和电视剧中有让你印象特别深刻的一段话？"
+                        android:textColor="@color/color_646F79"
+                        android:textSize="30sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/delect_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="18dp"
+                    android:src="@drawable/ic_ico_delete" />
+            </FrameLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view"

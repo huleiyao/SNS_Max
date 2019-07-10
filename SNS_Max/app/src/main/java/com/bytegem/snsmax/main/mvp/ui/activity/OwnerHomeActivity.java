@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
-import com.bytegem.snsmax.main.app.bean.User;
+import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerFeedsFragment;
@@ -99,11 +99,11 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
         mPresenter.getUserData(isMe, id);
     }
 
-    public void initUserData(User user) {
-        GlideLoaderUtil.LoadCircleImage(this, user.getCover(), user_cover);
-        user_name.setText(user.getName());
-        user_content.setText(user.getContent());
-        follow_count_and_fans_count.setText(Utils.getNumberIfPeople(user.getFollowings_count()) + "  关注  |  " + Utils.getNumberIfPeople(user.getFollowers_count()) + " 粉丝");
+    public void initUserData(UserBean userBean) {
+        GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
+        user_name.setText(userBean.getName());
+//        user_content.setText(userBean.getContent());
+        follow_count_and_fans_count.setText(Utils.getNumberIfPeople(userBean.getFollowings_count()) + "  关注  |  " + Utils.getNumberIfPeople(userBean.getFollowers_count()) + " 粉丝");
     }
 
     public void showFragment(ArrayList<FragmentBean> fragmenList) {

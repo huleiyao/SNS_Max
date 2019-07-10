@@ -7,6 +7,7 @@ import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.config.CommunityService;
+import com.bytegem.snsmax.main.app.config.TopicService;
 import com.bytegem.snsmax.main.app.config.UpdataImageService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
@@ -56,6 +57,13 @@ public class CreatNewsModel extends BaseModel implements CreatNewsContract.Model
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
                 .send(MApplication.getTokenOrType(), RequestBody.create(mediaType, jsonData));
+    }
+
+    @Override
+    public Observable<NetDefaultBean> topicSend(int topicId, String jsonData) {
+        return mRepositoryManager
+                .obtainRetrofitService(TopicService.class)
+                .sendFeedInTopic(MApplication.getTokenOrType(), topicId, RequestBody.create(mediaType, jsonData));
     }
 
     @Override

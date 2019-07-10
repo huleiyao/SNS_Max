@@ -6,12 +6,13 @@ import android.view.View;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.common.utils.M;
-import com.bytegem.snsmax.main.app.Api;
-import com.bytegem.snsmax.main.app.bean.CommunityMediaBean;
-import com.bytegem.snsmax.main.app.bean.CommunityPostList;
+import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
-import com.bytegem.snsmax.main.app.bean.LocationBean;
+import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
+import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -24,7 +25,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import javax.inject.Inject;
 
@@ -34,8 +34,6 @@ import com.lzy.imagepicker.bean.ImageItem;
 
 import java.io.EOFException;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 
 import static com.bytegem.snsmax.main.app.MApplication.location;
@@ -54,7 +52,7 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @ActivityScope
-public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, CreatNewsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
+public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, CreatNewsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, TagTextView.TopicListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -65,8 +63,9 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     AppManager mAppManager;
     @Inject
     CreateImageAdapter adapter;
-    CommunityMediaBean mMediaBean;
+    MediaBean mMediaBean;
     String mContent;
+    TopicBean mTopicBean;
     boolean isStartSend = false;
 
     @Inject
@@ -74,11 +73,12 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
         super(model, rootView);
     }
 
-    public void checkSend(String content, CommunityMediaBean mediaBean) {
+    public void checkSend(String content, MediaBean mediaBean, CreatNewsActivity.FeedType feedType, TopicBean topicBean) {
         mRootView.showLoading();
         mContent = content;
+        mTopicBean = topicBean;
         mMediaBean = mediaBean;
-        switch (adapter.getFeedType()) {
+        switch (feedType) {
             case CAMERA:
                 List<ImageItem> imageItems = mMediaBean.getImageItems();
                 if (imageItems != null && imageItems.size() > 0) {
@@ -94,9 +94,11 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
 //                getSign("video", imageItems.get(i), i);
                 break;
             case LINK:
-
+                send();
                 break;
             default:
+                send();
+                break;
         }
     }
 
@@ -136,7 +138,7 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 .doOnError((Throwable onError) -> {
                     if (onError instanceof EOFException) {
                         //无数据返回  成功
-                        mMediaBean.setImages(position, Api.FILE_LOOK_DOMAIN + fileSignBean.getPath());
+                        mMediaBean.setImages(position, Utils.checkUrl(fileSignBean.getPath()));
                         if (!isStartSend && mMediaBean.checkImage())
                             send();
                     } else {
@@ -168,7 +170,9 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 , "contents", mContent
                 , "media", bean
         );
-        mModel.send(jsonData)
+        (mTopicBean == null ?
+                mModel.send(jsonData)
+                : mModel.topicSend(mTopicBean.getId(), jsonData))
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -213,5 +217,10 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         mRootView.watchImagePicker(position);
+    }
+
+    @Override
+    public void topicListener(TopicBean topicBean) {
+        //点击话题后的操作
     }
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <View style="@style/default_line_hor" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="74dp"
+        android:orientation="vertical"
+        android:paddingLeft="42dp"
+        android:paddingRight="68dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="8dp"
+            android:text="可以添加微信、微博、知乎、头条、秒拍等各类网站链接，支持主流网站嵌入播放"
+            android:textColor="@color/color_646F79"
+            android:textSize="28sp" />
+
+        <EditText
+            android:id="@+id/url"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="79dp"
+            android:background="@drawable/shape_add_url_50_f6f8f9"
+            android:gravity="center"
+            android:hint="输入或粘贴链接"
+            android:maxLines="1"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            android:textColor="@color/color_151b26"
+            android:textColorHint="@color/color_b0b8bf"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="77dp"
+            android:background="@drawable/shape_add_url_50_665d68ea"
+            android:gravity="center"
+            android:text="添加"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+    </LinearLayout>
+</LinearLayout>

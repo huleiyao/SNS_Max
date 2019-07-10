@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.LocationBean;
+import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.mvp.ui.fragment.HomeFindFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.HomeFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.HomeMessageFragment;
@@ -27,7 +27,6 @@ import com.bytegem.snsmax.main.mvp.contract.HomeContract;
 import com.bytegem.snsmax.main.mvp.presenter.HomePresenter;
 
 import com.bytegem.snsmax.R;
-import com.next.easynavigation.constant.Anim;
 import com.next.easynavigation.view.EasyNavigationBar;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;

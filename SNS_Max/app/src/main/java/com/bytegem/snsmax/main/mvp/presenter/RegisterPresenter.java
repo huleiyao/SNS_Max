@@ -2,10 +2,9 @@ package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.LoginData;
+import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -22,8 +21,6 @@ import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.RegisterContract;
 import com.jess.arms.utils.RxLifecycleUtils;
-
-import java.net.URLEncoder;
 
 
 /**

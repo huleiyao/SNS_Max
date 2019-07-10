@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 
 import java.util.List;
 
@@ -27,11 +28,16 @@ import java.util.List;
  * Description:
  */
 public class TagTextView extends android.support.v7.widget.AppCompatTextView {
+    public interface TopicListener {
+        void topicListener(TopicBean topicBean);
+    }
+
     private StringBuffer content_buffer;
     private TextView tv_tag;
     private View view;//标签布局的最外层布局
     private Context mContext;
-
+    private TopicListener listener;
+    private TopicBean mTopicBean;
 //必须重写所有的构造器，否则可能会出现无法inflate布局的错误！
 
     public TagTextView(Context context) {
@@ -50,7 +56,21 @@ public class TagTextView extends android.support.v7.widget.AppCompatTextView {
         mContext = context;
     }
 
-    public void setContentAndTag(String content, String tag) {
+    public void setListener(TopicListener listener) {
+        this.listener = listener;
+    }
+
+    public TopicBean getmTopicBean() {
+        return mTopicBean;
+    }
+
+    public void setContentAndTag(String content, TopicBean topicBean) {
+        mTopicBean = topicBean;
+        if (topicBean == null) {
+            setText(content);
+            return;
+        }
+        String tag = topicBean.getName();
         tag = "#" + tag + "# ";
         content_buffer = new StringBuffer();
         content_buffer.append(tag);
@@ -59,6 +79,12 @@ public class TagTextView extends android.support.v7.widget.AppCompatTextView {
         View view = LayoutInflater.from(mContext).inflate(R.layout.tag, null);//R.layout.tag是每个标签的布局
         tv_tag = view.findViewById(R.id.tv_tag);
         tv_tag.setText(tag);
+        tv_tag.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) listener.topicListener(topicBean);
+            }
+        });
         Drawable d = new BitmapDrawable(convertViewToBitmap(view));
         d.setBounds(0, 0, tv_tag.getWidth(), tv_tag.getHeight());//缺少这句的话，不会报错，但是图片不回显示
 //            ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);//图片将对齐底部边线

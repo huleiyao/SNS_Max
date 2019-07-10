@@ -64,9 +64,9 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
     public Response onHttpResultResponse(@Nullable String httpResult, @NonNull Interceptor.Chain chain, @NonNull Response response) {
 //        if (!TextUtils.isEmpty(httpResult) && RequestInterceptor.isJson(response.body().contentType())) {
 //            try {
-//                List<User> list = ArmsUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<User>>() {
+//                List<UserBean> list = ArmsUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<UserBean>>() {
 //                }.getType());
-//                User user = list.get(0);
+//                UserBean user = list.get(0);
 //                Timber.w("Result ------> " + user.getLogin() + "    ||   Avatar_url------> " + user.getAvatarUrl());
 //            } catch (Exception e) {
 //                e.printStackTrace();

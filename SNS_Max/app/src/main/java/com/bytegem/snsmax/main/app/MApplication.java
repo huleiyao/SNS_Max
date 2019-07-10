@@ -2,13 +2,12 @@ package com.bytegem.snsmax.main.app;
 
 import android.content.Context;
 
-import com.bytegem.snsmax.main.app.bean.LocationBean;
+import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.jess.arms.base.BaseApplication;
 import com.lzy.imagepicker.GlideImageLoader;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.MediaLoader;
 import com.lzy.okhttputils.OkHttpUtils;
-import com.tencent.map.geolocation.TencentLocationManagerOptions;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 

@@ -1,7 +1,6 @@
 package com.bytegem.snsmax.main.mvp.contract;
 
-import com.bytegem.snsmax.common.bean.MBaseBean;
-import com.bytegem.snsmax.main.app.bean.LoginData;
+import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;

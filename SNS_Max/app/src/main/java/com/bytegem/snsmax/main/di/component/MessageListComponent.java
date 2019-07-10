@@ -9,7 +9,7 @@ import com.bytegem.snsmax.main.di.module.MessageListModule;
 import com.bytegem.snsmax.main.mvp.contract.MessageListContract;
 
 import com.jess.arms.di.scope.FragmentScope;
-import com.bytegem.snsmax.main.mvp.ui.fragment.MessageListFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.MessagesFragment;
 
 
 /**
@@ -27,7 +27,7 @@ import com.bytegem.snsmax.main.mvp.ui.fragment.MessageListFragment;
 @FragmentScope
 @Component(modules = MessageListModule.class, dependencies = AppComponent.class)
 public interface MessageListComponent {
-    void inject(MessageListFragment fragment);
+    void inject(MessagesFragment fragment);
 
     @Component.Builder
     interface Builder {

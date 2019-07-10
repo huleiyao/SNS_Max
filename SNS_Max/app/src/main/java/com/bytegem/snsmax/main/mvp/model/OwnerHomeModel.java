@@ -3,8 +3,7 @@ package com.bytegem.snsmax.main.mvp.model;
 import android.app.Application;
 
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
-import com.bytegem.snsmax.main.app.bean.UserData;
+import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.config.UserService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
@@ -17,7 +16,6 @@ import javax.inject.Inject;
 import com.bytegem.snsmax.main.mvp.contract.OwnerHomeContract;
 
 import io.reactivex.Observable;
-import okhttp3.RequestBody;
 
 
 /**
@@ -45,7 +43,7 @@ public class OwnerHomeModel extends BaseModel implements OwnerHomeContract.Model
     }
 
     @Override
-    public Observable<UserData> getUserData(boolean isMe, int id) {
+    public Observable<DATAUser> getUserData(boolean isMe, int id) {
         if (isMe)
             return mRepositoryManager
                     .obtainRetrofitService(UserService.class)

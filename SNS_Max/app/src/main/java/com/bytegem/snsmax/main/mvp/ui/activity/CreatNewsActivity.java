@@ -9,12 +9,17 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bytegem.snsmax.main.app.bean.CommunityMediaBean;
+import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
+import com.bytegem.snsmax.main.app.bean.feed.MediaLinkContent;
+import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
+import com.bytegem.snsmax.main.app.widget.TagEditTextView;
+import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -33,7 +38,6 @@ import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -41,6 +45,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity.FeedType.CAMERA;
+import static com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity.FeedType.DEFAULT;
 import static com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity.FeedType.VIDEO;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -63,9 +68,11 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
 
     @BindView(R.id.address)
     LinearLayout address;
+    @BindView(R.id.url)
+    FrameLayout url;
 
     @BindView(R.id.content)
-    EditText content;
+    TagEditTextView content;
 
     @BindView(R.id.camera)
     ImageView camera;
@@ -75,36 +82,39 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     ImageView link;
 
 
+    @BindView(R.id.url_text)
+    TextView url_text;
     @BindView(R.id.group_name)
     TextView group_name;
     @BindView(R.id.address_txt)
     TextView address_txt;
-    CommunityMediaBean mediaBean = new CommunityMediaBean();
+    MediaBean mediaBean = new MediaBean();
     @Inject
     CreateImageAdapter adapter;
-    FeedType feedType;
+    FeedType feedType = DEFAULT;
     MaterialDialog materialDialog;
 
     public enum FeedType {
         CAMERA, VIDEO, LINK, DEFAULT
     }
 
-    @OnClick({R.id.toolbar_send, R.id.select_group, R.id.camera, R.id.video, R.id.link, R.id.topic, R.id.down})
-    void onClick(View view) {
+    @OnClick({R.id.toolbar_send, R.id.select_group, R.id.camera, R.id.video, R.id.link, R.id.topic, R.id.down, R.id.delect_url})
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_send:
-                String content_str = content.getText().toString();
+                String content_str = content.getContent();
                 if (content_str.isEmpty()) {
                     showMessage("请输入内容！");
                     return;
                 }
-                mPresenter.checkSend(content_str, mediaBean);
+                mPresenter.checkSend(content_str, mediaBean, feedType, content.getTopicBean());
                 break;
             case R.id.select_group://选择圈子
                 break;
             case R.id.camera://图片
                 if (feedType == FeedType.CAMERA)
                     return;
+                url.setVisibility(View.GONE);
                 video.setImageResource(R.drawable.ic_ico_post_video);
                 link.setImageResource(R.drawable.ic_ico_post_link);
                 camera.setImageResource(R.drawable.ic_ico_post_camera_high);
@@ -116,6 +126,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
             case R.id.video://视频
                 if (feedType == FeedType.VIDEO)
                     return;
+                url.setVisibility(View.GONE);
                 video.setImageResource(R.drawable.ic_ico_post_video_high);
                 link.setImageResource(R.drawable.ic_ico_post_link);
                 camera.setImageResource(R.drawable.ic_ico_post_camera);
@@ -126,17 +137,23 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
             case R.id.link://链接
                 if (feedType == FeedType.LINK)
                     return;
-                video.setImageResource(R.drawable.ic_ico_post_video);
-                camera.setImageResource(R.drawable.ic_ico_post_camera);
-                link.setImageResource(R.drawable.ic_ico_post_link_high);
-                feedType = FeedType.LINK;
-                mediaBean.setType("url");
+                startActivityForResult(new Intent(this, CreatFeedAddUrlActivity.class), 103);
                 break;
             case R.id.topic://选择话题
+                startActivityForResult(new Intent(this, SelectTopicActivity.class), 104);
                 break;
             case R.id.down://收起/打开
                 break;
+            case R.id.delect_url://取消link分享
+                if (feedType == FeedType.LINK) {
+                    feedType = DEFAULT;
+                    link.setImageResource(R.drawable.ic_ico_post_link);
+                    url.setVisibility(View.GONE);
+                    mediaBean.setType("");
+                }
+                break;
         }
+
     }
 
     @Override
@@ -157,6 +174,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         setTitle("编辑动态");
+//        content.setListener(mPresenter);//话题的点击事件
         initImagePicker();
         recycle_view.setLayoutManager(new GridLayoutManager(this, 4));// 布局管理器
         recycle_view.setAdapter(adapter);
@@ -206,19 +224,44 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<ImageItem> imageItems;
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (requestCode == 1001) {
+        ArrayList<ImageItem> imageItems = null;
+        if (requestCode == 1001) {
+            if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
                 imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                setAdapterData(imageItems);
             }
+            setAdapterData(imageItems);
         } else if (resultCode == ImagePicker.RESULT_CODE_BACK) {
             //预览图片返回
             if (data != null && requestCode == 903) {
                 imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_ITEMS);
-                setAdapterData(imageItems);
             }
+            setAdapterData(imageItems);
+        } else if (resultCode == 103) {
+            MediaLinkContent mediaLinkContent = (MediaLinkContent) data.getSerializableExtra("url");
+            if (mediaLinkContent == null) ;
+            else
+                showUrl(mediaLinkContent);
+        } else if (resultCode == 104) {
+            TopicBean topicBean = (TopicBean) data.getSerializableExtra("topic");
+            if (topicBean == null) ;
+            else
+                showTopic(topicBean);
         }
+    }
+
+    private void showUrl(MediaLinkContent mediaLinkContent) {
+        video.setImageResource(R.drawable.ic_ico_post_video);
+        camera.setImageResource(R.drawable.ic_ico_post_camera);
+        link.setImageResource(R.drawable.ic_ico_post_link_high);
+        feedType = FeedType.LINK;
+        mediaBean.setType("url");
+        mediaBean.setMediaLink(mediaLinkContent);
+        url_text.setText(mediaLinkContent.getTitle());
+        url.setVisibility(View.VISIBLE);
+    }
+
+    private void showTopic(TopicBean topicBean) {
+        content.setObject(topicBean, true);
     }
 
     public void setAdapterData(ArrayList<ImageItem> imageItems) {
@@ -244,7 +287,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
         hideLoading();
         materialDialog = new MaterialDialog.Builder(this)
 //                .title("正在上传图片")
-                .content("上传图片中···")
+                .content("上传中···")
                 .progress(true, 0)
                 .progressIndeterminateStyle(false)
                 .canceledOnTouchOutside(false)
