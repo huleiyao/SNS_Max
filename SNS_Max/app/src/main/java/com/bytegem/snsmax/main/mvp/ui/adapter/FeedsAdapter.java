@@ -20,14 +20,16 @@ import java.io.File;
 public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListViewHolder> {
     private OnItemChildClickListener mOnItemChildClickListener;
     private OnItemClickListener mOnItemClickListener;
+    private TagTextView.TopicListener mTopicListener;
 
     public FeedsAdapter() {
         super(R.layout.item_community_post);
     }
 
-    public void setListener(OnItemChildClickListener onItemChildClickListener, OnItemClickListener onItemClickListener) {
+    public void setListener(OnItemChildClickListener onItemChildClickListener, OnItemClickListener onItemClickListener, TagTextView.TopicListener topicListener) {
         mOnItemChildClickListener = onItemChildClickListener;
         mOnItemClickListener = onItemClickListener;
+        mTopicListener = topicListener;
     }
 
     @Override
@@ -46,6 +48,8 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                 .setVisible(R.id.f_one_img, false)
                 .setVisible(R.id.group, false)
                 .addOnClickListener(R.id.f_one_img)
+                .addOnClickListener(R.id.content)
+                .addOnClickListener(R.id.tv_tag)
         ;
         if (bean.getGeo() == null
                 || (bean.getGeo().getLatitude().isEmpty() && bean.getGeo().getLongitude().isEmpty())
@@ -57,6 +61,7 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
         }
         if (bean.getTopic() != null && bean.getTopic().getName() != null)
             ((TagTextView) viewHolder.getView(R.id.content)).setContentAndTag(bean.getContents(), bean.getTopic());
+        ((TagTextView) viewHolder.getView(R.id.content)).setListener(mTopicListener);
         GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(bean.getUser().getAvatar()), viewHolder.getView(R.id.head_image));
         GlideLoaderUtil.LoadRoundImage6(mContext, Utils.checkUrl(bean.getGroup().getAvatar()), viewHolder.getView(R.id.group_cover));
         if (bean.getMedia() != null)

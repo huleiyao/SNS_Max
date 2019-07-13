@@ -8,7 +8,10 @@ import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
+import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
+import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedDetailsActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.TopicDetailActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
@@ -46,7 +49,7 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @FragmentScope
-public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
+public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, TagTextView.TopicListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -115,6 +118,20 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
             case R.id.f_one_img:
 
                 break;
+            case R.id.content:
+                if (adapter instanceof FeedsAdapter) {
+                    TopicBean topicBean = ((TagTextView) view).getmTopicBean();
+                    if (topicBean != null)
+                        mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", topicBean));
+                    else
+                        mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
+                }
+                break;
+            case R.id.tv_tag:
+                if (adapter instanceof FeedsAdapter) {
+                    mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
+                }
+                break;
         }
     }
 
@@ -124,5 +141,10 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
             mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
         else if (adapter instanceof ImageAdapter) ;
         else if (adapter instanceof ImageAdapter2) ;
+    }
+
+    @Override
+    public void topicListener(TopicBean topicBean) {
+        mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", topicBean));
     }
 }

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 
+import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -15,6 +17,8 @@ import com.bytegem.snsmax.main.mvp.presenter.TopicDetailPresenter;
 
 import com.bytegem.snsmax.R;
 
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -32,6 +36,9 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> implements TopicDetailContract.View {
+    @BindView(R.id.collapsing_toolbar_layout)
+    CollapsingToolbarLayout collapsing_toolbar_layout;
+    TopicBean topicBean;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -50,7 +57,8 @@ public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+         topicBean = (TopicBean) getIntent().getSerializableExtra("topic");
+        collapsing_toolbar_layout.setTitle("#" + topicBean.getName() + "#");
     }
 
     @Override
