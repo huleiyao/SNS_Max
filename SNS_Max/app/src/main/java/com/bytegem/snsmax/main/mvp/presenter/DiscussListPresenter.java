@@ -2,10 +2,14 @@ package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.main.app.bean.group.DATAGroup;
-import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.bean.group.DiscussBean;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
+import com.bytegem.snsmax.main.app.bean.group.LISTDiscusses;
+import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
+import com.bytegem.snsmax.main.app.bean.location.LocationBean;
+import com.bytegem.snsmax.main.mvp.ui.adapter.DiscussAdapter;
 import com.jess.arms.integration.AppManager;
-import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 
@@ -13,19 +17,22 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import javax.inject.Inject;
 
-import com.bytegem.snsmax.main.mvp.contract.GroupDetailsContract;
+import com.bytegem.snsmax.main.mvp.contract.DiscussListContract;
 import com.jess.arms.utils.RxLifecycleUtils;
+
+import java.util.ArrayList;
+
+import static com.bytegem.snsmax.main.app.MApplication.location;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 07/10/2019 19:45
+ * Created by MVPArmsTemplate on 07/12/2019 09:20
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -33,8 +40,8 @@ import com.jess.arms.utils.RxLifecycleUtils;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-@ActivityScope
-public class GroupDetailsPresenter extends BasePresenter<GroupDetailsContract.Model, GroupDetailsContract.View> {
+@FragmentScope
+public class DiscussListPresenter extends BasePresenter<DiscussListContract.Model, DiscussListContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -43,26 +50,40 @@ public class GroupDetailsPresenter extends BasePresenter<GroupDetailsContract.Mo
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
+    @Inject
+    DiscussAdapter adapter;
+    int mId;
+    int afterId;
 
     @Inject
-    public GroupDetailsPresenter(GroupDetailsContract.Model model, GroupDetailsContract.View rootView) {
+    public DiscussListPresenter(DiscussListContract.Model model, DiscussListContract.View rootView) {
         super(model, rootView);
     }
 
-    public void getGroupData(int id) {
-        mModel.getGroupData(id)
+    public void setId(int id) {
+        mId = id;
+        getList(true);
+    }
+
+    public void getList(boolean isRefresh) {
+        mModel.getDiscussList(mId, afterId)
                 .subscribeOn(Schedulers.io())
-                .retryWhen(new RetryWithDelay(3, 1))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<DATAGroup>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<LISTDiscusses>(mErrorHandler) {
                     @Override
-                    public void onNext(DATAGroup data) {
-                        if (data != null && data.getData() != null)
-                            mRootView.showGroupData(data.getData());
+                    public void onNext(LISTDiscusses data) {
+                        ArrayList<DiscussBean> feedBeans = data.getData();
+                        if (isRefresh)
+                            adapter.setNewData(feedBeans);
+                        else
+                            adapter.addData(feedBeans);
+                        mRootView.onFinishFreshAndLoad();
+                        if (feedBeans.size() > 0)
+                            afterId = feedBeans.get(feedBeans.size() - 1).getId();
                     }
                 });
     }

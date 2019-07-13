@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_group_notice_bg"
+    android:orientation="vertical"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="公告"
+            android:textColor="@color/color_151b26"
+            android:textSize="32sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/exit_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_ico_title_close" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <TextView
+            android:id="@+id/notice_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="40dp"
+            android:lineSpacingExtra="8dp"
+            android:minHeight="40dp"
+            android:text="在这第二个故事里，没有邪恶，没有幽暗，而只有一个少女，面对终将逝去的童年，所作的一次告别。\n这场告别，是从一次「搬家」开始的。\n别忘了影片的开始，千寻是因为随父母搬家到乡下，才遭遇了那个神秘的小镇。\n\n看到这处情节，我不禁暗暗叫好。\n因为我至今仍然记得少年时代的搬家经历，第一次回家时，走在完全陌生的街道，那种惶恐不安的心情。\n是啊，不被大人们理解的是，「搬家」对于孩子来说，就是一次冒险。\n而这场冒险的底色，是告别的忧伤：告别过去，告别熟悉，告别童年。\n因此，那个神秘的小镇，或许只是千寻在脑海中构建出来的一个「实体化的童年记忆」。\n她要用这种方式，在来不及告别的遗憾中，为自己完成一次华丽的悼念。\n她要再次徜徉在往事里，再次遭遇那些人和事；她要让它们重现，虽然可能是完全不同的由潜意识幻化出的另一个样子："
+            android:textColor="@color/color_646F79"
+            android:textSize="28sp" />
+    </ScrollView>
+</LinearLayout>

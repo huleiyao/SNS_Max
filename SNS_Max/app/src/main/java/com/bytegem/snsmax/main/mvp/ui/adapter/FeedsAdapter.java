@@ -44,6 +44,7 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                 .setVisible(R.id.url, false)
                 .setVisible(R.id.recycle_view, false)
                 .setVisible(R.id.f_one_img, false)
+                .setVisible(R.id.group, false)
                 .addOnClickListener(R.id.f_one_img)
         ;
         if (bean.getGeo() == null

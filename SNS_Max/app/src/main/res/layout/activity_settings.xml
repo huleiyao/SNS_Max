@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/default_background"
     android:orientation="vertical">
 
@@ -249,10 +250,15 @@
                 android:textColor="@color/color_151b26"
                 android:textSize="30sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
+            <com.bytegem.snsmax.common.View.SwitchButton
+                android:id="@+id/switch_button"
+                android:layout_width="68dp"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                app:circle2Bgmargin="3dp"
+                app:selectedBg="@color/color_5e6ce7"
+                app:switchState="close"
+                app:unselectedBg="@color/color_b0b8bf" />
         </LinearLayout>
     </LinearLayout>
 

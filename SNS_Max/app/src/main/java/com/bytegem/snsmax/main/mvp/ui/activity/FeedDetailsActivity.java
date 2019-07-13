@@ -272,11 +272,10 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
 
             @Override
             public void onLoadmore() {
-                mPresenter.getList(true, feedBean.getId(), 0);
+                mPresenter.getList(true, feedBean.getId(), adapter.getItem(adapter.getItemCount() - 1).getId());
             }
         });
 
-        springview.setEnableFooter(false);
         adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
         springview.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字

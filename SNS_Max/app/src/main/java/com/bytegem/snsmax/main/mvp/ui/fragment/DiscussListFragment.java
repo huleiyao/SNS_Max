@@ -12,22 +12,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import com.bytegem.snsmax.R;
-import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
-import com.bytegem.snsmax.main.mvp.ui.activity.AddressSelectActivity;
-import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
-import com.bytegem.snsmax.main.mvp.ui.view.HomeBannerView;
+import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.bean.group.DiscussBean;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
+import com.bytegem.snsmax.main.mvp.ui.adapter.DiscussAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.OwnerFeedsAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytegem.snsmax.main.di.component.DaggerFeedsComponent;
-import com.bytegem.snsmax.main.mvp.presenter.FeedsPresenter;
+import com.bytegem.snsmax.main.di.component.DaggerDiscussListComponent;
+import com.bytegem.snsmax.main.mvp.contract.DiscussListContract;
+import com.bytegem.snsmax.main.mvp.presenter.DiscussListPresenter;
 
+import com.bytegem.snsmax.R;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
@@ -37,7 +36,6 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -46,7 +44,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/05/2019 11:20
+ * Created by MVPArmsTemplate on 07/12/2019 09:20
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -54,41 +52,28 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class FeedsFragment extends BaseFragment<FeedsPresenter> implements FeedsContract.View {
-    int type;
-    @Inject
-    FeedsAdapter adapter;
+public class DiscussListFragment extends BaseFragment<DiscussListPresenter> implements DiscussListContract.View {
     @BindView(R.id.springview)
     SpringView springView;
     @BindView(R.id.recycle_view)
     RecyclerView recyclerView;
-    @BindView(R.id.address)
-    FrameLayout address;
-    @BindView(R.id.city)
-    TextView city;
+    @Inject
+    DiscussAdapter adapter;
+    private GroupBean mGroupBean;
 
-    @OnClick({R.id.address})
-    void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.address:
-                launchActivity(new Intent(getContext(), AddressSelectActivity.class));
-                break;
-        }
-    }
-
-    public static FeedsFragment newInstance(int type) {
-        FeedsFragment fragment = new FeedsFragment();
-        fragment.setType(type);
+    public static DiscussListFragment newInstance(GroupBean groupBean) {
+        DiscussListFragment fragment = new DiscussListFragment();
+        fragment.setGroupBean(groupBean);
         return fragment;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setGroupBean(GroupBean groupBean) {
+        mGroupBean = groupBean;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerFeedsComponent //如找不到该类,请编译一下项目
+        DaggerDiscussListComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -98,67 +83,34 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_community_post_list, container, false);
+        return inflater.inflate(R.layout.fragment_discuss_list, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        initList();
-    }
-
-    private void initList() {
-        if (adapter == null) adapter = new FeedsAdapter();
-        adapter.setListener(mPresenter, mPresenter);
-        if (type == 0) {
-            address.setVisibility(View.GONE);
-            HomeBannerView homeBannerView = new HomeBannerView(getContext());
-            ArrayList<String> list = new ArrayList<>();
-            list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3393469149,4171153724&fm=26&gp=0.jpg");
-            list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560254065616&di=b83592403fdff36401fd21144b30e8fc&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F110123%2F292-11012313544655.jpg");
-            list.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3650575962,3895995272&fm=11&gp=0.jpg");
-            list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560254004596&di=9fb27d55f52bbe73ac4cf4643cdabb1f&imgtype=0&src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz%2F3ofw5loYQ3LOsoX9gacMNhcchYX0nG6dVMvhBqZEdj4bvlBUVFnictHVicOCc7Pr1dP3CI1B1P3D5L4zjDJUEgxQ%2F0.jpg");
-            homeBannerView.showBanner(list);
-            adapter.setHeaderView(homeBannerView.getView());
-        } else if (type == 1)
-            address.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter.setOnItemClickListener(mPresenter);
-        adapter.setOnItemChildClickListener(mPresenter);
+//        adapter.setOnItemClickListener(mPresenter);
+//        adapter.setOnItemChildClickListener(mPresenter);
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
                 springView.setEnableFooter(false);
-                mPresenter.getList(false);
+                mPresenter.setId(mGroupBean.getId());
             }
 
             @Override
             public void onLoadmore() {
-                mPresenter.getList(true);
+                mPresenter.getList(false);
             }
         });
 
+        springView.setEnableFooter(false);
         springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
         springView.setFooter(new DefaultFooter(getActivity()));
-        mPresenter.setType(type, false);
-    }
-
-    public void changeCity() {
-        if (MApplication.location != null)
-            city.setText(MApplication.location.getCity());
-    }
-
-    public ArrayList<String> getList(int number) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 0; i < number; i++)
-            arrayList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560157380928&di=a5fcba2094b5d96612a2a77b4873115e&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F9b671d17b52639d35e7c76c23f79fbabebe769d43140-xjB5Tw_fw658");
-        return arrayList;
-    }
-
-    public void onFinishFreshAndLoad() {
-        springView.onFinishFreshAndLoad();
+        mPresenter.setId(mGroupBean.getId());
     }
 
     /**
@@ -210,6 +162,10 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
     @Override
     public void hideLoading() {
 
+    }
+
+    public void onFinishFreshAndLoad() {
+        springView.onFinishFreshAndLoad();
     }
 
     @Override

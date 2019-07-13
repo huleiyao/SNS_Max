@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bytegem.snsmax.main.app.bean.user.UserBean;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
@@ -130,7 +133,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        mPresenter.getUserData();
     }
 
     /**
@@ -199,5 +202,15 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     @Override
     public void killMyself() {
 
+    }
+
+    @Override
+    public void initUserData(UserBean userBean) {
+        user_name.setText(userBean.getName());
+        user_zan_count.setText(userBean.getLikes_count() + "");
+        user_follow_count.setText(userBean.getFollowers_count() + "");
+        user_fans_count.setText(userBean.getFollowings_count() + "");
+//        user_content.setText(userBean.get());
+        GlideLoaderUtil.LoadCircleImage(getContext(), Utils.checkUrl(userBean.getAvatar()), user_cover);
     }
 }

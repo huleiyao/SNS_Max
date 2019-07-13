@@ -89,6 +89,7 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        setTitle("");
         isMe = getIntent().getBooleanExtra(ISME, false);
         id = getIntent().getIntExtra(ID, 0);
         ArrayList<FragmentBean> fragmentBeans = new ArrayList<>();

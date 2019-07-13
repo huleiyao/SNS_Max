@@ -124,6 +124,10 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 openPhotos();
                 break;
             case R.id.video://视频
+                if (true) {
+                    showMessage("正在开发中...");
+                    return;
+                }
                 if (feedType == FeedType.VIDEO)
                     return;
                 url.setVisibility(View.GONE);

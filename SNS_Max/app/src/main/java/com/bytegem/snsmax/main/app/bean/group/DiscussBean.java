@@ -3,7 +3,7 @@ package com.bytegem.snsmax.main.app.bean.group;
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
 
-public class DiscussesBean extends MBaseBean {
+public class DiscussBean extends MBaseBean {
     private int id;
     private int feeds_count;
     private int follower_count;

@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.app.config;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.bean.group.DATAGroup;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.app.bean.group.LISTDiscusses;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
@@ -30,7 +31,7 @@ public interface GroupService {
     //圈子详情
     @GET("/groups/{id}")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<GroupBean> groupDetails(@Header("Authorization") String authorization, @Path("id") int groupId);
+    Observable<DATAGroup> getGroupDetails(@Header("Authorization") String authorization, @Path("id") int groupId);
 
     //发现页圈子列表
     @GET("/user/groups")

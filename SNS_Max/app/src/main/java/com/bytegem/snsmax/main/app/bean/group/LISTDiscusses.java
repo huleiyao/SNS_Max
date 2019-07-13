@@ -5,13 +5,13 @@ import com.bytegem.snsmax.common.bean.MBaseBean;
 import java.util.ArrayList;
 
 public class LISTDiscusses extends MBaseBean {
-    private ArrayList<DiscussesBean> data;
+    private ArrayList<DiscussBean> data;
 
-    public ArrayList<DiscussesBean> getData() {
+    public ArrayList<DiscussBean> getData() {
         return data;
     }
 
-    public void setData(ArrayList<DiscussesBean> data) {
+    public void setData(ArrayList<DiscussBean> data) {
         this.data = data;
     }
 }

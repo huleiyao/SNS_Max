@@ -168,7 +168,19 @@
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity android:name=".main.mvp.ui.activity.GroupDetailsActivity"></activity>
+        <activity
+            android:name=".main.mvp.ui.activity.GroupDetailsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.GroupSettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+        <activity android:name=".main.mvp.ui.activity.TopicDetailActivity"></activity>
     </application>
 
 </manifest>

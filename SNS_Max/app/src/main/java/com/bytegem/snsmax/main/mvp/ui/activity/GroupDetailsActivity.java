@@ -1,10 +1,32 @@
 package com.bytegem.snsmax.main.mvp.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
+import com.bytegem.snsmax.common.bean.FragmentBean;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.app.widget.MyCoordinatorLayout;
+import com.bytegem.snsmax.main.mvp.ui.fragment.DiscussListFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerFeedsFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerGroupsFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerRecordFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -14,7 +36,13 @@ import com.bytegem.snsmax.main.mvp.contract.GroupDetailsContract;
 import com.bytegem.snsmax.main.mvp.presenter.GroupDetailsPresenter;
 
 import com.bytegem.snsmax.R;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -31,7 +59,53 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> implements GroupDetailsContract.View {
+public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> implements GroupDetailsContract.View, View.OnClickListener {
+    @BindView(R.id.tabs)
+    SmartTabLayout tabs;
+
+    @BindView(R.id.projectPager)
+    ViewPager viewPager;
+
+    @BindView(R.id.member_covers)
+    RecyclerView member_covers;
+
+    @BindView(R.id.group_cover)
+    ImageView group_cover;
+
+    @BindView(R.id.group_name)
+    TextView group_name;
+    @BindView(R.id.group_active_count)
+    TextView group_active_count;
+    @BindView(R.id.group_detail)
+    TextView group_detail;
+    @BindView(R.id.group_member_count)
+    TextView group_member_count;
+    @BindView(R.id.group_message)
+    TextView group_message;
+
+    @BindView(R.id.join_us)
+    CheckBox join_us;
+
+    @BindView(R.id.group_member)
+    LinearLayout group_member;
+    TextView notice_content;
+    private GroupBean mGroup;
+    BottomSheetDialog notice;
+
+    @OnClick({R.id.more, R.id.group_message})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.more:
+                launchActivity(new Intent(this, GroupSettingActivity.class));
+                break;
+            case R.id.group_message:
+                notice.show();
+                break;
+            case R.id.exit_notice:
+                notice.dismiss();
+                break;
+        }
+    }
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -50,7 +124,48 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        setTitle("");
+        GroupBean group = (GroupBean) getIntent().getSerializableExtra("group");
+        if (group == null) {
+            killMyself();
+            return;
+        }
+        showGroupData(group);
+        initFragment();
+        initNotice();
+        mPresenter.getGroupData(group.getId());
+    }
 
+    private void initNotice() {
+        notice = new BottomSheetDialog(this);
+        notice.setContentView(R.layout.view_group_detail_notice);
+        notice.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        notice.findViewById(R.id.exit_notice).setOnClickListener(this);
+        notice_content = notice.findViewById(R.id.notice_content);
+    }
+
+    public void showGroupData(GroupBean group) {
+        mGroup = group;
+        GlideLoaderUtil.LoadRoundImage20(this, Utils.checkUrl(mGroup.getAvatar()), group_cover);
+        group_name.setText(mGroup.getName());
+        group_active_count.setText(Utils.getNumberIfPeople(mGroup.getMembers_count()) + " 人气");
+        if (mGroup.isHas_joined()) {
+            join_us.setText("已加入");
+        } else {
+            join_us.setText("+ 加入");
+        }
+        group_detail.setText(mGroup.getDesc());
+        group_member_count.setText(Utils.getNumberIfPeople(mGroup.getMembers_count()) + " 成员");
+    }
+
+    private void initFragment() {
+        ArrayList<FragmentBean> fragmentBeans = new ArrayList<>();
+        fragmentBeans.add(new FragmentBean("动态", OwnerFeedsFragment.newInstance()));
+        fragmentBeans.add(new FragmentBean("讨论", DiscussListFragment.newInstance(mGroup)));
+        viewPager.setAdapter(new VPFragmentAdapter(getSupportFragmentManager(), fragmentBeans));
+        viewPager.setOffscreenPageLimit(fragmentBeans.size() - 1);
+        tabs.setViewPager(viewPager);
     }
 
     @Override

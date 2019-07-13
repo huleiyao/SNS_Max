@@ -1,6 +1,8 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
+import android.content.Intent;
+import android.view.View;
 
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
@@ -8,8 +10,10 @@ import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.mvp.contract.GroupsContract;
+import com.bytegem.snsmax.main.mvp.ui.activity.GroupDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupHeadersAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupsAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -41,7 +45,7 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @FragmentScope
-public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsContract.View> {
+public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -61,8 +65,6 @@ public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsC
     }
 
     public void getList() {
-        if (location == null)
-            location = new LocationBean();
         mModel.getGroupList()
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -87,5 +89,17 @@ public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsC
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        if (adapter instanceof GroupsAdapter) {
+            mRootView.launchActivity(new Intent(mApplication, GroupDetailsActivity.class).putExtra("group", ((GroupsAdapter) adapter).getItem(position)));
+        }
     }
 }

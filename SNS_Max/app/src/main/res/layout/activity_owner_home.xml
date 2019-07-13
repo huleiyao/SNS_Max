@@ -22,12 +22,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentScrim="@color/color_5e6ce7"
                 app:expandedTitleTextAppearance="@style/CollapsingToolbarTitleStyle.About"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="#99000000"
                     android:orientation="vertical">
 
@@ -40,6 +41,8 @@
                         <include layout="@layout/include_user_info" />
                     </FrameLayout>
                 </LinearLayout>
+
+                <include layout="@layout/include_title_more" />
             </android.support.design.widget.CollapsingToolbarLayout>
 
             <com.ogaclejapan.smarttablayout.SmartTabLayout
