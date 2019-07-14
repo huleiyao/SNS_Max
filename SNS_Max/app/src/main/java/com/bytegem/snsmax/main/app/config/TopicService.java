@@ -33,7 +33,7 @@ public interface TopicService {
     //话题详情
     @GET(Topic + "/{id}")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<DATATopic> topicDetail(@Header("Authorization") String authorization, @Path("id") int id);
+    Observable<DATATopic> getTopicDetail(@Header("Authorization") String authorization, @Path("id") int id);
 
     //在话题下发布一个动态
     @POST(getTopicFeeds)

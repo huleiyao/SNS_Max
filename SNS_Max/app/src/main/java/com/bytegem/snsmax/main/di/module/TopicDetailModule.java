@@ -1,5 +1,6 @@
 package com.bytegem.snsmax.main.di.module;
 
+import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
@@ -8,6 +9,7 @@ import dagger.Provides;
 
 import com.bytegem.snsmax.main.mvp.contract.TopicDetailContract;
 import com.bytegem.snsmax.main.mvp.model.TopicDetailModel;
+import com.jess.arms.di.scope.FragmentScope;
 
 
 /**
@@ -27,4 +29,10 @@ public abstract class TopicDetailModule {
 
     @Binds
     abstract TopicDetailContract.Model bindTopicDetailModel(TopicDetailModel model);
+
+    @ActivityScope
+    @Provides
+    static FeedsAdapter provideCommunityPostListAdapter() {
+        return new FeedsAdapter();
+    }
 }

@@ -89,7 +89,10 @@ public class FeedCommentsOfCommentPresenter extends BasePresenter<FeedCommentsOf
                     @Override
                     public void onNext(LISTFeedComments data) {
                         ArrayList<FeedCommentBean> feedCommentBeans = data.getData();
-                        adapter.addData(feedCommentBeans);
+                        if (isLoadMore)
+                            adapter.addData(feedCommentBeans);
+                        else
+                            adapter.setNewData(feedCommentBeans);
                         mRootView.onFinishFreshAndLoad();
                     }
                 });
