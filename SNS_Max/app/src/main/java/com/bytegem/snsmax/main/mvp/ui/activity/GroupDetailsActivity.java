@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
@@ -62,15 +63,20 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> implements GroupDetailsContract.View, View.OnClickListener {
     @BindView(R.id.tabs)
     SmartTabLayout tabs;
-
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
     @BindView(R.id.projectPager)
     ViewPager viewPager;
-
+    @BindView(R.id.toolbar_title)
+    TextView toolbar_title;
     @BindView(R.id.member_covers)
     RecyclerView member_covers;
-
+    @BindView(R.id.head_layout)
+    LinearLayout head_layout;
     @BindView(R.id.group_cover)
     ImageView group_cover;
+    @BindView(R.id.search)
+    ImageView search;
 
     @BindView(R.id.group_name)
     TextView group_name;
@@ -124,12 +130,22 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        setTitle("");
         GroupBean group = (GroupBean) getIntent().getSerializableExtra("group");
         if (group == null) {
             killMyself();
             return;
         }
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset <= -head_layout.getHeight() / 2) {
+                    toolbar_title.setText(group.getName());
+                } else {
+                    toolbar_title.setText(" ");
+                }
+            }
+        });
+        search.setVisibility(View.VISIBLE);
         showGroupData(group);
         initFragment();
         initNotice();

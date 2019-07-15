@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentScrim="@color/color_5e6ce7"
+                app:contentScrim="@color/white"
                 app:expandedTitleTextAppearance="@style/CollapsingToolbarTitleStyle.About"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -55,6 +55,7 @@
                         android:gravity="left">
 
                         <ImageView
+                            android:id="@+id/back"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -67,7 +68,7 @@
                         android:id="@+id/toolbar_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_151b26"
                         android:textSize="36sp"
                         tools:text="@string/app_name" />
 

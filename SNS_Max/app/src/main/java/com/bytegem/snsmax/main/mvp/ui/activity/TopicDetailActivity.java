@@ -69,6 +69,12 @@ public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> impl
     @BindView(R.id.appbar)
     AppBarLayout appbar;
 
+    @BindView(R.id.search)
+    ImageView search;
+    @BindView(R.id.share)
+    ImageView share;
+    @BindView(R.id.back)
+    ImageView back;
     @BindView(R.id.topic_detail_header_bg_cover)
     ImageView topic_detail_header_bg_cover;
     @BindView(R.id.topic_cover)
@@ -110,8 +116,14 @@ public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> impl
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (verticalOffset <= -head_layout.getHeight() / 2) {
                     toolbar_title.setText("#" + topicBean.getName() + "#");
+                    back.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_151b26));
+                    search.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_search_151b26));
+                    share.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_share_151b26));
                 } else {
                     toolbar_title.setText(" ");
+                    back.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_white));
+                    search.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_search_white));
+                    share.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_share));
                 }
             }
         });
