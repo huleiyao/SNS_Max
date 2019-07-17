@@ -45,7 +45,7 @@ public class GlideImageLoader implements ImageLoader/*, NineGridView.ImageLoader
 
     @Override
     public void displayImagePreview(Activity activity, String path, ImageView imageView, int width, int height) {
-        GlideLoaderUtil.LoadImage(activity,path,imageView);
+        GlideLoaderUtil.LoadImage(activity, path, imageView);
     }
 
     @Override

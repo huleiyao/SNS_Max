@@ -12,6 +12,7 @@ import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.TopicDetailActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.VideoPlayerActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
@@ -30,6 +31,8 @@ import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
 import com.jess.arms.utils.RxLifecycleUtils;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.ui.WatchImagesActivity;
 
 import java.util.ArrayList;
 
@@ -116,7 +119,21 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
             case R.id.f_one_img:
-
+                if (adapter instanceof FeedsAdapter) {
+                    FeedBean feedBean = (FeedBean) adapter.getItem(position);
+                    switch (feedBean.getMedia().getType()) {
+                        case "image":
+                            mRootView.launchActivity(new Intent(mApplication, WatchImagesActivity.class)
+                                    .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, feedBean.getMedia().getImageList())
+                                    .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0)
+                                    .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
+                            );
+                            break;
+                        case "video":
+                            mRootView.launchActivity(new Intent(mApplication, VideoPlayerActivity.class).putExtra("feed", feedBean));
+                            break;
+                    }
+                }
                 break;
             case R.id.content:
                 if (adapter instanceof FeedsAdapter) {
@@ -139,8 +156,12 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (adapter instanceof FeedsAdapter)
             mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
-        else if (adapter instanceof ImageAdapter) ;
-        else if (adapter instanceof ImageAdapter2) ;
+        else if (adapter instanceof ImageAdapter || adapter instanceof ImageAdapter2)
+            mRootView.launchActivity(new Intent(mApplication, WatchImagesActivity.class)
+                    .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, (ArrayList<String>) adapter.getData())
+                    .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position)
+                    .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
+            );
     }
 
     @Override

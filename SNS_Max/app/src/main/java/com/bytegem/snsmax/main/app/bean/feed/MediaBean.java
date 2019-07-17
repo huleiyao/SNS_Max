@@ -1,6 +1,7 @@
 package com.bytegem.snsmax.main.app.bean.feed;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -138,11 +139,26 @@ public class MediaBean extends MBaseBean {
             case "image":
                 setImageList(gson.fromJson(gson.toJson(contents), new TypeToken<ArrayList<String>>() {
                 }.getType()));
+                complementUrlFromImage();
                 break;
             case "url":
                 setMediaLink(gson.fromJson(gson.toJson(contents), new TypeToken<MediaLinkContent>() {
                 }.getType()));
                 break;
+        }
+    }
+
+    public void complementUrlFromImage() {
+        if (imageList != null) {
+            ArrayList<String> list = new ArrayList<>();
+            for (String path : imageList)
+                if (path == null) ;
+                else if (path.isEmpty()) ;
+                else if (path.contains("http"))
+                    list.add(path);
+                else
+                    list.add(Utils.checkUrl(path));
+            setImageList(list);
         }
     }
 

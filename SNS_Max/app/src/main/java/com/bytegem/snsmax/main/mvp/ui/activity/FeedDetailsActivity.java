@@ -41,6 +41,10 @@ import com.bytegem.snsmax.R;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
+import com.lzy.imagepicker.ui.WatchImagesActivity;
 
 
 import java.io.File;
@@ -165,8 +169,19 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
             case R.id.user_cover://动态发起人
                 showMessage("进入用户信息界面");
                 break;
-            case R.id.one_img://只有一张图的时候   从这里打开全图
-
+            case R.id.one_img://只有一张图的时候   从这里打开全图,或去看视频
+                switch (feedBean.getMedia().getType()) {
+                    case "image":
+                        launchActivity(new Intent(this, WatchImagesActivity.class)
+                                .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, feedBean.getMedia().getImageList())
+                                .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0)
+                                .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
+                        );
+                        break;
+                    case "video":
+                        launchActivity(new Intent(this, VideoPlayerActivity.class).putExtra("feed", feedBean));
+                        break;
+                }
                 break;
             case R.id.join_us://只有一张图的时候   从这里打开全图
                 showMessage("加入圈子");
@@ -332,12 +347,13 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                     f_one_img.setVisibility(View.VISIBLE);
                     is_video.setVisibility(View.VISIBLE);
                     more_img.setVisibility(View.VISIBLE);
-                    MediaUtils.getImageForVideo(Utils.checkUrl(feedBean.getMedia().getMediaVideo().getVideo()), new MediaUtils.OnLoadVideoImageListener() {
-                        @Override
-                        public void onLoadImage(File file) {
-                            GlideLoaderUtil.LoadRoundImage20(FeedDetailsActivity.this, file, one_img);
-                        }
-                    });
+                    GlideLoaderUtil.LoadRoundImage20(FeedDetailsActivity.this, Utils.checkUrl(feedBean.getMedia().getMediaVideo().getCover()), one_img);
+//                    MediaUtils.getImageForVideo(Utils.checkUrl(feedBean.getMedia().getMediaVideo().getVideo()), new MediaUtils.OnLoadVideoImageListener() {
+//                        @Override
+//                        public void onLoadImage(File file) {
+//                            GlideLoaderUtil.LoadRoundImage20(FeedDetailsActivity.this, file, one_img);
+//                        }
+//                    });
                     break;
                 case "url":
                     MediaLinkContent mediaLinkContent = feedBean.getMedia().getMediaLink();

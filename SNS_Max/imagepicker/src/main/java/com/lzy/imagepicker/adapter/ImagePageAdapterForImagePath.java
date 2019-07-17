@@ -8,16 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-//import com.github.chrisbanes.photoview.OnPhotoTapListener;
-//import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.util.Utils;
 import com.lzy.imagepicker.bean.ImageItem;
-import com.yanzhenjie.album.widget.photoview.PhotoViewAttacher;
+import com.lzy.imagepicker.util.Utils;
 
 import java.util.ArrayList;
+
+//import com.github.chrisbanes.photoview.OnPhotoTapListener;
+//import com.github.chrisbanes.photoview.PhotoView;
 
 /**
  * ================================================
@@ -28,16 +28,16 @@ import java.util.ArrayList;
  * 修订历史：
  * ================================================
  */
-public class ImagePageAdapter extends PagerAdapter {
+public class ImagePageAdapterForImagePath extends PagerAdapter {
 
     private int screenWidth;
     private int screenHeight;
     private ImagePicker imagePicker;
-    private ArrayList<ImageItem> images = new ArrayList<>();
+    private ArrayList<String> images = new ArrayList<>();
     private Activity mActivity;
     public PhotoViewClickListener listener;
 
-    public ImagePageAdapter(Activity activity, ArrayList<ImageItem> images) {
+    public ImagePageAdapterForImagePath(Activity activity, ArrayList<String> images) {
         this.mActivity = activity;
         this.images = images;
 
@@ -47,7 +47,7 @@ public class ImagePageAdapter extends PagerAdapter {
         imagePicker = ImagePicker.getInstance();
     }
 
-    public void setData(ArrayList<ImageItem> images) {
+    public void setData(ArrayList<String> images) {
         this.images = images;
     }
 
@@ -58,15 +58,16 @@ public class ImagePageAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         PhotoView photoView = new PhotoView(mActivity);
-        ImageItem imageItem = images.get(position);
-        photoView.setImageURI(Uri.parse(imageItem.path));
-//        imagePicker.getImageLoader().displayImagePreview(mActivity, imageItem.path, photoView, screenWidth, screenHeight);
-//        photoView.setOnPhotoTapListener(new OnPhotoTapListener() {
-//            @Override
-//            public void onPhotoTap(ImageView view, float x, float y) {
-//                if (listener != null) listener.OnPhotoTapListener(view, x, y);
-//            }
-//        });
+        if (images.get(position).contains("http"))
+            imagePicker.getImageLoader().displayImagePreview(mActivity, images.get(position), photoView, screenWidth, screenHeight);
+        else
+            photoView.setImageURI(Uri.parse(images.get(position)));
+        photoView.setOnPhotoTapListener(new OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(ImageView view, float x, float y) {
+                if (listener != null) listener.OnPhotoTapListener(view, x, y);
+            }
+        });
         container.addView(photoView);
         return photoView;
     }

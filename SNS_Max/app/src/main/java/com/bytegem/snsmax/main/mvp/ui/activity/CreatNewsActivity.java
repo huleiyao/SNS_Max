@@ -199,11 +199,16 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @Override
     //已选择图片预览
     public void watchImagePicker(int position) {
+        ArrayList<ImageItem> imageItems = (ArrayList<ImageItem>) adapter.getData();
+        if (imageItems.get(imageItems.size() - 1).path.equals("add"))
+            imageItems.remove(imageItems.size() - 1);
         Intent intentPreview = new Intent(this, ImagePreviewDelActivity.class);
-        intentPreview.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, (ArrayList<ImageItem>) adapter.getData());
+        intentPreview.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, imageItems);
         intentPreview.putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position);
         intentPreview.putExtra(ImagePicker.EXTRA_FROM_ITEMS, true);
+
         startActivityForResult(intentPreview, 903);
+
     }
 
     @Override
@@ -273,7 +278,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
             imageItems = new ArrayList<>();
         mediaBean.setImageItems(imageItems);
         if (feedType == CAMERA) {
-            if (imageItems.size() < 9) {
+            if (imageItems.size() < 9 && !imageItems.get(imageItems.size() - 1).path.equals("add")) {
                 ImageItem imageItem = new ImageItem();
                 imageItem.path = "add";
                 imageItems.add(imageItem);

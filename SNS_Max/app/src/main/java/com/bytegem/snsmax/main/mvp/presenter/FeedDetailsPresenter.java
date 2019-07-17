@@ -12,6 +12,8 @@ import com.bytegem.snsmax.main.app.bean.feed.DATAFeedComment;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedCommentsOfCommentActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -27,6 +29,8 @@ import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.FeedDetailsContract;
 import com.jess.arms.utils.RxLifecycleUtils;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.ui.WatchImagesActivity;
 
 import java.util.ArrayList;
 
@@ -189,10 +193,17 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        FeedCommentBean feedCommentBean = (FeedCommentBean) adapter.getItem(position);
-        mRootView.launchActivity(new Intent(mApplication, FeedCommentsOfCommentActivity.class)
-                .putExtra(FeedCommentsOfCommentActivity.FEED_ID, feedId)
-                .putExtra(FeedCommentsOfCommentActivity.COMMENT_ID, feedCommentBean)
-        );
+        if (adapter instanceof FeedCommentsAdapter) {
+            FeedCommentBean feedCommentBean = (FeedCommentBean) adapter.getItem(position);
+            mRootView.launchActivity(new Intent(mApplication, FeedCommentsOfCommentActivity.class)
+                    .putExtra(FeedCommentsOfCommentActivity.FEED_ID, feedId)
+                    .putExtra(FeedCommentsOfCommentActivity.COMMENT_ID, feedCommentBean)
+            );
+        } else if (adapter instanceof ImageAdapter || adapter instanceof ImageAdapter2)
+            mRootView.launchActivity(new Intent(mApplication, WatchImagesActivity.class)
+                    .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, (ArrayList<String>) adapter.getData())
+                    .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position)
+                    .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
+            );
     }
 }

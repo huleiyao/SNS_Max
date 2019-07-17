@@ -53,6 +53,7 @@ dependencies {
     implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
     implementation 'com.github.forvv231:EasyNavigation:1.0.2'
     implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'cn.ittiger:TigerVideoPlayer:1.7'//视频播放
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]

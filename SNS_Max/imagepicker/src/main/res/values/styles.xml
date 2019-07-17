@@ -7,6 +7,7 @@
 
     <style name="ImagePickerThemeFullScreen" parent="ImagePickerTheme">
         <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <!--SuperCheckbox的样式-->

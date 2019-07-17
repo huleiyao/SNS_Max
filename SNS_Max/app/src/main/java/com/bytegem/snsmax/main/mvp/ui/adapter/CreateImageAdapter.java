@@ -2,12 +2,14 @@ package com.bytegem.snsmax.main.mvp.ui.adapter;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.MediaUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lzy.imagepicker.bean.ImageItem;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity.FeedType.DEFAULT;
@@ -55,7 +57,7 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
                                 .setVisible(R.id.delete, true)
                                 .setVisible(R.id.img, true)
                                 .setVisible(R.id.add, false);
-                        GlideLoaderUtil.LoadRoundImage20(mContext, Utils.checkUrl(bean.path), viewHolder.getView(R.id.cover));
+                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
                     }
                     break;
                 case VIDEO:
@@ -64,7 +66,13 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
                                 .setVisible(R.id.delete, true)
                                 .setVisible(R.id.img, true)
                                 .setVisible(R.id.add, false);
-                        GlideLoaderUtil.LoadRoundImage20(mContext, Utils.checkUrl(bean.path), viewHolder.getView(R.id.cover));
+                        MediaUtils.getImageForVideo(bean.path, new MediaUtils.OnLoadVideoImageListener() {
+                            @Override
+                            public void onLoadImage(File file) {
+                                GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.one_img));
+                            }
+                        });
+                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
                     } else if (bean.path.equals("add")) {
                         //添加
                         viewHolder.setVisible(R.id.img, false)
@@ -75,7 +83,7 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
             }
         else {
             viewHolder.setVisible(R.id.delete, true);
-            GlideLoaderUtil.LoadRoundImage20(mContext, Utils.checkUrl(bean.path), viewHolder.getView(R.id.cover));
+            GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
         }
     }
 }

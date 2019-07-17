@@ -12,6 +12,7 @@ import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.MediaUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
+import com.bytegem.snsmax.main.mvp.ui.activity.FeedDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.viewholder.CommunityPostListViewHolder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -94,12 +95,13 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                             .setVisible(R.id.is_video, true)
                             .setVisible(R.id.more_img, true)
                     ;
-                    MediaUtils.getImageForVideo(Utils.checkUrl(bean.getMedia().getMediaVideo().getVideo()), new MediaUtils.OnLoadVideoImageListener() {
-                        @Override
-                        public void onLoadImage(File file) {
-                            GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.one_img));
-                        }
-                    });
+                    GlideLoaderUtil.LoadRoundImage20(mContext, Utils.checkUrl(bean.getMedia().getMediaVideo().getCover()), viewHolder.getView(R.id.one_img));
+//                    MediaUtils.getImageForVideo(Utils.checkUrl(bean.getMedia().getMediaVideo().getVideo()), new MediaUtils.OnLoadVideoImageListener() {
+//                        @Override
+//                        public void onLoadImage(File file) {
+//                            GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.one_img));
+//                        }
+//                    });
                     break;
                 case "url":
                     MediaLinkContent mediaLinkContent = bean.getMedia().getMediaLink();

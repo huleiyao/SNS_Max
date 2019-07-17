@@ -15,7 +15,9 @@ dependencies {
     implementation rootProject.ext.dependencies["recyclerview-v7"]
     implementation rootProject.ext.dependencies["support-v4"]
 //    compile 'com.android.support:recyclerview-v7:25.3.1'
-    api 'com.github.chrisbanes.photoview:library:1.2.4'
+//    implementation 'com.github.chrisbanes.photoview:library:1.2.4'
+//    implementation 'com.github.chrisbanes:PhotoView:latest.release.here'
+    implementation project(':photoview')
     implementation rootProject.ext.dependencies["glide"]
     implementation project(':arms')
     api rootProject.ext.dependencies["album"]

@@ -14,6 +14,9 @@ import com.yanzhenjie.album.AlbumConfig;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
+import cn.ittiger.player.Config;
+import cn.ittiger.player.PlayerManager;
+import cn.ittiger.player.factory.ExoPlayerFactory;
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
 import static com.bytegem.snsmax.main.app.Api.FILE_UPDATA_DOMAIN;
@@ -49,6 +52,20 @@ public class MApplication extends BaseApplication {
         initUMeng();
         initImagePicker();
         OkHttpUtils.init(this);
+        initVideoPlayer();
+    }
+
+    public void initVideoPlayer() {
+
+//该配置最好在Application中实现
+        PlayerManager.loadConfig(
+                new Config.Builder(this)
+                        .buildPlayerFactory(new ExoPlayerFactory(this))//使用ExoPlayer内核作为视频播放器，默认使用MediaPlayer
+                        .enableSmallWindowPlay()//开启小窗口播放，默认不开其
+                        .cache(true)//开启缓存功能，默认不开启
+//                        .cacheProxy(HttpProxyCacheServer)//自定义缓存配置，不设置则采用默认的缓存配置
+                        .build()
+        );
     }
 
     public void initImagePicker() {
