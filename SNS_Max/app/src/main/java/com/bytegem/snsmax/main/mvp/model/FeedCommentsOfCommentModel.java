@@ -49,13 +49,13 @@ public class FeedCommentsOfCommentModel extends BaseModel implements FeedComment
         if (isFirst)
             return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsCommentsListDefault(id, limit, isDefaultOrder ? "desc" : "asc");
+                    .getCommentsCommentsListDefault(MApplication.getTokenOrType(),id, limit, isDefaultOrder ? "desc" : "asc");
         else if (isDefaultOrder) return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .getCommentsCommentsListBefore(id, limit, "desc", commentId);
+                .getCommentsCommentsListBefore(MApplication.getTokenOrType(),id, limit, "desc", commentId);
         else return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsCommentsListAfter(id, limit, "asc", commentId);
+                    .getCommentsCommentsListAfter(MApplication.getTokenOrType(),id, limit, "asc", commentId);
     }
 
     @Override

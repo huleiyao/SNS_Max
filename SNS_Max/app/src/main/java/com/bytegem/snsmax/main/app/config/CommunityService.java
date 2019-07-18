@@ -25,12 +25,12 @@ public interface CommunityService {
     //获取推荐动态列表
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @GET("/recommend/temporary-feeds")
-    Observable<LISTFeeds> getRecommendList(@Query("per_page") String per_page, @Query("page") String page);
+    Observable<LISTFeeds> getRecommendList(@Header("Authorization") String authorization, @Query("per_page") String per_page, @Query("page") String page);
 
     //获取动态列表
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @GET("/nearby/feeds")
-    Observable<LISTFeeds> getList(@Query("latitude") String latitude, @Query("longitude") String longitude, @Query("per_page") String per_page, @Query("page") String page);
+    Observable<LISTFeeds> getList(@Header("Authorization") String authorization, @Query("latitude") String latitude, @Query("longitude") String longitude, @Query("per_page") String per_page, @Query("page") String page);
 
     //取消/喜欢动态
     @PUT("/feeds/{feedid}/like")
@@ -55,12 +55,12 @@ public interface CommunityService {
     //获取热门评论
     @GET("/feeds/{feedid}/hot-comment")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<DATAFeedComment> getHotComment(@Path("feedid") int id);
+    Observable<DATAFeedComment> getHotComment(@Header("Authorization") String authorization, @Path("feedid") int id);
 
     //获取动态详情
     @GET("/feeds/{id}")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<DataFeed> getFeedDetails(@Path("id") int id);
+    Observable<DataFeed> getFeedDetails(@Header("Authorization") String authorization, @Path("id") int id);
 
     //发布动态
     @POST("/feeds")
@@ -75,18 +75,18 @@ public interface CommunityService {
     //第一次获取评论的评论列表
     @GET(getCommentsCommentListAndSendCommentComment)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeedComments> getCommentsCommentsListDefault(@Path("id") int id, @Query("limit") int limit, @Query("order") String order);
+    Observable<LISTFeedComments> getCommentsCommentsListDefault(@Header("Authorization") String authorization, @Path("id") int id, @Query("limit") int limit, @Query("order") String order);
 
     //获取正序评论的评论列表
     @GET(getCommentsCommentListAndSendCommentComment)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeedComments> getCommentsCommentsListAfter(@Path("id") int id, @Query("limit") int limit
+    Observable<LISTFeedComments> getCommentsCommentsListAfter(@Header("Authorization") String authorization, @Path("id") int id, @Query("limit") int limit
             , @Query("order") String order, @Query("after") int after);
 
     //获取倒序评论的评论列表
     @GET(getCommentsCommentListAndSendCommentComment)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeedComments> getCommentsCommentsListBefore(@Path("id") int id, @Query("limit") int limit
+    Observable<LISTFeedComments> getCommentsCommentsListBefore(@Header("Authorization") String authorization, @Path("id") int id, @Query("limit") int limit
             , @Query("order") String order, @Query("before") int before);
 
     //发布动态评论
@@ -97,17 +97,17 @@ public interface CommunityService {
     //第一次获取评论列表
     @GET(getCommentsListAndSendComment)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeedComments> getCommentsListDefault(@Path("id") int id, @Query("limit") int limit, @Query("order") String order);
+    Observable<LISTFeedComments> getCommentsListDefault(@Header("Authorization") String authorization, @Path("id") int id, @Query("limit") int limit, @Query("order") String order);
 
     //获取正序评论列表
     @GET(getCommentsListAndSendComment)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeedComments> getCommentsListAfter(@Path("id") int id, @Query("limit") int limit
+    Observable<LISTFeedComments> getCommentsListAfter(@Header("Authorization") String authorization, @Path("id") int id, @Query("limit") int limit
             , @Query("order") String order, @Query("after") int after);
 
     //获取倒序评论列表
     @GET(getCommentsListAndSendComment)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeedComments> getCommentsListBefore(@Path("id") int id, @Query("limit") int limit
+    Observable<LISTFeedComments> getCommentsListBefore(@Header("Authorization") String authorization, @Path("id") int id, @Query("limit") int limit
             , @Query("order") String order, @Query("before") int before);
 }

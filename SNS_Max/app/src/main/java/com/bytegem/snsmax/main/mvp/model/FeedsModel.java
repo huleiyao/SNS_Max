@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
@@ -44,14 +45,14 @@ public class FeedsModel extends BaseModel implements FeedsContract.Model {
     public Observable<LISTFeeds> getList(String latitude, String longitude, String per_page, String page) {
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .getList(latitude, longitude, per_page, page);
+                .getList(MApplication.getTokenOrType(), latitude, longitude, per_page, page);
     }
 
     @Override
     public Observable<LISTFeeds> getRecommendList(String per_page, String page) {
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .getRecommendList(per_page, page);
+                .getRecommendList(MApplication.getTokenOrType(), per_page, page);
     }
 
     @Override

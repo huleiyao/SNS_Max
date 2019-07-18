@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaLinkContent;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.widget.TagEditTextView;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
@@ -35,6 +36,8 @@ import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
+import com.mingyuechunqiu.recordermanager.feature.record.RecorderManagerFactory;
+import com.mingyuechunqiu.recordermanager.feature.record.RecorderManagerable;
 
 
 import java.util.ArrayList;
@@ -80,6 +83,8 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     ImageView video;
     @BindView(R.id.link)
     ImageView link;
+    @BindView(R.id.url_cover)
+    ImageView url_cover;
 
 
     @BindView(R.id.url_text)
@@ -124,10 +129,10 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 openPhotos();
                 break;
             case R.id.video://视频
-                if (true) {
-                    showMessage("正在开发中...");
-                    return;
-                }
+//                if (true) {
+//                    showMessage("正在开发中...");
+//                    return;
+//                }
                 if (feedType == FeedType.VIDEO)
                     return;
                 url.setVisibility(View.GONE);
@@ -137,6 +142,8 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 feedType = FeedType.VIDEO;
                 adapter.setFeedType(feedType);
                 mediaBean.setType("video");
+
+                RecorderManagerFactory.getRecordVideoRequest().startRecordVideo(this, 313);
                 break;
             case R.id.link://链接
                 if (feedType == FeedType.LINK)
@@ -266,6 +273,9 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
         mediaBean.setType("url");
         mediaBean.setMediaLink(mediaLinkContent);
         url_text.setText(mediaLinkContent.getTitle());
+        if (mediaLinkContent.getUrl() != null && !mediaLinkContent.getUrl().isEmpty())
+            GlideLoaderUtil.LoadImage(this, mediaLinkContent.getImage(), url_cover);
+        else url_cover.setImageResource(R.drawable.ic_img_link);
         url.setVisibility(View.VISIBLE);
     }
 
@@ -278,7 +288,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
             imageItems = new ArrayList<>();
         mediaBean.setImageItems(imageItems);
         if (feedType == CAMERA) {
-            if (imageItems.size() < 9 && !imageItems.get(imageItems.size() - 1).path.equals("add")) {
+            if (imageItems.size() == 0 || (imageItems.size() < 9 && !imageItems.get(imageItems.size() - 1).path.equals("add"))) {
                 ImageItem imageItem = new ImageItem();
                 imageItem.path = "add";
                 imageItems.add(imageItem);

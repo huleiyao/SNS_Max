@@ -51,10 +51,18 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                 .addOnClickListener(R.id.f_one_img)
                 .addOnClickListener(R.id.content)
                 .addOnClickListener(R.id.tv_tag)
+                .addOnClickListener(R.id.zan_cover)
+                .addOnClickListener(R.id.comment)
+                .addOnClickListener(R.id.share)
         ;
+        if (bean.isHas_liked())
+            viewHolder.setImageResource(R.id.zan_cover, R.drawable.ic_ico_moment_zan_on);
+        else
+            viewHolder.setImageResource(R.id.zan_cover, R.drawable.ic_ico_moment_zan);
         if (bean.getGeo() == null
                 || (bean.getGeo().getLatitude().isEmpty() && bean.getGeo().getLongitude().isEmpty())
                 || (bean.getGeo().getLatitude().equals("0") && bean.getGeo().getLongitude().equals("0")))
+            //@TODO 获取地址的文字信息
             ;
         else {
             viewHolder.setVisible(R.id.tv_address, true)
@@ -63,7 +71,11 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
         if (bean.getTopic() != null && bean.getTopic().getName() != null)
             ((TagTextView) viewHolder.getView(R.id.content)).setContentAndTag(bean.getContents(), bean.getTopic());
         ((TagTextView) viewHolder.getView(R.id.content)).setListener(mTopicListener);
-        GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(bean.getUser().getAvatar()), viewHolder.getView(R.id.head_image));
+        if (bean.getUser().getAvatar() == null || bean.getUser().getAvatar().isEmpty())
+            GlideLoaderUtil.LoadCircleImage(mContext, R.drawable.ic_deskicon, viewHolder.getView(R.id.head_image));
+        else
+            GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(bean.getUser().getAvatar()), viewHolder.getView(R.id.head_image));
+
         GlideLoaderUtil.LoadRoundImage6(mContext, Utils.checkUrl(bean.getGroup().getAvatar()), viewHolder.getView(R.id.group_cover));
         if (bean.getMedia() != null)
             switch (bean.getMedia().getType()) {
@@ -111,7 +123,7 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                             .setText(R.id.url_text, mediaLinkContent.getTitle() == null ? "" : mediaLinkContent.getTitle())
                     ;
                     if (mediaLinkContent.getImage() != null && !mediaLinkContent.getImage().isEmpty())
-                        GlideLoaderUtil.LoadRoundImage(mContext, Utils.checkUrl(mediaLinkContent.getUrl()), viewHolder.getView(R.id.url_cover));
+                        GlideLoaderUtil.LoadImage(mContext, Utils.checkUrl(mediaLinkContent.getImage()), viewHolder.getView(R.id.url_cover));
                     else
                         ((ImageView) viewHolder.getView(R.id.url_cover)).setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_img_link));
                     break;

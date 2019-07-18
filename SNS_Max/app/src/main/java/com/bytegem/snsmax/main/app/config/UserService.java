@@ -55,7 +55,7 @@ public interface UserService {
     //通过id获取用户资料
     @GET("/users/{id}")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<DATAUser> getUserFromId(@Path("id") int id);
+    Observable<DATAUser> getUserFromId(@Header("Authorization") String authorization,@Path("id") int id);
 
     //取消/关注一个用户
     @PUT("/user/followings/{id}")

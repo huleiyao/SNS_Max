@@ -207,11 +207,12 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageButton
+                <ImageView
+                    android:id="@+id/zan_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:src="@drawable/selector_like_img" />
+                    android:background="@color/albumTransparent"
+                    android:src="@drawable/ic_ico_moment_zan" />
 
                 <TextView
                     android:id="@+id/likes_count"
@@ -230,6 +231,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="66dp"
@@ -252,6 +254,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="66dp"

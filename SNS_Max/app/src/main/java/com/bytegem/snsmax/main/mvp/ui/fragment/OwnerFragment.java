@@ -211,6 +211,10 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
         user_follow_count.setText(userBean.getFollowers_count() + "");
         user_fans_count.setText(userBean.getFollowings_count() + "");
 //        user_content.setText(userBean.get());
-        GlideLoaderUtil.LoadCircleImage(getContext(), Utils.checkUrl(userBean.getAvatar()), user_cover);
+        if (userBean.getAvatar() == null ||userBean.getAvatar().isEmpty())
+            GlideLoaderUtil.LoadCircleImage(mContext, R.drawable.ic_deskicon, user_cover);
+        else
+            GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(userBean.getAvatar()), user_cover);
+//        GlideLoaderUtil.LoadCircleImage(getContext(), Utils.checkUrl(userBean.getAvatar()), user_cover);
     }
 }

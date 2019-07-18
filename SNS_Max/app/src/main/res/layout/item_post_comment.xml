@@ -62,7 +62,7 @@
                     android:id="@+id/comment_like_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@color/albumTransparent"
                     android:clickable="false"
                     android:focusable="false"
                     android:src="@drawable/selector_like" />

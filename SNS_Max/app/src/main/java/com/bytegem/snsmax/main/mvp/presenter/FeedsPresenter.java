@@ -3,6 +3,7 @@ package com.bytegem.snsmax.main.mvp.presenter;
 import android.app.Application;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
@@ -148,6 +149,21 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                 if (adapter instanceof FeedsAdapter) {
                     mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
                 }
+                break;
+            case R.id.zan_cover:
+                FeedBean feedBean = (FeedBean) adapter.getItem(position);
+                feedBean.setHas_liked(!feedBean.isHas_liked());
+                if (feedBean.isHas_liked()) {
+                    ((ImageView) view).setImageResource(R.drawable.ic_ico_moment_zan_on);
+                } else {
+                    ((ImageView) view).setImageResource(R.drawable.ic_ico_moment_zan);
+                }
+                break;
+            case R.id.comment:
+                mRootView.showMessage("评论");
+                break;
+            case R.id.share:
+                mRootView.showMessage("分享");
                 break;
         }
     }

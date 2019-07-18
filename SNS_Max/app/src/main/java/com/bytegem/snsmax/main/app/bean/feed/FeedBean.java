@@ -6,7 +6,10 @@ import com.bytegem.snsmax.main.app.bean.location.Geo;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
 
+import org.greenrobot.greendao.annotation.Id;
+
 public class FeedBean extends MBaseBean {
+    @Id(autoincrement = false)
     private int id;
     private String contents;
     private String created_at;
@@ -21,10 +24,19 @@ public class FeedBean extends MBaseBean {
     private int comments_count;
     private int share_count;
     private String share;
+    private boolean has_liked;
 
     public FeedBean() {
 //        setUserBean(new UserBean());
         setGroup(new GroupBean());
+    }
+
+    public boolean isHas_liked() {
+        return has_liked;
+    }
+
+    public void setHas_liked(boolean has_liked) {
+        this.has_liked = has_liked;
     }
 
     public int getLikes_count() {

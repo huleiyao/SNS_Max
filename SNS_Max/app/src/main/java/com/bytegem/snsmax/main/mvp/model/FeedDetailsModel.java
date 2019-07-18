@@ -52,20 +52,20 @@ public class FeedDetailsModel extends BaseModel implements FeedDetailsContract.M
         if (isFirst)
             return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsListDefault(id, limit, isDefaultOrder ? "desc" : "asc");
+                    .getCommentsListDefault(MApplication.getTokenOrType(), id, limit, isDefaultOrder ? "desc" : "asc");
         else if (isDefaultOrder) return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .getCommentsListBefore(id, limit, "desc", commentId);
+                .getCommentsListBefore(MApplication.getTokenOrType(), id, limit, "desc", commentId);
         else return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsListAfter(id, limit, "asc", commentId);
+                    .getCommentsListAfter(MApplication.getTokenOrType(), id, limit, "asc", commentId);
     }
 
     @Override
     public Observable<DATAFeedComment> getHotComment(int id) {
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .getHotComment(id);
+                .getHotComment(MApplication.getTokenOrType(), id);
     }
 
     @Override

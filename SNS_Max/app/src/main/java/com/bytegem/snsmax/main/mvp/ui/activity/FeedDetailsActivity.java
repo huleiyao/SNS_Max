@@ -265,6 +265,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
             killMyself();
             return;
         }
+        adapter.setAll(false);
         showFeed(feedBean);
         initCommitBottomSheetDialog();
         initBottomSheetDialog();
@@ -312,7 +313,10 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         this.feedBean = feedBean;
         UserBean user = feedBean.getUser();
         if (user != null) {
-            GlideLoaderUtil.LoadCircleImage(this, feedBean.getUser().getAvatar(), user_cover);
+            if (feedBean.getUser().getAvatar() == null || feedBean.getUser().getAvatar().isEmpty())
+                GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover);
+            else
+                GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(feedBean.getUser().getAvatar()), user_cover);
             user_name.setText(feedBean.getUser().getName());
 //            user_content.setText(feedBean.getUser().getName());
         }
@@ -362,7 +366,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                     more_img.setVisibility(View.VISIBLE);
                     url_text.setText(mediaLinkContent.getTitle() == null ? "" : mediaLinkContent.getTitle());
                     if (mediaLinkContent.getImage() != null && !mediaLinkContent.getImage().isEmpty())
-                        GlideLoaderUtil.LoadRoundImage(this, Utils.checkUrl(mediaLinkContent.getUrl()), url_cover);
+                        GlideLoaderUtil.LoadRoundImage(this, Utils.checkUrl(mediaLinkContent.getImage()), url_cover);
                     else
                         url_cover.setImageDrawable(this.getResources().getDrawable(R.drawable.ic_img_link));
                     break;
@@ -446,7 +450,12 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         else {
             hot_comment.setVisibility(View.VISIBLE);
             hotFeedCommentBean = feedCommentBean;
-            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(hotFeedCommentBean.getUserBean().getAvatar()), comment_user_cover);
+            if (hotFeedCommentBean.getUserBean().getAvatar() == null || hotFeedCommentBean.getUserBean().getAvatar().isEmpty())
+                GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, comment_user_cover);
+            else
+                GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(hotFeedCommentBean.getUserBean().getAvatar()), comment_user_cover);
+
+//            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(hotFeedCommentBean.getUserBean().getAvatar()), comment_user_cover);
             comment_user_name.setText(hotFeedCommentBean.getUserBean().getName());
             comment_send_time.setText(hotFeedCommentBean.getCreated_at());
             comment_zan_count.setText(hotFeedCommentBean.getLikes_count() + "");

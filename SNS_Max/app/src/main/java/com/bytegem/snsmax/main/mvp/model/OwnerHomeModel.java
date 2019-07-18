@@ -50,7 +50,7 @@ public class OwnerHomeModel extends BaseModel implements OwnerHomeContract.Model
                     .getUser(MApplication.getTokenOrType());
         else return mRepositoryManager
                 .obtainRetrofitService(UserService.class)
-                .getUserFromId(id);
+                .getUserFromId(MApplication.getTokenOrType(), id);
     }
 
     @Override

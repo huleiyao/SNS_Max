@@ -23,7 +23,7 @@ public interface TopicService {
     //搜索话题
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @GET(Topic)
-    Observable<LISTTopics> getTopicList(@Query("keyword") String keyword);
+    Observable<LISTTopics> getTopicList(@Header("Authorization") String authorization, @Query("keyword") String keyword);
 
     //创建一个话题
     @POST(Topic)
@@ -43,18 +43,18 @@ public interface TopicService {
     //第一次获取话题下的动态列表
     @GET(getTopicFeeds)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeeds> getTopicFeedsListDefault(@Path("id") int id, @Query("limit") int limit, @Query("order") String order);
+    Observable<LISTFeeds> getTopicFeedsListDefault(@Header("Authorization") String authorization,@Path("id") int id, @Query("limit") int limit, @Query("order") String order);
 
     //获取正序话题下的动态列表
     @GET(getTopicFeeds)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeeds> getTopicFeedsListAfter(@Path("id") int id, @Query("limit") int limit
+    Observable<LISTFeeds> getTopicFeedsListAfter(@Header("Authorization") String authorization,@Path("id") int id, @Query("limit") int limit
             , @Query("order") String order, @Query("after") int after);
 
     //获取倒序话题下的动态列表
     @GET(getTopicFeeds)
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTFeeds> getTopicFeedsistBefore(@Path("id") int id, @Query("limit") int limit
+    Observable<LISTFeeds> getTopicFeedsistBefore(@Header("Authorization") String authorization,@Path("id") int id, @Query("limit") int limit
             , @Query("order") String order, @Query("before") int before);
 
 }

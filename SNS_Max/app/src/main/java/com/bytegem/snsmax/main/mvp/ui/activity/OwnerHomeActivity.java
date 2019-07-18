@@ -101,7 +101,12 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
     }
 
     public void initUserData(UserBean userBean) {
-        GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
+        if (userBean.getAvatar() == null ||userBean.getAvatar().isEmpty())
+            GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover);
+        else
+            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
+
+//        GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
         user_name.setText(userBean.getName());
 //        user_content.setText(userBean.getContent());
         follow_count_and_fans_count.setText(Utils.getNumberIfPeople(userBean.getFollowings_count()) + "  关注  |  " + Utils.getNumberIfPeople(userBean.getFollowers_count()) + " 粉丝");

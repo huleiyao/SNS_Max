@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.topic.LISTTopics;
 import com.bytegem.snsmax.main.app.config.CommunityService;
@@ -47,7 +48,7 @@ public class SelectTopicModel extends BaseModel implements SelectTopicContract.M
     public Observable<LISTTopics> search(String keyword) {
         return mRepositoryManager
                 .obtainRetrofitService(TopicService.class)
-                .getTopicList(keyword);
+                .getTopicList(MApplication.getTokenOrType(),keyword);
     }
 
     @Override

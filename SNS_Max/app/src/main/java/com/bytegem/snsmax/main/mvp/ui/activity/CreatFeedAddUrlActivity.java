@@ -93,6 +93,13 @@ public class CreatFeedAddUrlActivity extends BaseActivity<CreatFeedAddUrlPresent
                 .inject(this);
     }
 
+    public String getUrlIcon(String url) {
+        String[] split = url.split("/");
+        if (split.length > 2)
+            return split[0] + "//" + split[2] + "/" + "favicon.ico";
+        return "";
+    }
+
     public boolean getUrlTitle(String http, String url) {
         try {
             //还是一样先从一个URL加载一个Document对象。
@@ -103,7 +110,8 @@ public class CreatFeedAddUrlActivity extends BaseActivity<CreatFeedAddUrlPresent
             if (mediaLinkContent == null)
                 mediaLinkContent = new MediaLinkContent();
             mediaLinkContent.setTitle(title);
-            mediaLinkContent.setUrl(url);
+            mediaLinkContent.setUrl(http + url);
+            mediaLinkContent.setImage(getUrlIcon(http + url));
             handler.sendEmptyMessage(0);
             return true;
         } catch (Exception e) {

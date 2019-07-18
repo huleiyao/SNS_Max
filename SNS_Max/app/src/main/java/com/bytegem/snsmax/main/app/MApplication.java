@@ -57,7 +57,7 @@ public class MApplication extends BaseApplication {
 
     public void initVideoPlayer() {
 
-//该配置最好在Application中实现
+        //该配置最好在Application中实现
         PlayerManager.loadConfig(
                 new Config.Builder(this)
                         .buildPlayerFactory(new ExoPlayerFactory(this))//使用ExoPlayer内核作为视频播放器，默认使用MediaPlayer

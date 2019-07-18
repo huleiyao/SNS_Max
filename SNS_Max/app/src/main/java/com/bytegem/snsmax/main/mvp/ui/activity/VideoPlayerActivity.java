@@ -132,7 +132,12 @@ public class VideoPlayerActivity extends BaseActivity<VideoPlayerPresenter> impl
         video_player_view.bind(Utils.checkUrl(mFeedBean.getMedia().getMediaVideo().getVideo()), "");
         if (mFeedBean.getUser() != null) {
             user_name.setText(mFeedBean.getUser().getName());
-            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(mFeedBean.getUser().getAvatar()), user_cover);
+            if (mFeedBean.getUser().getAvatar() == null || mFeedBean.getUser().getAvatar().isEmpty())
+                GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover);
+            else
+                GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(mFeedBean.getUser().getAvatar()), user_cover);
+
+//            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(mFeedBean.getUser().getAvatar()), user_cover);
 //            if (mFeedBean.getUser().)@TODO 此用户是否已关注，需显示或隐藏+号图片
             add_user.setVisibility(View.VISIBLE);
         } else add_user.setVisibility(View.GONE);

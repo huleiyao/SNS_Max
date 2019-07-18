@@ -59,13 +59,13 @@ public class TopicDetailModel extends BaseModel implements TopicDetailContract.M
         if (isFirst)
             return mRepositoryManager
                     .obtainRetrofitService(TopicService.class)
-                    .getTopicFeedsListDefault(id, limit, isDefaultOrder ? "desc" : "asc");
+                    .getTopicFeedsListDefault(MApplication.getTokenOrType(), id, limit, isDefaultOrder ? "desc" : "asc");
         else if (isDefaultOrder) return mRepositoryManager
                 .obtainRetrofitService(TopicService.class)
-                .getTopicFeedsistBefore(id, limit, "desc", feedId);
+                .getTopicFeedsistBefore(MApplication.getTokenOrType(), id, limit, "desc", feedId);
         else return mRepositoryManager
                     .obtainRetrofitService(TopicService.class)
-                    .getTopicFeedsListAfter(id, limit, "asc", feedId);
+                    .getTopicFeedsListAfter(MApplication.getTokenOrType(), id, limit, "asc", feedId);
     }
 
     @Override

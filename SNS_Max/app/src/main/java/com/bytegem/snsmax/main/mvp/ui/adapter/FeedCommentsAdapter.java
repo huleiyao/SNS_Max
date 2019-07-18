@@ -44,7 +44,12 @@ public class FeedCommentsAdapter extends BaseQuickAdapter<FeedCommentBean, BaseV
                 .setText(R.id.comment_zan_count, bean.getLikes_count() + "")
                 .addOnClickListener(R.id.comment_zan)
         ;
-        GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(bean.getUserBean().getAvatar()), viewHolder.getView(R.id.comment_user_cover));
+        if (bean.getUserBean().getAvatar() == null || bean.getUserBean().getAvatar().isEmpty())
+            GlideLoaderUtil.LoadCircleImage(mContext, R.drawable.ic_deskicon,  viewHolder.getView(R.id.comment_user_cover));
+        else
+            GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(bean.getUserBean().getAvatar()), viewHolder.getView(R.id.comment_user_cover));
+
+//        GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(bean.getUserBean().getAvatar()), viewHolder.getView(R.id.comment_user_cover));
         if (isLevel_2) {
             if (viewHolder.getPosition() == 0) {
                 viewHolder.setBackgroundColor(R.id.bg, mContext.getResources().getColor(R.color.white));
