@@ -49,9 +49,9 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class CreatFeedAddUrlActivity extends BaseActivity<CreatFeedAddUrlPresenter> implements CreatFeedAddUrlContract.View {
-    @BindView(R.id.add)
+    @BindView(R.id.creat_feed_add_bt)
     TextView add;
-    @BindView(R.id.url)
+    @BindView(R.id.creat_feed_url)
     EditText url;
     MaterialDialog materialDialog;
     MediaLinkContent mediaLinkContent;
@@ -70,10 +70,10 @@ public class CreatFeedAddUrlActivity extends BaseActivity<CreatFeedAddUrlPresent
         }
     };
 
-    @OnClick(R.id.add)
+    @OnClick(R.id.creat_feed_add_bt)
     void onClick(View view) {
         switch (view.getId()) {
-            case R.id.add:
+            case R.id.creat_feed_add_bt:
                 String url_str = url.getText().toString();
                 if (url_str.isEmpty()) ;
                 else {

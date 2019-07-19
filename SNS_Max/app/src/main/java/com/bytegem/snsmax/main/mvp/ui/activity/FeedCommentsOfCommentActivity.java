@@ -55,7 +55,7 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
     SpringView springview;
     @BindView(R.id.recycle_view)
     RecyclerView recycle_view;
-    @BindView(R.id.comment)
+    @BindView(R.id.feed_comments_comment_content)
     EditText comment;
     @Inject
     FeedCommentsAdapter adapter;
@@ -74,10 +74,10 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
                 .inject(this);
     }
 
-    @OnClick(R.id.send)
+    @OnClick(R.id.feed_comments_send_comment)
     void onClick(View view) {
         switch (view.getId()) {
-            case R.id.send:
+            case R.id.feed_comments_send_comment:
                 String content = comment.getText().toString();
                 if (content.isEmpty()) {
                     comment.setError("请输入评论内容");
@@ -112,7 +112,6 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
         springview.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                springview.setEnableFooter(false);
                 mPresenter.getList(false);
             }
 
@@ -122,7 +121,6 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
             }
         });
 
-        springview.setEnableFooter(false);
         adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
         springview.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字

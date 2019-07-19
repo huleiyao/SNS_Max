@@ -22,7 +22,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/video_more"
+                android:id="@+id/video_player_video_more"
                 android:layout_width="wrap_content"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
@@ -62,7 +62,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/video_player_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -75,7 +75,7 @@
                     android:textSize="34sp" />
 
                 <TextView
-                    android:id="@+id/feed_content"
+                    android:id="@+id/video_player_feed_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="26dp"
@@ -89,7 +89,7 @@
                     android:textSize="30sp" />
 
                 <LinearLayout
-                    android:id="@+id/group"
+                    android:id="@+id/video_player_group"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:layout_marginTop="30dp"
@@ -97,13 +97,13 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/group_cover"
+                        android:id="@+id/video_player_group_cover"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:scaleType="fitXY" />
 
                     <TextView
-                        android:id="@+id/group_name"
+                        android:id="@+id/video_player_group_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
@@ -130,13 +130,13 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/user_cover"
+                        android:id="@+id/video_player_user_cover"
                         android:layout_width="90dp"
                         android:layout_height="90dp"
                         android:scaleType="fitXY" />
 
                     <ImageView
-                        android:id="@+id/add_user"
+                        android:id="@+id/video_player_add_user"
                         android:layout_width="42dp"
                         android:layout_height="42dp"
                         android:layout_marginLeft="24dp"
@@ -145,7 +145,7 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:id="@+id/like"
+                    android:id="@+id/video_player_like"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
@@ -153,14 +153,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/like_cover"
+                        android:id="@+id/video_player_like_cover"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_ico_video_zan" />
 
 
                     <TextView
-                        android:id="@+id/like_count"
+                        android:id="@+id/video_player_like_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
@@ -175,7 +175,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/comment"
+                    android:id="@+id/video_player_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
@@ -183,14 +183,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/comment_cover"
+                        android:id="@+id/video_player_comment_cover"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_ico_video_comment" />
 
 
                     <TextView
-                        android:id="@+id/omment_count"
+                        android:id="@+id/video_player_omment_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
@@ -205,7 +205,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/shape"
+                    android:id="@+id/video_player_shape"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
@@ -213,14 +213,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/shape_cover"
+                        android:id="@+id/video_player_shape_cover"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_ico_video_share" />
 
 
                     <TextView
-                        android:id="@+id/shape_count"
+                        android:id="@+id/video_player_shape_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"

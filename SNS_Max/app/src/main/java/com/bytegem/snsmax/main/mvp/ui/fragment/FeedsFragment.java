@@ -108,7 +108,7 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
 
     private void initList() {
         if (adapter == null) adapter = new FeedsAdapter();
-        adapter.setListener(mPresenter, mPresenter,mPresenter);
+        adapter.setListener(mPresenter, mPresenter, mPresenter);
         if (type == 0) {
             address.setVisibility(View.GONE);
             HomeBannerView homeBannerView = new HomeBannerView(getContext());
@@ -130,7 +130,6 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                springView.setEnableFooter(false);
                 mPresenter.getList(false);
             }
 

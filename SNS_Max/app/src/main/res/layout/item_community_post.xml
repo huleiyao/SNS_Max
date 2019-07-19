@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/group"
+            android:id="@+id/feed_item_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -29,12 +29,12 @@
                 android:paddingTop="24dp">
 
                 <ImageView
-                    android:id="@+id/group_cover"
+                    android:id="@+id/feed_item_group_cover"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
 
                 <TextView
-                    android:id="@+id/group_name"
+                    android:id="@+id/feed_item_group_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -55,7 +55,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/head_image"
+                android:id="@+id/feed_item_user_cover"
                 android:layout_width="72dp"
                 android:layout_height="match_parent" />
 
@@ -67,7 +67,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/feed_item_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -76,7 +76,7 @@
                     android:textSize="26sp" />
 
                 <TextView
-                    android:id="@+id/user_tag"
+                    android:id="@+id/feed_item_user_tag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -88,7 +88,7 @@
         </LinearLayout>
 
         <com.bytegem.snsmax.main.app.widget.TagTextView
-            android:id="@+id/content"
+            android:id="@+id/feed_item_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -99,27 +99,27 @@
             android:textSize="30sp" />
 
         <FrameLayout
-            android:id="@+id/more_img"
+            android:id="@+id/feed_item_more_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:visibility="gone">
 
             <FrameLayout
-                android:id="@+id/f_one_img"
+                android:id="@+id/feed_item_f_one_img"
                 android:layout_width="match_parent"
                 android:layout_height="360dp"
                 android:background="@drawable/shape_frame_image_round20"
                 android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/one_img"
+                    android:id="@+id/feed_item_one_img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY" />
 
                 <ImageView
-                    android:id="@+id/is_video"
+                    android:id="@+id/feed_item_is_video"
                     android:layout_width="158dp"
                     android:layout_height="158dp"
                     android:layout_gravity="bottom|left"
@@ -130,7 +130,7 @@
             <include layout="@layout/include_recyclerview" />
 
             <LinearLayout
-                android:id="@+id/url"
+                android:id="@+id/feed_item_url"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="18dp"
@@ -138,14 +138,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/url_cover"
+                    android:id="@+id/feed_item_url_cover"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_img_link" />
 
                 <TextView
-                    android:id="@+id/url_text"
+                    android:id="@+id/feed_item_url_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -159,7 +159,7 @@
         </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/address"
+            android:id="@+id/feed_item_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp">
@@ -182,7 +182,7 @@
                     android:src="@drawable/ic_ico_address" />
 
                 <TextView
-                    android:id="@+id/tv_address"
+                    android:id="@+id/feed_item_tv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -208,14 +208,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/zan_cover"
+                    android:id="@+id/feed_item_zan_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/albumTransparent"
                     android:src="@drawable/ic_ico_moment_zan" />
 
                 <TextView
-                    android:id="@+id/likes_count"
+                    android:id="@+id/feed_item_likes_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
@@ -231,14 +231,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/comment"
+                    android:id="@+id/feed_item_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="66dp"
                     android:src="@drawable/ic_ico_moment_comment" />
 
                 <TextView
-                    android:id="@+id/comments_count"
+                    android:id="@+id/feed_item_comments_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
@@ -254,14 +254,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/share"
+                    android:id="@+id/feed_item_share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="66dp"
                     android:src="@drawable/ic_ico_moment_share" />
 
                 <TextView
-                    android:id="@+id/share_count"
+                    android:id="@+id/feed_item_share_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
@@ -275,7 +275,7 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/more"
+                android:id="@+id/feed_item_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_ico_moment_more" />

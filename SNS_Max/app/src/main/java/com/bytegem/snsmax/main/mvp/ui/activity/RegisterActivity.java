@@ -1,6 +1,7 @@
 package com.bytegem.snsmax.main.mvp.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -41,48 +43,48 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class RegisterActivity extends BaseActivity<RegisterPresenter> implements RegisterContract.View {
-    @BindView(R.id.error)
-    TextView error;
-    @BindView(R.id.get_code)
-    TextView get_code;
-    @BindView(R.id.phone_number)
-    EditText phone_number;
-    @BindView(R.id.code)
-    EditText code;
+    @BindView(R.id.register_error)
+    TextView register_error;
+    @BindView(R.id.register_get_code)
+    TextView register_get_code;
+    @BindView(R.id.register_phone_number)
+    EditText register_phone_number;
+    @BindView(R.id.register_code)
+    EditText register_code;
     boolean isStartTimer = false;
 
-    @OnClick({R.id.to_login, R.id.get_code, R.id.next, R.id.wechat_login, R.id.agreement})
+    @OnClick({R.id.to_login, R.id.register_get_code, R.id.register_next, R.id.register_wechat_login, R.id.register_agreement})
     void onClick(View view) {
-        String phone_ = phone_number.getText().toString();
-        String code_ = code.getText().toString();
+        String phone_ = register_phone_number.getText().toString();
+        String code_ = register_code.getText().toString();
         switch (view.getId()) {
             case R.id.to_login:
                 killMyself();
                 break;
-            case R.id.get_code:
+            case R.id.register_get_code:
                 if (phone_ != null && phone_.isEmpty()) {
-                    error.setText("请输入手机号码");
+                    register_error.setText("请输入手机号码");
                     return;
                 }
                 if (isStartTimer) return;//开始计时了  说明不能点击获取验证码
                 changeGetCodeView(true);
                 mPresenter.getCode(phone_);
                 break;
-            case R.id.next:
+            case R.id.register_next:
                 if (phone_ != null && phone_.isEmpty()) {
-                    error.setText("请输入手机号码");
+                    register_error.setText("请输入手机号码");
                     return;
                 }
                 if (code_ != null && code_.isEmpty()) {
-                    error.setText("请输入验证码");
+                    register_error.setText("请输入验证码");
                     return;
                 }
                 mPresenter.register(phone_, code_);
                 break;
-            case R.id.wechat_login:
+            case R.id.register_wechat_login:
 
                 break;
-            case R.id.agreement:
+            case R.id.register_agreement:
 
                 break;
         }
@@ -103,9 +105,10 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (register_get_code == null || handler == null) return;
             if (msg.what > 0) {
                 isStartTimer = true;
-                get_code.setText("已发送(" + msg.what + ")");
+                register_get_code.setText("已发送(" + msg.what + ")");
                 handler.sendEmptyMessageDelayed(msg.what - 1, 1000);
             } else changeGetCodeView(false);
         }
@@ -113,19 +116,24 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     public void changeGetCodeView(boolean isOpenGetCode) {
         if (isOpenGetCode) {
-            get_code.setText("获取验证码");
-            get_code.setTextColor(getResources().getColor(R.color.color_151b26));
-            get_code.setClickable(false);
+            register_get_code.setText("获取验证码");
+            register_get_code.setTextColor(getResources().getColor(R.color.color_151b26));
+            register_get_code.setClickable(false);
         } else {
-            get_code.setText("重新获取验证码");
-            get_code.setTextColor(getResources().getColor(R.color.color_5D68EA));
-            get_code.setClickable(true);
+            register_get_code.setText("重新获取验证码");
+            register_get_code.setTextColor(getResources().getColor(R.color.color_5D68EA));
+            register_get_code.setClickable(true);
             isStartTimer = false;
         }
     }
 
     @Override
     public void toHome() {
+        getSharedPreferences("user", Context.MODE_PRIVATE)
+                .edit()
+                .putString("token", MApplication.token)
+                .putString("token_type", MApplication.token_type)
+                .commit();
         launchActivity(new Intent(this, HomeActivity.class));
         killMyself();
     }

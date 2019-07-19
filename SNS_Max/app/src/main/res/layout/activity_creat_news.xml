@@ -74,7 +74,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/select_group"
+                    android:id="@+id/creat_news_select_group"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -88,7 +88,7 @@
                         android:src="@drawable/ic_ico_circle_grey" />
 
                     <TextView
-                        android:id="@+id/group_name"
+                        android:id="@+id/creat_news_group_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
@@ -109,7 +109,7 @@
                     android:background="@color/color_DFE6E8" />
 
                 <com.bytegem.snsmax.main.app.widget.TagEditTextView
-                    android:id="@+id/content"
+                    android:id="@+id/create_news_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/albumTransparent"
@@ -133,7 +133,7 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/url"
+                android:id="@+id/creat_news_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone">
@@ -143,18 +143,18 @@
                     android:layout_height="156dp"
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="32dp"
-                    android:background="@drawable/shape_creat_feed_url_bg_f0f1f2"
                     android:layout_marginTop="18dp"
+                    android:background="@drawable/shape_creat_feed_url_bg_f0f1f2"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/url_cover"
+                        android:id="@+id/creat_news_url_cover"
                         android:layout_width="156dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_img_link" />
 
                     <TextView
-                        android:id="@+id/url_text"
+                        android:id="@+id/creat_news_url_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -167,7 +167,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/delect_url"
+                    android:id="@+id/creat_news_delect_url"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -183,7 +183,7 @@
                 android:paddingRight="32dp" />
 
             <LinearLayout
-                android:id="@+id/address"
+                android:id="@+id/creat_news_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -202,7 +202,7 @@
                     android:src="@drawable/ic_ico_address" />
 
                 <TextView
-                    android:id="@+id/address_txt"
+                    android:id="@+id/creat_news_address_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="9dp"
@@ -226,7 +226,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/camera"
+                    android:id="@+id/creat_news_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingLeft="32dp"
@@ -234,7 +234,7 @@
                     android:src="@drawable/ic_ico_post_camera" />
 
                 <ImageView
-                    android:id="@+id/video"
+                    android:id="@+id/creat_news_video"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingLeft="30dp"
@@ -242,7 +242,7 @@
                     android:src="@drawable/ic_ico_post_video" />
 
                 <ImageView
-                    android:id="@+id/link"
+                    android:id="@+id/creat_news_link"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingLeft="30dp"
@@ -250,7 +250,7 @@
                     android:src="@drawable/ic_ico_post_link" />
 
                 <ImageView
-                    android:id="@+id/topic"
+                    android:id="@+id/creat_news_topic"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingLeft="30dp"
@@ -263,7 +263,7 @@
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:id="@+id/down"
+                    android:id="@+id/creat_news_down"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingLeft="30dp"

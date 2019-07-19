@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.main.app.MApplication;
@@ -44,28 +45,27 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
-
-    @BindView(R.id.error)
-    TextView error;
-    @BindView(R.id.get_code)
-    TextView get_code;
-    @BindView(R.id.phone_number)
-    EditText phone_number;
-    @BindView(R.id.code)
-    EditText code;
+    @BindView(R.id.login_error)
+    TextView login_error;
+    @BindView(R.id.login_get_code)
+    TextView login_get_code;
+    @BindView(R.id.login_phone_number)
+    EditText login_phone_number;
+    @BindView(R.id.login_code)
+    EditText login_code;
     boolean isStartTimer = false;
 
-    @OnClick({R.id.to_register, R.id.get_code, R.id.login, R.id.wechat_login})
+    @OnClick({R.id.to_register, R.id.login_get_code, R.id.login, R.id.login_wechat_login})
     void onClick(View view) {
-        String phone_ = phone_number.getText().toString();
-        String code_ = code.getText().toString();
+        String phone_ = login_phone_number.getText().toString();
+        String code_ = login_code.getText().toString();
         switch (view.getId()) {
             case R.id.to_register:
                 launchActivity(new Intent(this, RegisterActivity.class));
                 break;
-            case R.id.get_code:
+            case R.id.login_get_code:
                 if (phone_ != null && phone_.isEmpty()) {
-                    error.setText("请输入手机号码");
+                    login_error.setText("请输入手机号码");
                     return;
                 }
                 if (isStartTimer) return;//开始计时了  说明不能点击获取验证码
@@ -74,16 +74,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case R.id.login:
                 if (phone_ != null && phone_.isEmpty()) {
-                    error.setText("请输入手机号码");
+                    login_error.setText("请输入手机号码");
                     return;
                 }
                 if (code_ != null && code_.isEmpty()) {
-                    error.setText("请输入验证码");
+                    login_error.setText("请输入验证码");
                     return;
                 }
                 mPresenter.login(phone_, code_);
                 break;
-            case R.id.wechat_login:
+            case R.id.login_wechat_login:
                 SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
                 MApplication.token = sharedPreferences.getString("token", null);
                 MApplication.token_type = sharedPreferences.getString("token_type", null);
@@ -103,6 +103,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 .putString("token_type", MApplication.token_type)
                 .commit();
         launchActivity(new Intent(this, HomeActivity.class));
+        killMyself();
     }
 
     @Override
@@ -120,9 +121,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (login_get_code == null || handler == null) return;
             if (msg.what > 0) {
                 isStartTimer = true;
-                get_code.setText("已发送(" + msg.what + ")");
+                login_get_code.setText("已发送(" + msg.what + ")");
                 handler.sendEmptyMessageDelayed(msg.what - 1, 1000);
             } else changeGetCodeView(false);
         }
@@ -130,13 +132,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     public void changeGetCodeView(boolean isOpenGetCode) {
         if (isOpenGetCode) {
-            get_code.setText("获取验证码");
-            get_code.setTextColor(getResources().getColor(R.color.color_151b26));
-            get_code.setClickable(false);
+            login_get_code.setText("获取验证码");
+            login_get_code.setTextColor(getResources().getColor(R.color.color_151b26));
+            login_get_code.setClickable(false);
         } else {
-            get_code.setText("重新获取验证码");
-            get_code.setTextColor(getResources().getColor(R.color.color_5D68EA));
-            get_code.setClickable(true);
+            login_get_code.setText("重新获取验证码");
+            login_get_code.setTextColor(getResources().getColor(R.color.color_5D68EA));
+            login_get_code.setClickable(true);
             isStartTimer = false;
         }
     }

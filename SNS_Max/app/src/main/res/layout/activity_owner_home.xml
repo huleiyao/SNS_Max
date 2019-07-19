@@ -12,13 +12,12 @@
         android:layout_weight="1">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
+            android:id="@+id/owner_home_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/albumTransparent">
 
             <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -27,6 +26,7 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <LinearLayout
+                    android:id="@+id/owner_home_head_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#99000000"

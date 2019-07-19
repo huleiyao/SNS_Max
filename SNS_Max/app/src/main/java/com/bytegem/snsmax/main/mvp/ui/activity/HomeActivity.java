@@ -55,7 +55,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View, TencentLocationListener {
-    @BindView(R.id.navigationBar)
+    @BindView(R.id.home_navigationBar)
     EasyNavigationBar navigationBar;
     private String[] tabText = {"首页", "发现 ", "", "消息", "我"};
     //未选中icon

@@ -7,14 +7,14 @@
     android:paddingTop="7dp">
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/comment_of_comment_item_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/color_151b26"
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/comment_of_comment_item_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

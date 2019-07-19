@@ -102,7 +102,6 @@ public class GroupsFragment extends BaseFragment<GroupsPresenter> implements Gro
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                springView.setEnableFooter(false);
                 mPresenter.getList();
             }
 
@@ -112,7 +111,6 @@ public class GroupsFragment extends BaseFragment<GroupsPresenter> implements Gro
             }
         });
 
-        springView.setEnableFooter(false);
         adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
         adapter.setListener(mPresenter, mPresenter);

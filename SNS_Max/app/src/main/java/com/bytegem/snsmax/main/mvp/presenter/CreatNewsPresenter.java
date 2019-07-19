@@ -201,10 +201,10 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
-            case R.id.delete:
+            case R.id.creat_image_item_delete:
                 mRootView.remove(position);
                 break;
-            case R.id.add:
+            case R.id.creat_image_item_add:
                 CreatNewsActivity.FeedType feedType = ((CreateImageAdapter) adapter).getFeedType();
                 if (feedType == CreatNewsActivity.FeedType.CAMERA) mRootView.openPhotos();
                 else if (feedType == CreatNewsActivity.FeedType.VIDEO) {

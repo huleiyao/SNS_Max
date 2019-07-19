@@ -2,18 +2,23 @@ package com.lzy.imagepicker.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,6 +36,8 @@ import com.lzy.imagepicker.util.Utils;
 import com.lzy.imagepicker.view.FolderPopUpWindow;
 import com.lzy.imagepicker.view.GridSpacingItemDecoration;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +51,8 @@ import java.util.List;
  * 2017-03-17
  *
  * @author nanchen
- *         新增可直接传递是否裁剪参数，以及直接拍照
- *         ================================================
+ * 新增可直接传递是否裁剪参数，以及直接拍照
+ * ================================================
  */
 public class ImageGridActivity extends ImageBaseActivity implements ImageDataSource.OnImagesLoadedListener, OnImageItemClickListener, ImagePicker.OnImageSelectedListener, View.OnClickListener {
 
@@ -352,10 +359,15 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
 //                        }
 //                    }
 //                }
-
                 ImageItem imageItem = new ImageItem();
                 imageItem.path = path;
-                imagePicker.clearSelectedImages();
+                imageItem.mimeType = getMimeTypeFromUrl(path);
+                try {
+                    imageItem.size = getFileSize(new File(path));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+//                imagePicker.clearSelectedImages();
                 imagePicker.addSelectedImageItem(0, imageItem, true);
                 if (imagePicker.isCrop()) {
                     Intent intent = new Intent(ImageGridActivity.this, ImageCropActivity.class);
@@ -372,4 +384,30 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
         }
     }
 
+    private static long getFileSize(File file) throws Exception {
+        long size = 0;
+        if (file.exists()) {
+            FileInputStream fis = null;
+            fis = new FileInputStream(file);
+            size = fis.available();
+        } else {
+            file.createNewFile();
+            Log.e("获取文件大小", "文件不存在!");
+        }
+        return size;
+    }
+
+    /**
+     * 使用系统API，根据url获得对应的MIME类型
+     */
+    private String getMimeTypeFromUrl(String url) {
+        String type = null;
+        //使用系统API，获取URL路径中文件的后缀名（扩展名）
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (!TextUtils.isEmpty(extension)) {
+            //使用系统API，获取MimeTypeMap的单例实例，然后调用其内部方法获取文件后缀名（扩展名）所对应的MIME类型
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+        }
+        return type;
+    }
 }

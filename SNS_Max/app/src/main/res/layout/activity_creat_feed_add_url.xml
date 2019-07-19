@@ -27,7 +27,7 @@
             android:textSize="28sp" />
 
         <EditText
-            android:id="@+id/url"
+            android:id="@+id/creat_feed_url"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginTop="79dp"
@@ -42,7 +42,7 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/add"
+            android:id="@+id/creat_feed_add_bt"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginTop="77dp"

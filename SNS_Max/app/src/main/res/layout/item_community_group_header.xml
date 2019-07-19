@@ -13,7 +13,7 @@
         android:layout_gravity="center">
 
         <ImageView
-            android:id="@+id/cover"
+            android:id="@+id/group_item_group_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shape_find_group_header_frame" />
@@ -24,7 +24,7 @@
             android:background="@drawable/shape_frame_image_round20_30" />
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/group_item_group_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"

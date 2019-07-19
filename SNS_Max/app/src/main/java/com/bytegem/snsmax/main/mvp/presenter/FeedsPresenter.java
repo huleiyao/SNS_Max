@@ -119,7 +119,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
-            case R.id.f_one_img:
+            case R.id.feed_item_f_one_img:
                 if (adapter instanceof FeedsAdapter) {
                     FeedBean feedBean = (FeedBean) adapter.getItem(position);
                     switch (feedBean.getMedia().getType()) {
@@ -136,7 +136,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                     }
                 }
                 break;
-            case R.id.content:
+            case R.id.feed_item_content:
                 if (adapter instanceof FeedsAdapter) {
                     TopicBean topicBean = ((TagTextView) view).getmTopicBean();
                     if (topicBean != null)
@@ -145,12 +145,12 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                         mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
                 }
                 break;
-            case R.id.tv_tag:
-                if (adapter instanceof FeedsAdapter) {
-                    mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
-                }
-                break;
-            case R.id.zan_cover:
+//            case R.id.tv_tag:点击事件无效，不需要了
+//                if (adapter instanceof FeedsAdapter) {
+//                    mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
+//                }
+//                break;
+            case R.id.feed_item_zan_cover:
                 FeedBean feedBean = (FeedBean) adapter.getItem(position);
                 feedBean.setHas_liked(!feedBean.isHas_liked());
                 if (feedBean.isHas_liked()) {
@@ -159,10 +159,10 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                     ((ImageView) view).setImageResource(R.drawable.ic_ico_moment_zan);
                 }
                 break;
-            case R.id.comment:
+            case R.id.feed_item_comment:
                 mRootView.showMessage("评论");
                 break;
-            case R.id.share:
+            case R.id.feed_item_share:
                 mRootView.showMessage("分享");
                 break;
         }

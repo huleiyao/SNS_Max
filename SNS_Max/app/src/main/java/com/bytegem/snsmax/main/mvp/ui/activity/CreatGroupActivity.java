@@ -52,28 +52,28 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  */
 public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implements CreatGroupContract.View {
 
-    @BindView(R.id.group_cover)
+    @BindView(R.id.creat_group_cover)
     ImageView group_cover;
-    @BindView(R.id.group_name)
+    @BindView(R.id.creat_group_name)
     EditText group_name;
-    @BindView(R.id.group_detail)
+    @BindView(R.id.creat_group_detail)
     EditText group_detail;
-    @BindView(R.id.switch_button)
+    @BindView(R.id.creat_switch_button)
     SwitchButton switch_button;
-    @BindView(R.id.creat_group)
+    @BindView(R.id.creat_group_bt)
     Button creat_group;
     public static final int SELECT_IMAGE = 802;
     MaterialDialog materialDialog;
     boolean isHaveCover = false;
 
-    @OnClick({R.id.uploading_header, R.id.creat_group})
+    @OnClick({R.id.creat_group_uploading_header, R.id.creat_group_bt})
     void onClick(View view) {
         switch (view.getId()) {
-            case R.id.uploading_header:
+            case R.id.creat_group_uploading_header:
                 //选图片并上传
                 startActivityForResult(new Intent(this, ImageGridActivity.class), SELECT_IMAGE);
                 break;
-            case R.id.creat_group:
+            case R.id.creat_group_bt:
                 String name = group_name.getText().toString();
                 String detail = group_detail.getText().toString();
                 if (isHaveCover || name.isEmpty() || detail.isEmpty())

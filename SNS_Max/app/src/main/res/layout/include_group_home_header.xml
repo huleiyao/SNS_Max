@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/group_cover"
+                android:id="@+id/group_detail_group_cover"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:scaleType="fitXY" />
@@ -48,7 +48,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/group_name"
+                            android:id="@+id/group_detail_group_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
@@ -61,7 +61,7 @@
                             android:textSize="30sp" />
 
                         <TextView
-                            android:id="@+id/group_active_count"
+                            android:id="@+id/group_detail_group_active_count"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="18dp"
@@ -75,7 +75,7 @@
                     </LinearLayout>
 
                     <CheckBox
-                        android:id="@+id/join_us"
+                        android:id="@+id/group_detail_join_us"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -91,7 +91,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/group_detail"
+                    android:id="@+id/group_detail_group_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -112,7 +112,7 @@
             android:background="#4cffffff" />
 
         <LinearLayout
-            android:id="@+id/group_member"
+            android:id="@+id/group_detail_group_member"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="38dp"
@@ -120,7 +120,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/group_member_count"
+                android:id="@+id/group_detail_group_member_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowColor="#26000000"
@@ -137,7 +137,7 @@
                 android:layout_weight="1" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/member_covers"
+                android:id="@+id/group_detail_member_covers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -159,7 +159,7 @@
             android:paddingTop="12dp">
 
             <TextView
-                android:id="@+id/group_message"
+                android:id="@+id/group_detail_group_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"

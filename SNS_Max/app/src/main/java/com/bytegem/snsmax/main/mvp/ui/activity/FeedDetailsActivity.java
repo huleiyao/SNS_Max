@@ -81,33 +81,38 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     @Inject
     ImageAdapter2 imageAdapter2;
 
-    @BindView(R.id.url_text)
+    @BindView(R.id.post_detail_url_text)
     TextView url_text;
-    @BindView(R.id.one_img)
+    @BindView(R.id.post_detail_one_img)
     ImageView one_img;
-    @BindView(R.id.is_video)
+    @BindView(R.id.post_detail_is_video)
     ImageView is_video;
-    @BindView(R.id.url_cover)
+    @BindView(R.id.post_detail_url_cover)
     ImageView url_cover;
-    @BindView(R.id.f_one_img)
+
+    @BindView(R.id.post_detail_f_one_img)
     FrameLayout f_one_img;
-    @BindView(R.id.url)
+    @BindView(R.id.post_detail_more_img)
+    FrameLayout more_img;
+
+    @BindView(R.id.post_detail_url)
     LinearLayout url;
-    @BindView(R.id.follow_the_user)
+
+    @BindView(R.id.post_detail_follow_the_user)
     TextView follow_the_user;
-    @BindView(R.id.tv_address)
+    @BindView(R.id.post_detail_tv_address)
     TextView tv_address;
-    @BindView(R.id.content)
+    @BindView(R.id.post_detail_content)
     TextView content;
-    @BindView(R.id.user_content)
+    @BindView(R.id.post_detail_user_content)
     TextView user_content;
-    @BindView(R.id.user_name)
+    @BindView(R.id.post_detail_user_name)
     TextView user_name;
-    @BindView(R.id.group_name)
+    @BindView(R.id.feed_detail_group_name)
     TextView group_name;
-    @BindView(R.id.group_cotent)
+    @BindView(R.id.feed_detail_group_cotent)
     TextView group_cotent;
-    @BindView(R.id.join_us)
+    @BindView(R.id.feed_detail_group_join_us)
     TextView join_us;
     @BindView(R.id.comment_send_time)
     TextView comment_send_time;
@@ -117,16 +122,16 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     TextView comment_zan_count;
     @BindView(R.id.comment_user_name)
     TextView comment_user_name;
-    @BindView(R.id.zan_the_post_count)
+    @BindView(R.id.feed_detail_zan_the_post_count)
     TextView zan_the_post_count;
-    @BindView(R.id.comment_the_post_count)
+    @BindView(R.id.feed_detail_comment_the_post_count)
     TextView comment_the_post_count;
-    @BindView(R.id.share_the_post_count)
+    @BindView(R.id.feed_detail_share_the_post_count)
     TextView share_the_post_count;
 
-    @BindView(R.id.user_cover)
+    @BindView(R.id.post_detail_user_cover)
     ImageView user_cover;
-    @BindView(R.id.group_cover)
+    @BindView(R.id.feed_detail_group_cover)
     ImageView group_cover;
     @BindView(R.id.comment_user_cover)
     ImageView comment_user_cover;
@@ -143,7 +148,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     RecyclerView recycle_view;//动态图片列表
     @BindView(R.id.more_comment)
     LinearLayout more_comment;
-    @BindView(R.id.address)
+    @BindView(R.id.post_detail_address)
     LinearLayout address;
     @BindView(R.id.comment_zan)
     LinearLayout comment_zan;
@@ -152,24 +157,23 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     @BindView(R.id.group)
     LinearLayout group;//圈子相关，如果没有关联圈子  这部分需要隐藏
     EditText commit_content;//发送评论的edittext
-    @BindView(R.id.more_img)
-    FrameLayout more_img;
+
     FeedCommentBean hotFeedCommentBean;
     BottomSheetDialog bottomSheetDialog;
     BottomSheetDialog commitBottomSheetDialog;
 
-    @OnClick({R.id.follow_the_user, R.id.join_us, R.id.user_cover, R.id.one_img, R.id.share_to_wechat
-            , R.id.share_to_moments, R.id.share_to_qq, R.id.zan_the_post, R.id.comment_the_post
-            , R.id.share_the_post, R.id.tv_address, R.id.bg})
+    @OnClick({R.id.post_detail_follow_the_user, R.id.feed_detail_group_join_us, R.id.post_detail_user_cover, R.id.post_detail_one_img, R.id.post_detail_share_to_wechat
+            , R.id.post_detail_share_to_moments, R.id.post_detail_share_to_qq, R.id.feed_detail_zan_the_post, R.id.feed_detail_comment_the_post
+            , R.id.feed_detail_share_the_post, R.id.post_detail_tv_address, R.id.bg, R.id.more_comment})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.follow_the_user://关注动态发起人
+            case R.id.post_detail_follow_the_user://关注动态发起人
                 mPresenter.changeUserFollowState(feedBean.getUser().getId());
                 break;
-            case R.id.user_cover://动态发起人
+            case R.id.post_detail_user_cover://动态发起人
                 showMessage("进入用户信息界面");
                 break;
-            case R.id.one_img://只有一张图的时候   从这里打开全图,或去看视频
+            case R.id.post_detail_one_img://只有一张图的时候   从这里打开全图,或去看视频
                 switch (feedBean.getMedia().getType()) {
                     case "image":
                         launchActivity(new Intent(this, WatchImagesActivity.class)
@@ -183,28 +187,28 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                         break;
                 }
                 break;
-            case R.id.join_us://只有一张图的时候   从这里打开全图
+            case R.id.feed_detail_group_join_us:
                 showMessage("加入圈子");
                 break;
-            case R.id.share_to_wechat://分享到微信
+            case R.id.post_detail_share_to_wechat://分享到微信
                 showMessage("分享到微信");
                 break;
-            case R.id.share_to_moments://朋友圈
+            case R.id.post_detail_share_to_moments://朋友圈
                 showMessage("分享到朋友圈");
                 break;
-            case R.id.share_to_qq://qq
+            case R.id.post_detail_share_to_qq://qq
                 showMessage("分享到qq");
                 break;
-            case R.id.zan_the_post://底部赞
+            case R.id.feed_detail_zan_the_post://底部赞
                 mPresenter.changeLikeState(feedBean.getId());
                 break;
-            case R.id.comment_the_post://发评论
+            case R.id.feed_detail_comment_the_post://发评论
                 bottomSheetDialog.show();
                 break;
-            case R.id.share_the_post://分享
+            case R.id.feed_detail_share_the_post://分享
                 showMessage("去分享");
                 break;
-            case R.id.tv_address://地址
+            case R.id.post_detail_tv_address://地址
                 showMessage("地址，定位");
                 break;
             case R.id.to_commit:
@@ -218,7 +222,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
             case R.id.cancel:
                 bottomSheetDialog.dismiss();
                 break;
-            case R.id.send:
+            case R.id.dialog_send_comment:
                 if (commit_content != null) {
                     String content = commit_content.getText().toString();
                     if (content.isEmpty()) {
@@ -237,6 +241,9 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                     launchActivity(new Intent(this, FeedCommentsOfCommentActivity.class)
                             .putExtra(FeedCommentsOfCommentActivity.FEED_ID, feedBean.getId())
                             .putExtra(FeedCommentsOfCommentActivity.COMMENT_ID, hotFeedCommentBean));
+                break;
+            case R.id.more_comment:
+                //进入最新评论全部列表界面
                 break;
         }
     }
@@ -281,7 +288,6 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         springview.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                springview.setEnableFooter(false);
                 mPresenter.getList(false, feedBean.getId(), 0);
                 mPresenter.getHotComment(feedBean.getId());
             }
@@ -378,7 +384,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         commitBottomSheetDialog.setContentView(R.layout.view_commit);
         commitBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
                 .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
-        commitBottomSheetDialog.findViewById(R.id.send).setOnClickListener(this);
+        commitBottomSheetDialog.findViewById(R.id.dialog_send_comment).setOnClickListener(this);
         commit_content = commitBottomSheetDialog.findViewById(R.id.commit_content);
         commit_content.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

@@ -7,26 +7,24 @@
     android:orientation="vertical">
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
+            android:id="@+id/group_detail_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentScrim="@color/color_5e6ce7"
+                app:contentScrim="@color/white"
                 app:expandedTitleTextAppearance="@style/CollapsingToolbarTitleStyle.About"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <LinearLayout
-                    android:id="@+id/head_layout"
+                    android:id="@+id/group_detail_head_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"

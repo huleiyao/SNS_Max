@@ -53,24 +53,24 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class SelectTopicActivity extends BaseActivity<SelectTopicPresenter> implements SelectTopicContract.View {
-    @BindView(R.id.keyword)
+    @BindView(R.id.select_topic_keyword)
     EditText keyword;
     @BindView(R.id.recycle_view)
     RecyclerView recyclerView;
-    @BindView(R.id.empty)
+    @BindView(R.id.select_topic_empty)
     LinearLayout empty;
-    @BindView(R.id.topic_name)
+    @BindView(R.id.select_topic_topic_name)
     TextView topic_name;
     @Inject
     TopicsAdapter adapter;
 
-    @OnClick({R.id.cancel, R.id.creat_topic})
+    @OnClick({R.id.select_topic_cancel, R.id.select_topic_creat_topic})
     void onClick(View view) {
         switch (view.getId()) {
-            case R.id.cancel:
+            case R.id.select_topic_cancel:
                 killMyself();
                 break;
-            case R.id.creat_topic:
+            case R.id.select_topic_creat_topic:
                 //去创建新的话题
                 startActivityForResult(new Intent(this, CreateTopicActivity.class), 105);
                 break;

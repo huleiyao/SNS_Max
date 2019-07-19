@@ -88,7 +88,6 @@ public class GroupHotMessageFragment extends BaseFragment<GroupHotMessagePresent
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                springView.setEnableFooter(false);
 //                loadData(true);
             }
 
@@ -98,7 +97,6 @@ public class GroupHotMessageFragment extends BaseFragment<GroupHotMessagePresent
             }
         });
 
-        springView.setEnableFooter(false);
 //        adapter.setOnItemChildClickListener(mPresenter);
 //        adapter.setOnItemClickListener(mPresenter);
         springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字

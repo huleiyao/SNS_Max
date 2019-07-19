@@ -55,8 +55,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> implements TopicDetailContract.View {
-    @BindView(R.id.collapsing_toolbar_layout)
-    CollapsingToolbarLayout collapsing_toolbar_layout;
     TopicBean topicBean;
     @Inject
     FeedsAdapter adapter;
@@ -64,26 +62,26 @@ public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> impl
     SpringView springView;
     @BindView(R.id.recycle_view)
     RecyclerView recyclerView;
-    @BindView(R.id.head_layout)
+    @BindView(R.id.topic_detail_head_layout)
     LinearLayout head_layout;
-    @BindView(R.id.appbar)
+    @BindView(R.id.topic_detail_appbar)
     AppBarLayout appbar;
 
-    @BindView(R.id.search)
+    @BindView(R.id.topic_detail_search)
     ImageView search;
-    @BindView(R.id.share)
+    @BindView(R.id.topic_detail_share)
     ImageView share;
-    @BindView(R.id.back)
+    @BindView(R.id.topic_detail_back)
     ImageView back;
     @BindView(R.id.topic_detail_header_bg_cover)
     ImageView topic_detail_header_bg_cover;
-    @BindView(R.id.topic_cover)
+    @BindView(R.id.topic_detail_topic_cover)
     ImageView topic_cover;
-    @BindView(R.id.topic_name)
+    @BindView(R.id.topic_detail_topic_name)
     TextView topic_name;
-    @BindView(R.id.topic_popularity)
+    @BindView(R.id.topic_detail_topic_popularity)
     TextView topic_popularity;
-    @BindView(R.id.topic_content)
+    @BindView(R.id.topic_detail_topic_content)
     TextView topic_content;
     @BindView(R.id.toolbar_title)
     TextView toolbar_title;
@@ -106,7 +104,6 @@ public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> impl
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         topicBean = (TopicBean) getIntent().getSerializableExtra("topic");
-        collapsing_toolbar_layout.setTitle(" ");
         if (topicBean == null) {
             killMyself();
             return;
@@ -139,7 +136,6 @@ public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> impl
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                springView.setEnableFooter(false);
                 mPresenter.getList(false);
             }
 

@@ -69,29 +69,29 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @BindView(R.id.recycle_view)
     RecyclerView recycle_view;
 
-    @BindView(R.id.address)
+    @BindView(R.id.creat_news_address)
     LinearLayout address;
-    @BindView(R.id.url)
+    @BindView(R.id.creat_news_url)
     FrameLayout url;
 
-    @BindView(R.id.content)
+    @BindView(R.id.create_news_content)
     TagEditTextView content;
 
-    @BindView(R.id.camera)
+    @BindView(R.id.creat_news_camera)
     ImageView camera;
-    @BindView(R.id.video)
+    @BindView(R.id.creat_news_video)
     ImageView video;
-    @BindView(R.id.link)
+    @BindView(R.id.creat_news_link)
     ImageView link;
-    @BindView(R.id.url_cover)
+    @BindView(R.id.creat_news_url_cover)
     ImageView url_cover;
 
 
-    @BindView(R.id.url_text)
+    @BindView(R.id.creat_news_url_text)
     TextView url_text;
-    @BindView(R.id.group_name)
+    @BindView(R.id.creat_news_group_name)
     TextView group_name;
-    @BindView(R.id.address_txt)
+    @BindView(R.id.creat_news_address_txt)
     TextView address_txt;
     MediaBean mediaBean = new MediaBean();
     @Inject
@@ -103,7 +103,9 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
         CAMERA, VIDEO, LINK, DEFAULT
     }
 
-    @OnClick({R.id.toolbar_send, R.id.select_group, R.id.camera, R.id.video, R.id.link, R.id.topic, R.id.down, R.id.delect_url})
+    @OnClick({R.id.toolbar_send, R.id.creat_news_select_group, R.id.creat_news_camera
+            , R.id.creat_news_video, R.id.creat_news_link, R.id.creat_news_topic
+            , R.id.creat_news_down, R.id.creat_news_delect_url})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_send:
@@ -114,9 +116,9 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 }
                 mPresenter.checkSend(content_str, mediaBean, feedType, content.getTopicBean());
                 break;
-            case R.id.select_group://选择圈子
+            case R.id.creat_news_select_group://选择圈子
                 break;
-            case R.id.camera://图片
+            case R.id.creat_news_camera://图片
                 if (feedType == FeedType.CAMERA)
                     return;
                 url.setVisibility(View.GONE);
@@ -128,7 +130,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 mediaBean.setType("image");
                 openPhotos();
                 break;
-            case R.id.video://视频
+            case R.id.creat_news_video://视频
 //                if (true) {
 //                    showMessage("正在开发中...");
 //                    return;
@@ -145,17 +147,17 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
 
                 RecorderManagerFactory.getRecordVideoRequest().startRecordVideo(this, 313);
                 break;
-            case R.id.link://链接
+            case R.id.creat_news_link://链接
                 if (feedType == FeedType.LINK)
                     return;
                 startActivityForResult(new Intent(this, CreatFeedAddUrlActivity.class), 103);
                 break;
-            case R.id.topic://选择话题
+            case R.id.creat_news_topic://选择话题
                 startActivityForResult(new Intent(this, SelectTopicActivity.class), 104);
                 break;
-            case R.id.down://收起/打开
+            case R.id.creat_news_down://收起/打开
                 break;
-            case R.id.delect_url://取消link分享
+            case R.id.creat_news_delect_url://取消link分享
                 if (feedType == FeedType.LINK) {
                     feedType = DEFAULT;
                     link.setImageResource(R.drawable.ic_ico_post_link);
@@ -241,17 +243,20 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ArrayList<ImageItem> imageItems = null;
-        if (requestCode == 1001) {
+        if (requestCode == 1001) {//添加图片
             if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
                 imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                setAdapterData(imageItems);
+            } else if (resultCode == ImagePicker.RESULT_CODE_BACK) //返回回来的   没有数据
+                ;
+        } else if (requestCode == 903) {//预览/删除
+            if (resultCode == ImagePicker.RESULT_CODE_BACK) {
+                //预览图片返回
+                if (data != null) {
+                    imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_ITEMS);
+                }
+                setAdapterData(imageItems);
             }
-            setAdapterData(imageItems);
-        } else if (resultCode == ImagePicker.RESULT_CODE_BACK) {
-            //预览图片返回
-            if (data != null && requestCode == 903) {
-                imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_ITEMS);
-            }
-            setAdapterData(imageItems);
         } else if (resultCode == 103) {
             MediaLinkContent mediaLinkContent = (MediaLinkContent) data.getSerializableExtra("url");
             if (mediaLinkContent == null) ;

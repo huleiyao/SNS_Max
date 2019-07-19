@@ -23,10 +23,10 @@ public class FeedCommentsOfCommentAdapter extends BaseQuickAdapter<FeedCommentBe
     @Override
     protected void convert(BaseViewHolder viewHolder, FeedCommentBean bean) {
         if (viewHolder.getPosition() == 2)
-            viewHolder.setText(R.id.user_name, "共" + super.getItemCount() + "条回复>>");
+            viewHolder.setText(R.id.comment_of_comment_item_user_name, "共" + super.getItemCount() + "条回复>>");
         else {
-            viewHolder.setText(R.id.user_name, bean.getUserBean().getName()+": ")
-                    .setText(R.id.content, bean.getContents());
+            viewHolder.setText(R.id.comment_of_comment_item_user_name, bean.getUserBean().getName()+": ")
+                    .setText(R.id.comment_of_comment_item_content, bean.getContents());
         }
     }
 

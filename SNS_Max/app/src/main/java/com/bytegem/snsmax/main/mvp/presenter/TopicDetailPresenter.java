@@ -123,10 +123,10 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
-            case R.id.f_one_img:
+            case R.id.feed_item_f_one_img:
 
                 break;
-            case R.id.content:
+            case R.id.feed_item_content:
                 if (adapter instanceof FeedsAdapter) {
                     TopicBean topicBean = ((TagTextView) view).getmTopicBean();
                     if (topicBean != null)
@@ -135,11 +135,11 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
                         mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
                 }
                 break;
-            case R.id.tv_tag:
-                if (adapter instanceof FeedsAdapter) {
-                    mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
-                }
-                break;
+//            case R.id.tv_tag://取消
+//                if (adapter instanceof FeedsAdapter) {
+//                    mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
+//                }
+//                break;
         }
     }
 

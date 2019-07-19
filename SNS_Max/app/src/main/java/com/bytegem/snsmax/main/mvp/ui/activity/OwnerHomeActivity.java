@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
@@ -53,24 +55,33 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
     SmartTabLayout tabs;
     @BindView(R.id.projectPager)
     ViewPager viewPager;
-    @BindView(R.id.user_cover)
+    @BindView(R.id.user_info_user_cover)
     ImageView user_cover;
-
-    @BindView(R.id.user_name)
+    @BindView(R.id.owner_home_appbar)
+    AppBarLayout appbar;
+    @BindView(R.id.back_cover)
+    ImageView back_cover;
+    @BindView(R.id.more)
+    TextView more;
+    @BindView(R.id.owner_home_head_layout)
+    LinearLayout head_layout;
+    @BindView(R.id.user_info_user_name)
     TextView user_name;
-    @BindView(R.id.send_message)
+    @BindView(R.id.user_info_send_message)
     TextView send_message;
-    @BindView(R.id.user_content)
+    @BindView(R.id.user_info_user_content)
     TextView user_content;
-    @BindView(R.id.follow_count_and_fans_count)
+    @BindView(R.id.user_info_follow_count_and_fans_count)
     TextView follow_count_and_fans_count;
-
-    @BindView(R.id.follow_the_user)
+    @BindView(R.id.toolbar_title)
+    TextView toolbar_title;
+    @BindView(R.id.user_info_follow_the_user)
     Button follow_the_user;
     boolean isMe = false;
     public static final String ISME = "IS-ME";
     public static final String ID = "ID";
     private int id;
+    private String title = "";
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -89,7 +100,7 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        setTitle("");
+        setTitle(" ");
         isMe = getIntent().getBooleanExtra(ISME, false);
         id = getIntent().getIntExtra(ID, 0);
         ArrayList<FragmentBean> fragmentBeans = new ArrayList<>();
@@ -97,15 +108,31 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
         fragmentBeans.add(new FragmentBean("圈子", OwnerGroupsFragment.newInstance(isMe)));
         fragmentBeans.add(new FragmentBean("档案", OwnerRecordFragment.newInstance()));
         showFragment(fragmentBeans);
+
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset <= -head_layout.getHeight() / 2) {
+                    toolbar_title.setText(title);
+                    back_cover.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_151b26));
+                    more.setTextColor(getResources().getColor(R.color.color_151b26));
+                } else {
+                    toolbar_title.setText(" ");
+                    back_cover.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_white));
+                    more.setTextColor(getResources().getColor(R.color.white));
+                }
+            }
+        });
+
         mPresenter.getUserData(isMe, id);
     }
 
     public void initUserData(UserBean userBean) {
-        if (userBean.getAvatar() == null ||userBean.getAvatar().isEmpty())
+        if (userBean.getAvatar() == null || userBean.getAvatar().isEmpty())
             GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover);
         else
             GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
-
+        title = userBean.getName();
 //        GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
         user_name.setText(userBean.getName());
 //        user_content.setText(userBean.getContent());

@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
@@ -23,11 +22,8 @@ import com.bytegem.snsmax.common.bean.FragmentBean;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
-import com.bytegem.snsmax.main.app.widget.MyCoordinatorLayout;
 import com.bytegem.snsmax.main.mvp.ui.fragment.DiscussListFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerFeedsFragment;
-import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerGroupsFragment;
-import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerRecordFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -63,48 +59,52 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> implements GroupDetailsContract.View, View.OnClickListener {
     @BindView(R.id.tabs)
     SmartTabLayout tabs;
-    @BindView(R.id.appbar)
+    @BindView(R.id.group_detail_appbar)
     AppBarLayout appbar;
     @BindView(R.id.projectPager)
     ViewPager viewPager;
     @BindView(R.id.toolbar_title)
     TextView toolbar_title;
-    @BindView(R.id.member_covers)
+    @BindView(R.id.group_detail_member_covers)
     RecyclerView member_covers;
-    @BindView(R.id.head_layout)
+    @BindView(R.id.group_detail_head_layout)
     LinearLayout head_layout;
-    @BindView(R.id.group_cover)
+    @BindView(R.id.group_detail_group_cover)
     ImageView group_cover;
     @BindView(R.id.search)
     ImageView search;
+    @BindView(R.id.back_cover)
+    ImageView back_cover;
 
-    @BindView(R.id.group_name)
+    @BindView(R.id.more)
+    TextView more;
+    @BindView(R.id.group_detail_group_name)
     TextView group_name;
-    @BindView(R.id.group_active_count)
+    @BindView(R.id.group_detail_group_active_count)
     TextView group_active_count;
-    @BindView(R.id.group_detail)
+    @BindView(R.id.group_detail_group_detail)
     TextView group_detail;
-    @BindView(R.id.group_member_count)
+    @BindView(R.id.group_detail_group_member_count)
     TextView group_member_count;
-    @BindView(R.id.group_message)
+    @BindView(R.id.group_detail_group_message)
     TextView group_message;
 
-    @BindView(R.id.join_us)
+    @BindView(R.id.group_detail_join_us)
     CheckBox join_us;
 
-    @BindView(R.id.group_member)
+    @BindView(R.id.group_detail_group_member)
     LinearLayout group_member;
     TextView notice_content;
     private GroupBean mGroup;
     BottomSheetDialog notice;
 
-    @OnClick({R.id.more, R.id.group_message})
+    @OnClick({R.id.more, R.id.group_detail_group_message})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.more:
                 launchActivity(new Intent(this, GroupSettingActivity.class));
                 break;
-            case R.id.group_message:
+            case R.id.group_detail_group_message:
                 notice.show();
                 break;
             case R.id.exit_notice:
@@ -135,13 +135,20 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
             killMyself();
             return;
         }
+        toolbar_title.setTextColor(getResources().getColor(R.color.color_151b26));
         appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (verticalOffset <= -head_layout.getHeight() / 2) {
+                    more.setTextColor(getResources().getColor(R.color.color_151b26));
                     toolbar_title.setText(group.getName());
+                    back_cover.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_151b26));
+                    search.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_search_151b26));
                 } else {
                     toolbar_title.setText(" ");
+                    more.setTextColor(getResources().getColor(R.color.white));
+                    back_cover.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_white));
+                    search.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_search_white));
                 }
             }
         });

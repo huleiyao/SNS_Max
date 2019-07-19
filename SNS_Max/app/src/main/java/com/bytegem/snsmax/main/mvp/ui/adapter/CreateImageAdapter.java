@@ -38,52 +38,52 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
     @Override
     protected void convert(BaseViewHolder viewHolder, ImageItem bean) {
         viewHolder
-                .addOnClickListener(R.id.delete)
-                .addOnClickListener(R.id.add)
-                .setVisible(R.id.is_video, false)//默认隐藏
-                .setVisible(R.id.delete, false)//默认隐藏
-                .setVisible(R.id.video_add, false)//默认隐藏
-                .setVisible(R.id.add, false);//默认隐藏
+                .addOnClickListener(R.id.creat_image_item_delete)
+                .addOnClickListener(R.id.creat_image_item_add)
+                .setVisible(R.id.creat_image_item_is_video, false)//默认隐藏
+                .setVisible(R.id.creat_image_item_delete, false)//默认隐藏
+                .setVisible(R.id.creat_image_item_video_add, false)//默认隐藏
+                .setVisible(R.id.creat_image_item_add, false);//默认隐藏
 
         if (feedType != null)
             switch (feedType) {
                 case CAMERA:
                     if (bean.path.equals("add")) {
                         //最后一条 //添加
-                        viewHolder.setVisible(R.id.img, false)
-                                .setVisible(R.id.add, true);
+                        viewHolder.setVisible(R.id.creat_image_item_img, false)
+                                .setVisible(R.id.creat_image_item_add, true);
                     } else {
                         viewHolder
-                                .setVisible(R.id.delete, true)
-                                .setVisible(R.id.img, true)
-                                .setVisible(R.id.add, false);
-                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
+                                .setVisible(R.id.creat_image_item_delete, true)
+                                .setVisible(R.id.creat_image_item_img, true)
+                                .setVisible(R.id.creat_image_item_add, false);
+                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.creat_image_item_cover));
                     }
                     break;
                 case VIDEO:
                     if (super.getItemCount() == 1 && viewHolder.getPosition() == 0) {
-                        viewHolder.setVisible(R.id.is_video, true)
-                                .setVisible(R.id.delete, true)
-                                .setVisible(R.id.img, true)
-                                .setVisible(R.id.add, false);
+                        viewHolder.setVisible(R.id.creat_image_item_is_video, true)
+                                .setVisible(R.id.creat_image_item_delete, true)
+                                .setVisible(R.id.creat_image_item_img, true)
+                                .setVisible(R.id.creat_image_item_add, false);
                         MediaUtils.getImageForVideo(bean.path, new MediaUtils.OnLoadVideoImageListener() {
                             @Override
                             public void onLoadImage(File file) {
-                                GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.one_img));
+                                GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.creat_image_item_cover));
                             }
                         });
-                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
+//                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.creat_image_item_cover));
                     } else if (bean.path.equals("add")) {
                         //添加
-                        viewHolder.setVisible(R.id.img, false)
-                                .setVisible(R.id.add, true)
-                                .setVisible(R.id.video_add, true);
+                        viewHolder.setVisible(R.id.creat_image_item_img, false)
+                                .setVisible(R.id.creat_image_item_add, true)
+                                .setVisible(R.id.creat_image_item_video_add, true);
                     }
                     break;
             }
         else {
-            viewHolder.setVisible(R.id.delete, true);
-            GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.cover));
+            viewHolder.setVisible(R.id.creat_image_item_delete, true);
+            GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.creat_image_item_cover));
         }
     }
 }

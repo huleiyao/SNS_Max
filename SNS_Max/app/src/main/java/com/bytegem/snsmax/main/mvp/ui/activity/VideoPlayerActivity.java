@@ -48,54 +48,55 @@ public class VideoPlayerActivity extends BaseActivity<VideoPlayerPresenter> impl
     @BindView(R.id.video_player_view)
     VideoPlayerView video_player_view;
 
-    @BindView(R.id.group)
+    @BindView(R.id.video_player_group)
     View group;
 
-    @BindView(R.id.group_cover)
+    @BindView(R.id.video_player_group_cover)
     ImageView group_cover;
-    @BindView(R.id.user_cover)
+    @BindView(R.id.video_player_user_cover)
     ImageView user_cover;
-    @BindView(R.id.add_user)
+    @BindView(R.id.video_player_add_user)
     ImageView add_user;
 
-    @BindView(R.id.user_name)
+    @BindView(R.id.video_player_user_name)
     TextView user_name;
-    @BindView(R.id.like_count)
+    @BindView(R.id.video_player_like_count)
     TextView like_count;
-    @BindView(R.id.omment_count)
+    @BindView(R.id.video_player_omment_count)
     TextView omment_count;
-    @BindView(R.id.shape_count)
+    @BindView(R.id.video_player_shape_count)
     TextView shape_count;
-    @BindView(R.id.feed_content)
+    @BindView(R.id.video_player_feed_content)
     TextView feed_content;
-    @BindView(R.id.group_name)
+    @BindView(R.id.video_player_group_name)
     TextView group_name;
 
     private FeedBean mFeedBean;
 
-    @OnClick({R.id.add_user, R.id.video_more, R.id.like_cover, R.id.comment_cover, R.id.shape_cover})
+    @OnClick({R.id.video_player_add_user, R.id.video_player_video_more, R.id.video_player_like_cover
+            , R.id.video_player_comment_cover, R.id.video_player_shape_cover})
     void onClick(View view) {
         switch (view.getId()) {
-            case R.id.add_user:
+            case R.id.video_player_add_user:
                 if (mFeedBean != null && mFeedBean.getUser() != null && mFeedBean.getUser().getId() > 0)
                     launchActivity(new Intent(this, OwnerHomeActivity.class)
                             .putExtra(OwnerHomeActivity.ISME, false)
                             .putExtra(OwnerHomeActivity.ID, mFeedBean.getUser().getId())
                     );
                 break;
-            case R.id.video_more:
+            case R.id.video_player_video_more:
 
                 break;
-            case R.id.like_cover:
+            case R.id.video_player_like_cover:
 
                 break;
-            case R.id.comment_cover:
+            case R.id.video_player_comment_cover:
                 if (mFeedBean != null)
                     launchActivity(new Intent(this, FeedDetailsActivity.class)
                             .putExtra("data", mFeedBean)
                     );
                 break;
-            case R.id.shape_cover:
+            case R.id.video_player_shape_cover:
 
                 break;
         }

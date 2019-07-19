@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/topic_cover"
+                android:id="@+id/topic_detail_topic_cover"
                 android:layout_width="78dp"
                 android:layout_height="78dp"
                 android:src="@drawable/ic_ico_topic" />
@@ -36,7 +36,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/topic_name"
+                    android:id="@+id/topic_detail_topic_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -49,7 +49,7 @@
                     android:textSize="36sp" />
 
                 <TextView
-                    android:id="@+id/topic_popularity"
+                    android:id="@+id/topic_detail_topic_popularity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -63,7 +63,7 @@
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/topic_content"
+                    android:id="@+id/topic_detail_topic_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"

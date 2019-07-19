@@ -16,7 +16,7 @@ public class ChatsAdapter extends BaseQuickAdapter<MBaseBean, BaseViewHolder> {
     protected void convert(BaseViewHolder viewHolder, MBaseBean bean) {
 //        viewHolder.setText(R.id.area_name, bean);
         GlideLoaderUtil.LoadCircleImage(mContext,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560157380928&di=a5fcba2094b5d96612a2a77b4873115e&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F9b671d17b52639d35e7c76c23f79fbabebe769d43140-xjB5Tw_fw658"
-        ,viewHolder.getView(R.id.head_image));
+        ,viewHolder.getView(R.id.chat_item_user_cover));
     }
 
 
