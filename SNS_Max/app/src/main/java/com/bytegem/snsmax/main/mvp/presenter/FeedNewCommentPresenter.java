@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.view.View;
 
 import com.bytegem.snsmax.R;
-import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.feed.FeedCommentBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
-import com.bytegem.snsmax.main.app.bean.feed.DATAFeedComment;
-import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedCommentsOfCommentActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
@@ -27,7 +25,7 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import javax.inject.Inject;
 
-import com.bytegem.snsmax.main.mvp.contract.FeedDetailsContract;
+import com.bytegem.snsmax.main.mvp.contract.FeedNewCommentContract;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.ui.WatchImagesActivity;
@@ -39,7 +37,7 @@ import java.util.ArrayList;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/23/2019 15:23
+ * Created by MVPArmsTemplate on 07/20/2019 15:39
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -48,7 +46,7 @@ import java.util.ArrayList;
  * ================================================
  */
 @ActivityScope
-public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Model, FeedDetailsContract.View> implements BaseQuickAdapter.OnItemChildClickListener, BaseQuickAdapter.OnItemClickListener {
+public class FeedNewCommentPresenter extends BasePresenter<FeedNewCommentContract.Model, FeedNewCommentContract.View> implements BaseQuickAdapter.OnItemChildClickListener, BaseQuickAdapter.OnItemClickListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -57,32 +55,15 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
-    private int limit = 15;
-    boolean isDefaultOrder = true;
     @Inject
     FeedCommentsAdapter adapter;
-    boolean isFollow = false;
+    boolean isDefaultOrder = true;
+    private int limit = 15;
     int feedId;
 
     @Inject
-    public FeedDetailsPresenter(FeedDetailsContract.Model model, FeedDetailsContract.View rootView) {
+    public FeedNewCommentPresenter(FeedNewCommentContract.Model model, FeedNewCommentContract.View rootView) {
         super(model, rootView);
-    }
-
-    public void getHotComment(int postId) {
-        mModel.getHotComment(postId)
-                .subscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                })
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<DATAFeedComment>(mErrorHandler) {
-                    @Override
-                    public void onNext(DATAFeedComment data) {
-                        mRootView.showHotComment(data.getData());
-                    }
-                });
     }
 
     public void getList(boolean isLoadMore, int postId, int commentId) {
@@ -105,38 +86,6 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
                 });
     }
 
-    public void commit(int feedId, String content) {
-        mModel.commit(feedId, M.getMapString(
-                "contents", content
-        ))
-                .subscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                })
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
-                    @Override
-                    public void onNext(NetDefaultBean data) {
-                        getList(false, feedId, 0);
-                    }
-                });
-    }
-
-    public void changeLikeState(int feedId, boolean isLike) {
-        mModel.changeLikeState(feedId, isLike)
-                .subscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                })
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
-                    @Override
-                    public void onNext(NetDefaultBean data) {
-                    }
-                });
-    }
 
     public void changeCommentLikeState(int commentId, boolean isLike) {
         mModel.changeCommentLikeState(commentId, isLike)
@@ -152,31 +101,6 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
 
                     }
                 });
-    }
-
-    public void changeUserFollowState(int userId) {
-        mModel.changeUserFollowState(userId, isFollow)
-                .subscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                })
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
-                    @Override
-                    public void onNext(NetDefaultBean data) {
-                        isFollow = !isFollow;
-                    }
-                });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mErrorHandler = null;
-        this.mAppManager = null;
-        this.mImageLoader = null;
-        this.mApplication = null;
     }
 
     @Override
@@ -203,5 +127,14 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
                     .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position)
                     .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
             );
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mErrorHandler = null;
+        this.mAppManager = null;
+        this.mImageLoader = null;
+        this.mApplication = null;
     }
 }

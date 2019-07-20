@@ -89,6 +89,8 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     ImageView is_video;
     @BindView(R.id.post_detail_url_cover)
     ImageView url_cover;
+    @BindView(R.id.feed_detail_zan_the_post_img)
+    ImageView feed_detail_zan_the_post_img;
 
     @BindView(R.id.post_detail_f_one_img)
     FrameLayout f_one_img;
@@ -171,7 +173,10 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                 mPresenter.changeUserFollowState(feedBean.getUser().getId());
                 break;
             case R.id.post_detail_user_cover://动态发起人
-                showMessage("进入用户信息界面");
+                launchActivity(new Intent(this, OwnerHomeActivity.class)
+                        .putExtra(OwnerHomeActivity.ISME, false)
+                        .putExtra(OwnerHomeActivity.ID, feedBean.getUser().getId())
+                );
                 break;
             case R.id.post_detail_one_img://只有一张图的时候   从这里打开全图,或去看视频
                 switch (feedBean.getMedia().getType()) {
@@ -200,7 +205,13 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                 showMessage("分享到qq");
                 break;
             case R.id.feed_detail_zan_the_post://底部赞
-                mPresenter.changeLikeState(feedBean.getId());
+                mPresenter.changeLikeState(feedBean.getId(), feedBean.isHas_liked());
+                feedBean.setHas_liked(!feedBean.isHas_liked());
+                int likeCount = feedBean.getLikes_count();
+                if (feedBean.isHas_liked()) feedBean.setLikes_count(likeCount++);
+                else if (likeCount > 0) feedBean.setLikes_count(likeCount--);
+                else ;
+                changeFeedLike();
                 break;
             case R.id.feed_detail_comment_the_post://发评论
                 bottomSheetDialog.show();
@@ -244,6 +255,8 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                 break;
             case R.id.more_comment:
                 //进入最新评论全部列表界面
+                launchActivity(new Intent(this, FeedNewCommentActivity.class)
+                        .putExtra("feedId", feedBean.getId()));
                 break;
         }
     }
@@ -306,6 +319,14 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         mPresenter.getHotComment(feedBean.getId());
     }
 
+    private void changeFeedLike() {
+        if (feedBean.isHas_liked())
+            feed_detail_zan_the_post_img.setImageResource(R.drawable.ic_ico_moment_zan_on);
+        else
+            feed_detail_zan_the_post_img.setImageResource(R.drawable.ic_ico_moment_zan);
+        zan_the_post_count.setText(feedBean.getLikes_count() + "");
+    }
+
     private void showFeed(FeedBean feedBean) {
         url.setVisibility(View.GONE);
         more_img.setVisibility(View.GONE);
@@ -326,8 +347,8 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
             user_name.setText(feedBean.getUser().getName());
 //            user_content.setText(feedBean.getUser().getName());
         }
+        changeFeedLike();
         content.setText(feedBean.getContents());
-        zan_the_post_count.setText(feedBean.getLikes_count() + "");
         comment_the_post_count.setText(feedBean.getComments_count() + "");
         share_the_post_count.setText(feedBean.getShare_count() + "");
         if (feedBean.getMedia() != null)

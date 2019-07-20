@@ -92,13 +92,17 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
 //        String data = "{\"data\":[{\"id\":4,\"contents\":\"你好，我是一条最普通的内容\",\"media\":{\"type\":\"url\",\"contents\":{\"title\":\"来自腾讯视频的链接\",               \"image\":\"https://puui.qpic.cn/vupload/0/common_logo_square.png/0\",\"url\":\"https://v.qq.com\"}},\"geo\":{\"latitude\":\"32.235467237\",\"longitude\":\"162.23214421\"},\"user\":{},\"created_at\":\"2019-06-18T14:39:57Z\"}],\"links\":{\"first\":\"http://fans.local.medz.cn/nearbiespage=1\",\"last\":\"http://fans.local.medz.cn/nearbies?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"path\":\"http://fans.local.medz.cn/nearbies\",\"per_page\":30,\"to\":1,\"total\":1}}";
 //        response = response.newBuilder().body(ResponseBody.create(null, data)).build();
         if (response.code() != 202 && httpResult != null) {
-            JSONObject object = null;
-            try {
-                object = new JSONObject(httpResult);
-                if (object.has("message"))
-                    response = response.newBuilder().body(ResponseBody.create(null, httpResult)).message(object.getString("message")).build();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (httpResult.isEmpty()) {
+                response = response.newBuilder().body(ResponseBody.create(null, httpResult)).message("").build();
+            } else {
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(httpResult);
+                    if (object.has("message"))
+                        response = response.newBuilder().body(ResponseBody.create(null, httpResult)).message(object.getString("message")).build();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return response;

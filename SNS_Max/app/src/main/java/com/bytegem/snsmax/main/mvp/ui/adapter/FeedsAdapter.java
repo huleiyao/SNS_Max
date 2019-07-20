@@ -50,7 +50,7 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                 .setVisible(R.id.feed_item_group, false)
                 .addOnClickListener(R.id.feed_item_f_one_img)
                 .addOnClickListener(R.id.feed_item_content)
-                .addOnClickListener(R.id.feed_item_zan_cover)
+                .addOnClickListener(R.id.feed_item_zan)
                 .addOnClickListener(R.id.feed_item_comment)
                 .addOnClickListener(R.id.feed_item_share)
         ;

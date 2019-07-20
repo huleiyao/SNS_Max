@@ -150,13 +150,13 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
 //                    mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
 //                }
 //                break;
-            case R.id.feed_item_zan_cover:
+            case R.id.feed_item_zan:
                 FeedBean feedBean = (FeedBean) adapter.getItem(position);
                 feedBean.setHas_liked(!feedBean.isHas_liked());
                 if (feedBean.isHas_liked()) {
-                    ((ImageView) view).setImageResource(R.drawable.ic_ico_moment_zan_on);
+                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan_on);
                 } else {
-                    ((ImageView) view).setImageResource(R.drawable.ic_ico_moment_zan);
+                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan);
                 }
                 break;
             case R.id.feed_item_comment:

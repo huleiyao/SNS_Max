@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.utils.Utils;
-import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.TopicsAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -27,9 +26,6 @@ import com.bytegem.snsmax.main.mvp.contract.SelectTopicContract;
 import com.bytegem.snsmax.main.mvp.presenter.SelectTopicPresenter;
 
 import com.bytegem.snsmax.R;
-import com.liaoinstan.springview.container.DefaultFooter;
-import com.liaoinstan.springview.container.DefaultHeader;
-import com.liaoinstan.springview.widget.SpringView;
 
 
 import javax.inject.Inject;

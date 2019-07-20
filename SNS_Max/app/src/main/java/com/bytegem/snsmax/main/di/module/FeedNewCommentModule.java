@@ -1,22 +1,21 @@
 package com.bytegem.snsmax.main.di.module;
 
-import com.bytegem.snsmax.main.mvp.ui.adapter.TopicsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-import com.bytegem.snsmax.main.mvp.contract.SelectTopicContract;
-import com.bytegem.snsmax.main.mvp.model.SelectTopicModel;
-import com.jess.arms.di.scope.FragmentScope;
+import com.bytegem.snsmax.main.mvp.contract.FeedNewCommentContract;
+import com.bytegem.snsmax.main.mvp.model.FeedNewCommentModel;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 07/09/2019 18:20
+ * Created by MVPArmsTemplate on 07/20/2019 15:39
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -25,14 +24,14 @@ import com.jess.arms.di.scope.FragmentScope;
  * ================================================
  */
 @Module
-public abstract class SelectTopicModule {
+public abstract class FeedNewCommentModule {
 
     @Binds
-    abstract SelectTopicContract.Model bindSelectTopicModel(SelectTopicModel model);
+    abstract FeedNewCommentContract.Model bindFeedNewCommentModel(FeedNewCommentModel model);
 
     @ActivityScope
     @Provides
-    static TopicsAdapter provideTopicsAdapter() {
-        return new TopicsAdapter();
+    static FeedCommentsAdapter provideCommunityCommentsAdapter() {
+        return new FeedCommentsAdapter();
     }
 }

@@ -43,14 +43,14 @@ public interface CommunityService {
     Observable<NetDefaultBean> changeDislikeState(@Header("Authorization") String authorization, @Path("feedid") int id);
 
     //取消/喜欢评论
-    @DELETE("/comments/{id}/like")
+    @DELETE("/comments/{commentid}/like")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<NetDefaultBean> changeCommentDislikeState(@Header("Authorization") String authorization, @Path("feedid") int id);
+    Observable<NetDefaultBean> changeCommentDislikeState(@Header("Authorization") String authorization, @Path("commentid") int id);
 
     //取消/喜欢评论
-    @PUT("/comments/{id}/like")
+    @PUT("/comments/{commentid}/like")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<NetDefaultBean> changeCommentLikeState(@Header("Authorization") String authorization, @Path("feedid") int id);
+    Observable<NetDefaultBean> changeCommentLikeState(@Header("Authorization") String authorization, @Path("commentid") int id);
 
     //获取热门评论
     @GET("/feeds/{feedid}/hot-comment")

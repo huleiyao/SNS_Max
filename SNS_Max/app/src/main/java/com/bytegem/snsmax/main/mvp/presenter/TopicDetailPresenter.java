@@ -3,6 +3,7 @@ package com.bytegem.snsmax.main.mvp.presenter;
 import android.app.Application;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
@@ -14,6 +15,7 @@ import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.TopicDetailActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.VideoPlayerActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
@@ -33,6 +35,8 @@ import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.TopicDetailContract;
 import com.jess.arms.utils.RxLifecycleUtils;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.ui.WatchImagesActivity;
 
 import java.util.ArrayList;
 
@@ -52,7 +56,7 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @ActivityScope
-public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Model, TopicDetailContract.View>  implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener{
+public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Model, TopicDetailContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -124,7 +128,21 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
             case R.id.feed_item_f_one_img:
-
+                if (adapter instanceof FeedsAdapter) {
+                    FeedBean feedBean = (FeedBean) adapter.getItem(position);
+                    switch (feedBean.getMedia().getType()) {
+                        case "image":
+                            mRootView.launchActivity(new Intent(mApplication, WatchImagesActivity.class)
+                                    .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, feedBean.getMedia().getImageList())
+                                    .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0)
+                                    .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
+                            );
+                            break;
+                        case "video":
+                            mRootView.launchActivity(new Intent(mApplication, VideoPlayerActivity.class).putExtra("feed", feedBean));
+                            break;
+                    }
+                }
                 break;
             case R.id.feed_item_content:
                 if (adapter instanceof FeedsAdapter) {
@@ -135,11 +153,26 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
                         mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
                 }
                 break;
-//            case R.id.tv_tag://取消
+//            case R.id.tv_tag:点击事件无效，不需要了
 //                if (adapter instanceof FeedsAdapter) {
 //                    mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", ((FeedsAdapter) adapter).getItem(position).getTopic()));
 //                }
 //                break;
+            case R.id.feed_item_zan:
+                FeedBean feedBean = (FeedBean) adapter.getItem(position);
+                feedBean.setHas_liked(!feedBean.isHas_liked());
+                if (feedBean.isHas_liked()) {
+                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan_on);
+                } else {
+                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan);
+                }
+                break;
+            case R.id.feed_item_comment:
+                mRootView.showMessage("评论");
+                break;
+            case R.id.feed_item_share:
+                mRootView.showMessage("分享");
+                break;
         }
     }
 
