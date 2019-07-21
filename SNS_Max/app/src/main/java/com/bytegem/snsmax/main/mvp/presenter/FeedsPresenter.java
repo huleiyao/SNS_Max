@@ -17,6 +17,7 @@ import com.bytegem.snsmax.main.mvp.ui.activity.VideoPlayerActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
+import com.bytegem.snsmax.main.mvp.ui.listener.ImageAdapterGetFeed;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
@@ -33,7 +34,7 @@ import javax.inject.Inject;
 import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.ui.WatchImagesActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.WatchImageActivity;
 
 import java.util.ArrayList;
 
@@ -124,10 +125,11 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                     FeedBean feedBean = (FeedBean) adapter.getItem(position);
                     switch (feedBean.getMedia().getType()) {
                         case "image":
-                            mRootView.launchActivity(new Intent(mApplication, WatchImagesActivity.class)
+                            mRootView.launchActivity(new Intent(mApplication, WatchImageActivity.class)
                                     .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, feedBean.getMedia().getImageList())
                                     .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0)
                                     .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
+                                    .putExtra("feed", feedBean)
                             );
                             break;
                         case "video":
@@ -173,10 +175,11 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
         if (adapter instanceof FeedsAdapter)
             mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
         else if (adapter instanceof ImageAdapter || adapter instanceof ImageAdapter2)
-            mRootView.launchActivity(new Intent(mApplication, WatchImagesActivity.class)
+            mRootView.launchActivity(new Intent(mApplication, WatchImageActivity.class)
                     .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, (ArrayList<String>) adapter.getData())
                     .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position)
                     .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
+                    .putExtra("feed", ((ImageAdapterGetFeed) adapter).getFeed())
             );
     }
 

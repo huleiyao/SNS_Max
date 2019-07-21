@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.ui.viewholder;
 
 import android.view.View;
 
+import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -21,11 +22,13 @@ public class CommunityPostListViewHolder extends BaseViewHolder {
 //        adapter2 = new ImageAdapter2();
     }
 
-    public ImageAdapter getAdapter() {
+    public ImageAdapter getAdapter(FeedBean feedBean) {
+        if (adapter != null) adapter.setFeedBean(feedBean);
         return adapter;
     }
 
-    public ImageAdapter2 getAdapter2() {
+    public ImageAdapter2 getAdapter2(FeedBean feedBean) {
+        if (adapter2 != null) adapter2.setFeedBean(feedBean);
         return adapter2;
     }
 

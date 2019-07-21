@@ -2,6 +2,7 @@ package com.lzy.imagepicker.ui;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,11 +39,28 @@ public abstract class ImagePreviewBaseActivity extends ImageBaseActivity {
     protected ImagePageAdapter mAdapter;
     protected boolean isFromItems = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_preview);
+    /** 单击时，隐藏头和尾 */
+    public abstract void onImageSingleTap();
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        ImagePicker.getInstance().restoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        ImagePicker.getInstance().saveInstanceState(outState);
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_image_preview;
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
         mCurrentPosition = getIntent().getIntExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0);
         isFromItems = getIntent().getBooleanExtra(ImagePicker.EXTRA_FROM_ITEMS, false);
 
@@ -90,20 +108,5 @@ public abstract class ImagePreviewBaseActivity extends ImageBaseActivity {
 
         //初始化当前页面的状态
         mTitleCount.setText(getString(R.string.ip_preview_image_count, mCurrentPosition + 1, mImageItems.size()));
-    }
-
-    /** 单击时，隐藏头和尾 */
-    public abstract void onImageSingleTap();
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        ImagePicker.getInstance().restoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        ImagePicker.getInstance().saveInstanceState(outState);
     }
 }

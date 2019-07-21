@@ -90,11 +90,11 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                             viewHolder.setImageData(bean.getMedia().getImageList());
                             if (bean.getMedia().getImageList().size() == 2) {
                                 recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));// 布局管理器
-                                recyclerView.setAdapter(viewHolder.getAdapter2());
+                                recyclerView.setAdapter(viewHolder.getAdapter2(bean));
                                 viewHolder.setListener(mOnItemChildClickListener, mOnItemClickListener);
                             } else {
                                 recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));// 布局管理器
-                                recyclerView.setAdapter(viewHolder.getAdapter());
+                                recyclerView.setAdapter(viewHolder.getAdapter(bean));
                                 viewHolder.setListener(mOnItemChildClickListener, mOnItemClickListener);
                             }
                             recyclerView.setItemAnimator(new DefaultItemAnimator());

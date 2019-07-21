@@ -9,6 +9,7 @@ import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -87,66 +88,6 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRAS_TAKE_PICKERS, directPhoto);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_grid);
-
-        imagePicker = ImagePicker.getInstance();
-        imagePicker.clear();
-        imagePicker.addOnImageSelectedListener(this);
-
-        Intent data = getIntent();
-        // 新增可直接拍照
-        if (data != null && data.getExtras() != null) {
-            directPhoto = data.getBooleanExtra(EXTRAS_TAKE_PICKERS, false); // 默认不是直接打开相机
-            if (directPhoto) {
-                if (!(checkPermission(Manifest.permission.CAMERA))) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, ImageGridActivity.REQUEST_PERMISSION_CAMERA);
-                } else {
-                    imagePicker.takePicture(this, ImagePicker.REQUEST_CODE_TAKE);
-                }
-            }
-            ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(EXTRAS_IMAGES);
-            imagePicker.setSelectedImages(images);
-        }
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-
-        findViewById(R.id.btn_back).setOnClickListener(this);
-        mBtnOk = (Button) findViewById(R.id.btn_ok);
-        mBtnOk.setOnClickListener(this);
-        mBtnPre = (TextView) findViewById(R.id.btn_preview);
-        mBtnPre.setOnClickListener(this);
-        mFooterBar = findViewById(R.id.footer_bar);
-        mllDir = findViewById(R.id.ll_dir);
-        mllDir.setOnClickListener(this);
-        mtvDir = (TextView) findViewById(R.id.tv_dir);
-        if (imagePicker.isMultiMode()) {
-            mBtnOk.setVisibility(View.VISIBLE);
-            mBtnPre.setVisibility(View.VISIBLE);
-        } else {
-            mBtnOk.setVisibility(View.GONE);
-            mBtnPre.setVisibility(View.GONE);
-        }
-
-//        mImageGridAdapter = new ImageGridAdapter(this, null);
-        mImageFolderAdapter = new ImageFolderAdapter(this, null);
-        mRecyclerAdapter = new ImageRecyclerAdapter(this, null);
-
-        onImageSelected(0, null, false);
-
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
-            if (checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                new ImageDataSource(this, null, this);
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION_STORAGE);
-            }
-        } else {
-            new ImageDataSource(this, null, this);
-        }
     }
 
     @Override
@@ -409,5 +350,67 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
         }
         return type;
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_image_grid;
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        imagePicker = ImagePicker.getInstance();
+        imagePicker.clear();
+        imagePicker.addOnImageSelectedListener(this);
+
+        Intent data = getIntent();
+        // 新增可直接拍照
+        if (data != null && data.getExtras() != null) {
+            directPhoto = data.getBooleanExtra(EXTRAS_TAKE_PICKERS, false); // 默认不是直接打开相机
+            if (directPhoto) {
+                if (!(checkPermission(Manifest.permission.CAMERA))) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, ImageGridActivity.REQUEST_PERMISSION_CAMERA);
+                } else {
+                    imagePicker.takePicture(this, ImagePicker.REQUEST_CODE_TAKE);
+                }
+            }
+            ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(EXTRAS_IMAGES);
+            imagePicker.setSelectedImages(images);
+        }
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
+
+        findViewById(R.id.btn_back).setOnClickListener(this);
+        mBtnOk = (Button) findViewById(R.id.btn_ok);
+        mBtnOk.setOnClickListener(this);
+        mBtnPre = (TextView) findViewById(R.id.btn_preview);
+        mBtnPre.setOnClickListener(this);
+        mFooterBar = findViewById(R.id.footer_bar);
+        mllDir = findViewById(R.id.ll_dir);
+        mllDir.setOnClickListener(this);
+        mtvDir = (TextView) findViewById(R.id.tv_dir);
+        if (imagePicker.isMultiMode()) {
+            mBtnOk.setVisibility(View.VISIBLE);
+            mBtnPre.setVisibility(View.VISIBLE);
+        } else {
+            mBtnOk.setVisibility(View.GONE);
+            mBtnPre.setVisibility(View.GONE);
+        }
+
+//        mImageGridAdapter = new ImageGridAdapter(this, null);
+        mImageFolderAdapter = new ImageFolderAdapter(this, null);
+        mRecyclerAdapter = new ImageRecyclerAdapter(this, null);
+
+        onImageSelected(0, null, false);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            if (checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                new ImageDataSource(this, null, this);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION_STORAGE);
+            }
+        } else {
+            new ImageDataSource(this, null, this);
+        }
     }
 }

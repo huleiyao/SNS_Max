@@ -1,6 +1,9 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.view.View;
 
 import com.bytegem.snsmax.R;
@@ -31,6 +34,7 @@ import javax.inject.Inject;
 import com.bytegem.snsmax.main.mvp.contract.CreatNewsContract;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.lzy.imagepicker.bean.ImageItem;
+import com.sh.shvideolibrary.VideoInputDialog;
 
 import java.io.EOFException;
 import java.io.File;
@@ -52,7 +56,7 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @ActivityScope
-public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, CreatNewsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, TagTextView.TopicListener {
+public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, CreatNewsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, TagTextView.TopicListener, VideoInputDialog.VideoCall {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -222,5 +226,18 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     @Override
     public void topicListener(TopicBean topicBean) {
         //点击话题后的操作
+    }
+
+    /**
+     * 小视屏录制回调
+     *
+     * @param path
+     */
+    @Override
+    public void videoPathCall(String path) {
+//        this.path = path;
+//        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MINI_KIND);
+//        image.setImageBitmap(bitmap);
+//        first.setText(getFileSize(path));
     }
 }

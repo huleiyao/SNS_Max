@@ -53,6 +53,7 @@ dependencies {
     implementation project(':arms')
     implementation project(':common')
     implementation project(':tencentlocation')
+    implementation project(':shvideolibrary')
     implementation rootProject.ext.dependencies["androideventbus"]
     implementation rootProject.ext.dependencies["cardview-v7"]
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
@@ -77,5 +78,5 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.0'
     implementation 'org.greenrobot:greendao-generator:3.2.0'
 
-    implementation 'com.github.MingYueChunQiu:RecorderManager:0.2.25'
+//    implementation 'com.github.MingYueChunQiu:RecorderManager:0.2.25'
 }

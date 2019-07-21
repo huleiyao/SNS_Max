@@ -34,14 +34,6 @@
             android:name=".ui.ImagePreviewDelActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/ImagePickerThemeFullScreen" />
-        <activity
-            android:name=".ui.WatchImagesActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/ImagePickerThemeFullScreen"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden"
-            />
-
         <provider
             android:name=".ImagePickerProvider"
             android:authorities="${applicationId}.provider"

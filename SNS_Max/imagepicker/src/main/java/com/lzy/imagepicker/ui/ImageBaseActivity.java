@@ -5,12 +5,16 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.mvp.IPresenter;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.R;
 import com.lzy.imagepicker.view.SystemBarTintManager;
@@ -24,20 +28,9 @@ import com.lzy.imagepicker.view.SystemBarTintManager;
  * 修订历史：
  * ================================================
  */
-public class ImageBaseActivity extends AppCompatActivity {
+public abstract class ImageBaseActivity<P extends IPresenter> extends BaseActivity {
 
     protected SystemBarTintManager tintManager;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setTranslucentStatus(true);
-        }
-        tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setStatusBarTintResource(R.color.ip_color_primary_dark);  //设置上方状态栏的颜色
-    }
 
     @TargetApi(19)
     private void setTranslucentStatus(boolean on) {
@@ -70,5 +63,10 @@ public class ImageBaseActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         ImagePicker.getInstance().saveInstanceState(outState);
+    }
+
+    @Override
+    public void setupActivityComponent(@NonNull AppComponent appComponent) {
+
     }
 }

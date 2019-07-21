@@ -3,6 +3,7 @@ package com.lzy.imagepicker.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.format.Formatter;
 import android.view.View;
@@ -38,90 +39,6 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     private Button mBtnOk;                         //确认图片的选择
     private View bottomBar;
     private View marginView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        isOrigin = getIntent().getBooleanExtra(ImagePreviewActivity.ISORIGIN, false);
-        imagePicker.addOnImageSelectedListener(this);
-        mBtnOk = (Button) findViewById(R.id.btn_ok);
-        mBtnOk.setVisibility(View.VISIBLE);
-        mBtnOk.setOnClickListener(this);
-
-        bottomBar = findViewById(R.id.bottom_bar);
-        bottomBar.setVisibility(View.VISIBLE);
-
-        mCbCheck = (SuperCheckBox) findViewById(R.id.cb_check);
-        mCbOrigin = (SuperCheckBox) findViewById(R.id.cb_origin);
-        marginView = findViewById(R.id.margin_bottom);
-        mCbOrigin.setText(getString(R.string.ip_origin));
-        mCbOrigin.setOnCheckedChangeListener(this);
-        mCbOrigin.setChecked(isOrigin);
-
-        //初始化当前页面的状态
-        onImageSelected(0, null, false);
-        ImageItem item = mImageItems.get(mCurrentPosition);
-        boolean isSelected = imagePicker.isSelect(item);
-        mTitleCount.setText(getString(R.string.ip_preview_image_count, mCurrentPosition + 1, mImageItems.size()));
-        mCbCheck.setChecked(isSelected);
-        //滑动ViewPager的时候，根据外界的数据改变当前的选中状态和当前的图片的位置描述文本
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                mCurrentPosition = position;
-                ImageItem item = mImageItems.get(mCurrentPosition);
-                boolean isSelected = imagePicker.isSelect(item);
-                mCbCheck.setChecked(isSelected);
-                mTitleCount.setText(getString(R.string.ip_preview_image_count, mCurrentPosition + 1, mImageItems.size()));
-            }
-        });
-        //当点击当前选中按钮的时候，需要根据当前的选中状态添加和移除图片
-        mCbCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImageItem imageItem = mImageItems.get(mCurrentPosition);
-                int selectLimit = imagePicker.getSelectLimit();
-                if (mCbCheck.isChecked() && selectedImages.size() >= selectLimit) {
-                    Toast.makeText(ImagePreviewActivity.this, getString(R.string.ip_select_limit, selectLimit), Toast.LENGTH_SHORT).show();
-                    mCbCheck.setChecked(false);
-                } else {
-                    imagePicker.addSelectedImageItem(mCurrentPosition, imageItem, mCbCheck.isChecked());
-                }
-            }
-        });
-        NavigationBarChangeListener.with(this).setListener(new NavigationBarChangeListener.OnSoftInputStateChangeListener() {
-            @Override
-            public void onNavigationBarShow(int orientation, int height) {
-                marginView.setVisibility(View.VISIBLE);
-                ViewGroup.LayoutParams layoutParams = marginView.getLayoutParams();
-                if (layoutParams.height == 0) {
-                    layoutParams.height = Utils.getNavigationBarHeight(ImagePreviewActivity.this);
-                    marginView.requestLayout();
-                }
-            }
-
-            @Override
-            public void onNavigationBarHide(int orientation) {
-                marginView.setVisibility(View.GONE);
-            }
-        });
-        NavigationBarChangeListener.with(this, NavigationBarChangeListener.ORIENTATION_HORIZONTAL)
-                .setListener(new NavigationBarChangeListener.OnSoftInputStateChangeListener() {
-                    @Override
-                    public void onNavigationBarShow(int orientation, int height) {
-                        topBar.setPadding(0, 0, height, 0);
-                        bottomBar.setPadding(0, 0, height, 0);
-                    }
-
-                    @Override
-                    public void onNavigationBarHide(int orientation) {
-                        topBar.setPadding(0, 0, 0, 0);
-                        bottomBar.setPadding(0, 0, 0, 0);
-                    }
-                });
-    }
-
 
 
     /**
@@ -222,5 +139,87 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
             //Activity全屏显示，但状态栏不会被隐藏覆盖，状态栏依然可见，Activity顶端布局部分会被状态遮住
 //            if (Build.VERSION.SDK_INT >= 16) content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+        isOrigin = getIntent().getBooleanExtra(ImagePreviewActivity.ISORIGIN, false);
+        imagePicker.addOnImageSelectedListener(this);
+        mBtnOk = (Button) findViewById(R.id.btn_ok);
+        mBtnOk.setVisibility(View.VISIBLE);
+        mBtnOk.setOnClickListener(this);
+
+        bottomBar = findViewById(R.id.bottom_bar);
+        bottomBar.setVisibility(View.VISIBLE);
+
+        mCbCheck = (SuperCheckBox) findViewById(R.id.cb_check);
+        mCbOrigin = (SuperCheckBox) findViewById(R.id.cb_origin);
+        marginView = findViewById(R.id.margin_bottom);
+        mCbOrigin.setText(getString(R.string.ip_origin));
+        mCbOrigin.setOnCheckedChangeListener(this);
+        mCbOrigin.setChecked(isOrigin);
+
+        //初始化当前页面的状态
+        onImageSelected(0, null, false);
+        ImageItem item = mImageItems.get(mCurrentPosition);
+        boolean isSelected = imagePicker.isSelect(item);
+        mTitleCount.setText(getString(R.string.ip_preview_image_count, mCurrentPosition + 1, mImageItems.size()));
+        mCbCheck.setChecked(isSelected);
+        //滑动ViewPager的时候，根据外界的数据改变当前的选中状态和当前的图片的位置描述文本
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentPosition = position;
+                ImageItem item = mImageItems.get(mCurrentPosition);
+                boolean isSelected = imagePicker.isSelect(item);
+                mCbCheck.setChecked(isSelected);
+                mTitleCount.setText(getString(R.string.ip_preview_image_count, mCurrentPosition + 1, mImageItems.size()));
+            }
+        });
+        //当点击当前选中按钮的时候，需要根据当前的选中状态添加和移除图片
+        mCbCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageItem imageItem = mImageItems.get(mCurrentPosition);
+                int selectLimit = imagePicker.getSelectLimit();
+                if (mCbCheck.isChecked() && selectedImages.size() >= selectLimit) {
+                    Toast.makeText(ImagePreviewActivity.this, getString(R.string.ip_select_limit, selectLimit), Toast.LENGTH_SHORT).show();
+                    mCbCheck.setChecked(false);
+                } else {
+                    imagePicker.addSelectedImageItem(mCurrentPosition, imageItem, mCbCheck.isChecked());
+                }
+            }
+        });
+        NavigationBarChangeListener.with(this).setListener(new NavigationBarChangeListener.OnSoftInputStateChangeListener() {
+            @Override
+            public void onNavigationBarShow(int orientation, int height) {
+                marginView.setVisibility(View.VISIBLE);
+                ViewGroup.LayoutParams layoutParams = marginView.getLayoutParams();
+                if (layoutParams.height == 0) {
+                    layoutParams.height = Utils.getNavigationBarHeight(ImagePreviewActivity.this);
+                    marginView.requestLayout();
+                }
+            }
+
+            @Override
+            public void onNavigationBarHide(int orientation) {
+                marginView.setVisibility(View.GONE);
+            }
+        });
+        NavigationBarChangeListener.with(this, NavigationBarChangeListener.ORIENTATION_HORIZONTAL)
+                .setListener(new NavigationBarChangeListener.OnSoftInputStateChangeListener() {
+                    @Override
+                    public void onNavigationBarShow(int orientation, int height) {
+                        topBar.setPadding(0, 0, height, 0);
+                        bottomBar.setPadding(0, 0, height, 0);
+                    }
+
+                    @Override
+                    public void onNavigationBarHide(int orientation) {
+                        topBar.setPadding(0, 0, 0, 0);
+                        bottomBar.setPadding(0, 0, 0, 0);
+                    }
+                });
     }
 }

@@ -8,10 +8,8 @@ import android.widget.ImageView;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
-import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.topic.DATATopic;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
-import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.TopicDetailActivity;
@@ -36,11 +34,9 @@ import javax.inject.Inject;
 import com.bytegem.snsmax.main.mvp.contract.TopicDetailContract;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.ui.WatchImagesActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.WatchImageActivity;
 
 import java.util.ArrayList;
-
-import static com.bytegem.snsmax.main.app.MApplication.location;
 
 
 /**
@@ -132,7 +128,7 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
                     FeedBean feedBean = (FeedBean) adapter.getItem(position);
                     switch (feedBean.getMedia().getType()) {
                         case "image":
-                            mRootView.launchActivity(new Intent(mApplication, WatchImagesActivity.class)
+                            mRootView.launchActivity(new Intent(mApplication, WatchImageActivity.class)
                                     .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, feedBean.getMedia().getImageList())
                                     .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0)
                                     .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)

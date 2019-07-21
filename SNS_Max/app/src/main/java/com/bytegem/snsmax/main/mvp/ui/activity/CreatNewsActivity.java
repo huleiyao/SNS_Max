@@ -36,8 +36,7 @@ import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
-import com.mingyuechunqiu.recordermanager.feature.record.RecorderManagerFactory;
-import com.mingyuechunqiu.recordermanager.feature.record.RecorderManagerable;
+import com.sh.shvideolibrary.VideoInputDialog;
 
 
 import java.util.ArrayList;
@@ -131,10 +130,6 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 openPhotos();
                 break;
             case R.id.creat_news_video://视频
-//                if (true) {
-//                    showMessage("正在开发中...");
-//                    return;
-//                }
                 if (feedType == FeedType.VIDEO)
                     return;
                 url.setVisibility(View.GONE);
@@ -144,8 +139,8 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 feedType = FeedType.VIDEO;
                 adapter.setFeedType(feedType);
                 mediaBean.setType("video");
-
-                RecorderManagerFactory.getRecordVideoRequest().startRecordVideo(this, 313);
+                VideoInputDialog.show(getSupportFragmentManager(),mPresenter,VideoInputDialog.Q720,this);
+//                RecorderManagerFactory.getRecordVideoRequest().startRecordVideo(this, 313);
                 break;
             case R.id.creat_news_link://链接
                 if (feedType == FeedType.LINK)

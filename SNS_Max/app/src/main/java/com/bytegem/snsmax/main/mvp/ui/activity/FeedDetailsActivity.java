@@ -23,7 +23,6 @@ import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaLinkContent;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
-import com.bytegem.snsmax.main.app.utils.MediaUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.contract.FeedDetailsContract;
 import com.bytegem.snsmax.main.mvp.presenter.FeedDetailsPresenter;
@@ -42,12 +41,8 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
-import com.lzy.imagepicker.ui.WatchImagesActivity;
 
 
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -181,7 +176,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
             case R.id.post_detail_one_img://只有一张图的时候   从这里打开全图,或去看视频
                 switch (feedBean.getMedia().getType()) {
                     case "image":
-                        launchActivity(new Intent(this, WatchImagesActivity.class)
+                        launchActivity(new Intent(this, WatchImageActivity.class)
                                 .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, feedBean.getMedia().getImageList())
                                 .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0)
                                 .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)

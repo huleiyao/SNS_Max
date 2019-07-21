@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
@@ -70,6 +71,9 @@ public class VideoPlayerActivity extends BaseActivity<VideoPlayerPresenter> impl
     TextView feed_content;
     @BindView(R.id.video_player_group_name)
     TextView group_name;
+
+    @BindView(R.id.video_feed_info)
+    LinearLayout video_feed_info;
 
     private FeedBean mFeedBean;
 

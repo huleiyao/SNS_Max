@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -36,49 +37,6 @@ public class ImageCropActivity extends ImageBaseActivity implements View.OnClick
     private int mOutputY;
     private ArrayList<ImageItem> mImageItems;
     private ImagePicker imagePicker;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_crop);
-
-        imagePicker = ImagePicker.getInstance();
-
-        //初始化View
-        findViewById(R.id.btn_back).setOnClickListener(this);
-        Button btn_ok = (Button) findViewById(R.id.btn_ok);
-        btn_ok.setText(getString(R.string.ip_complete));
-        btn_ok.setOnClickListener(this);
-        TextView tv_des = (TextView) findViewById(R.id.tv_des);
-        tv_des.setText(getString(R.string.ip_photo_crop));
-        mCropImageView = (CropImageView) findViewById(R.id.cv_crop_image);
-        mCropImageView.setOnBitmapSaveCompleteListener(this);
-
-        //获取需要的参数
-        mOutputX = imagePicker.getOutPutX();
-        mOutputY = imagePicker.getOutPutY();
-        mIsSaveRectangle = imagePicker.isSaveRectangle();
-        mImageItems = imagePicker.getSelectedImages();
-        String imagePath = mImageItems.get(0).path;
-
-        mCropImageView.setFocusStyle(imagePicker.getStyle());
-        mCropImageView.setFocusWidth(imagePicker.getFocusWidth());
-        mCropImageView.setFocusHeight(imagePicker.getFocusHeight());
-
-        //缩放图片
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, options);
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        options.inSampleSize = calculateInSampleSize(options, displayMetrics.widthPixels, displayMetrics.heightPixels);
-        options.inJustDecodeBounds = false;
-        mBitmap = BitmapFactory.decodeFile(imagePath, options);
-//        mCropImageView.setImageBitmap(mBitmap);
-        //设置默认旋转角度
-        mCropImageView.setImageBitmap(mCropImageView.rotate(mBitmap, BitmapUtil.getBitmapDegree(imagePath)));
-
-//        mCropImageView.setImageURI(Uri.fromFile(new File(imagePath)));
-    }
 
     public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         int width = options.outWidth;
@@ -134,5 +92,50 @@ public class ImageCropActivity extends ImageBaseActivity implements View.OnClick
             mBitmap.recycle();
             mBitmap = null;
         }
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_image_crop;
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        imagePicker = ImagePicker.getInstance();
+
+        //初始化View
+        findViewById(R.id.btn_back).setOnClickListener(this);
+        Button btn_ok = (Button) findViewById(R.id.btn_ok);
+        btn_ok.setText(getString(R.string.ip_complete));
+        btn_ok.setOnClickListener(this);
+        TextView tv_des = (TextView) findViewById(R.id.tv_des);
+        tv_des.setText(getString(R.string.ip_photo_crop));
+        mCropImageView = (CropImageView) findViewById(R.id.cv_crop_image);
+        mCropImageView.setOnBitmapSaveCompleteListener(this);
+
+        //获取需要的参数
+        mOutputX = imagePicker.getOutPutX();
+        mOutputY = imagePicker.getOutPutY();
+        mIsSaveRectangle = imagePicker.isSaveRectangle();
+        mImageItems = imagePicker.getSelectedImages();
+        String imagePath = mImageItems.get(0).path;
+
+        mCropImageView.setFocusStyle(imagePicker.getStyle());
+        mCropImageView.setFocusWidth(imagePicker.getFocusWidth());
+        mCropImageView.setFocusHeight(imagePicker.getFocusHeight());
+
+        //缩放图片
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, options);
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        options.inSampleSize = calculateInSampleSize(options, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        options.inJustDecodeBounds = false;
+        mBitmap = BitmapFactory.decodeFile(imagePath, options);
+//        mCropImageView.setImageBitmap(mBitmap);
+        //设置默认旋转角度
+        mCropImageView.setImageBitmap(mCropImageView.rotate(mBitmap, BitmapUtil.getBitmapDegree(imagePath)));
+
+//        mCropImageView.setImageURI(Uri.fromFile(new File(imagePath)));
     }
 }
