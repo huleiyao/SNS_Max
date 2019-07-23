@@ -39,6 +39,7 @@ import com.lzy.imagepicker.view.GridSpacingItemDecoration;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -303,11 +304,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
                 ImageItem imageItem = new ImageItem();
                 imageItem.path = path;
                 imageItem.mimeType = getMimeTypeFromUrl(path);
-                try {
-                    imageItem.size = getFileSize(new File(path));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                imageItem.size = getFileSize(new File(path));
 //                imagePicker.clearSelectedImages();
                 imagePicker.addSelectedImageItem(0, imageItem, true);
                 if (imagePicker.isCrop()) {
@@ -325,15 +322,18 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
         }
     }
 
-    private static long getFileSize(File file) throws Exception {
+    public static long getFileSize(File file) {
         long size = 0;
-        if (file.exists()) {
-            FileInputStream fis = null;
-            fis = new FileInputStream(file);
-            size = fis.available();
-        } else {
-            file.createNewFile();
-            Log.e("获取文件大小", "文件不存在!");
+        try {
+            if (file.exists()) {
+                FileInputStream fis = null;
+                fis = new FileInputStream(file);
+                size = fis.available();
+            } else {
+                file.createNewFile();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return size;
     }
@@ -341,7 +341,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
     /**
      * 使用系统API，根据url获得对应的MIME类型
      */
-    private String getMimeTypeFromUrl(String url) {
+    public static String getMimeTypeFromUrl(String url) {
         String type = null;
         //使用系统API，获取URL路径中文件的后缀名（扩展名）
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);

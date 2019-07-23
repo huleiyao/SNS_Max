@@ -61,6 +61,9 @@ public class M {
                 case "video/mpeg":
                     tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "mp4.mp4"));
                     break;
+                case "video/mp4":
+                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "mp4.mp4"));
+                    break;
             }
         } catch (IOException e) {
             e.printStackTrace();

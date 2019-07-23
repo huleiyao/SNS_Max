@@ -4,10 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.os.Environment;
 import android.view.inputmethod.InputMethodManager;
 
 import com.bytegem.snsmax.main.app.Api;
+import com.bytegem.snsmax.main.app.config.LocationCache;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -36,6 +42,29 @@ public class Utils {
         if (path.contains("http"))
             return path;
         else return Api.FILE_LOOK_DOMAIN + path;
+    }
+
+    public static String getNetVideoImagePath(String videoUrl) {
+        Bitmap bitmap = getNetVideoBitmap(videoUrl);
+        if (bitmap == null) return "";
+        String pathPic = null;
+        try {
+            FileOutputStream fos = null;
+            pathPic = LocationCache.IMAGE_LOCATION + File.separator + System.currentTimeMillis() + ".jpg";
+            new File(LocationCache.IMAGE_LOCATION + File.separator).mkdirs();
+            fos = new FileOutputStream(pathPic);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            fos.close();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (pathPic == null || !new File(pathPic).exists()) return null;
+        else
+            return pathPic;
     }
 
     public static Bitmap getNetVideoBitmap(String videoUrl) {

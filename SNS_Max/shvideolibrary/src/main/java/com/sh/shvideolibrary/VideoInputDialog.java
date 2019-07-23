@@ -2,13 +2,16 @@ package com.sh.shvideolibrary;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -20,6 +23,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.sh.shvideolibrary.compression.CompressListener;
+import com.sh.shvideolibrary.compression.CompressorUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +47,7 @@ public class VideoInputDialog extends DialogFragment {
     private static final String TAG = "VideoInputDialog";
     private Camera mCamera;
     private CameraPreview mPreview;
-    private ProgressBar mProgressRight,mProgressLeft;
+    private ProgressBar mProgressRight, mProgressLeft;
     private MediaRecorder mMediaRecorder;
     private Timer mTimer;
     private final int MAX_TIME = 1000;
@@ -55,7 +61,7 @@ public class VideoInputDialog extends DialogFragment {
     public static int Q720 = CamcorderProfile.QUALITY_720P;
     public static int Q1080 = CamcorderProfile.QUALITY_1080P;
     public static int Q21600 = CamcorderProfile.QUALITY_2160P;
-    private int quality =CamcorderProfile.QUALITY_480P;
+    private int quality = CamcorderProfile.QUALITY_480P;
 
     Context mContext;
 
@@ -78,7 +84,7 @@ public class VideoInputDialog extends DialogFragment {
         this.videoCall = videoCall;
     }
 
-    public static VideoInputDialog newInstance(VideoCall videoCall,int quality,Context context) {
+    public static VideoInputDialog newInstance(VideoCall videoCall, int quality, Context context) {
         VideoInputDialog dialog = new VideoInputDialog();
         dialog.setVideoCall(videoCall);
         dialog.setQuality(quality);
@@ -87,6 +93,7 @@ public class VideoInputDialog extends DialogFragment {
         return dialog;
     }
 
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -122,7 +129,7 @@ public class VideoInputDialog extends DialogFragment {
                                             mainHandler.post(sendVideo);
                                         }
                                     }
-                                    }, 0, 10);
+                                }, 0, 10);
                             } else {
                                 releaseMediaRecorder();
                             }
@@ -151,10 +158,10 @@ public class VideoInputDialog extends DialogFragment {
     /**
      * 停止录制
      */
-    private void recordStop(){
+    private void recordStop() {
         if (isRecording) {
             isRecording = false;
-            if (isLongEnough()){
+            if (isLongEnough()) {
                 mMediaRecorder.stop();
             }
             releaseMediaRecorder();
@@ -168,59 +175,57 @@ public class VideoInputDialog extends DialogFragment {
 
 
     /**
-     *
      * @param ft
-     * @param videoCall  录制视频回调
-     * @param quality 分辨率
+     * @param videoCall 录制视频回调
+     * @param quality   分辨率
      * @param context
      */
-    public static void show(FragmentManager ft,VideoCall videoCall,int quality,Context context){
+    public static void show(FragmentManager ft, VideoCall videoCall, int quality, Context context) {
 
-        DialogFragment newFragment = VideoInputDialog.newInstance(videoCall,quality, context);
+        DialogFragment newFragment = VideoInputDialog.newInstance(videoCall, quality, context);
         newFragment.show(ft, "VideoInputDialog");
     }
 
 
-
-    /** A safe way to get an instance of the Camera object. */
-    private static Camera getCameraInstance(){
+    /**
+     * A safe way to get an instance of the Camera object.
+     */
+    private static Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
     }
 
-
-
-    private void releaseMediaRecorder(){
+    private void releaseMediaRecorder() {
         if (mMediaRecorder != null) {
             mMediaRecorder.reset();   // clear recorder configuration
             mMediaRecorder.release(); // release the recorder object
             mMediaRecorder = null;
             mCamera.lock();           // lock camera for later use
-            if (isLongEnough()){
+            if (isLongEnough()) {
                 videoCall.videoPathCall(fileName);
-            }else{
+            } else {
                 Toast.makeText(getContext(), getString(R.string.chat_video_too_short), Toast.LENGTH_SHORT).show();
             }
             dismiss();
         }
     }
 
-    private void releaseCamera(){
-        if (mCamera != null){
+    private void releaseCamera() {
+        if (mCamera != null) {
             mCamera.release();        // release the camera for other applications
             mCamera = null;
         }
     }
-    //初始化 mMediaRecorder 用于录像
-    private boolean prepareVideoRecorder(){
 
-        if (mCamera==null) return false;
+    //初始化 mMediaRecorder 用于录像
+    private boolean prepareVideoRecorder() {
+
+        if (mCamera == null) return false;
         mMediaRecorder = new MediaRecorder();
         mCamera.unlock();
         mMediaRecorder.setCamera(mCamera);
@@ -252,28 +257,30 @@ public class VideoInputDialog extends DialogFragment {
     }
 
 
-
-    /** Create a File for saving an image or video */
-    private File getOutputMediaFile(){
+    /**
+     * Create a File for saving an image or video
+     */
+    private File getOutputMediaFile() {
 
 //        return  new File(getContext().getExternalCacheDir().getAbsolutePath() + "/" + fileName);
 //        PackageManager pm = mContext.getPackageManager();
-        String appName =      mContext. getPackageName();
+        String appName = mContext.getPackageName();
         File dir = new File(Environment.getExternalStorageDirectory() + "/" + appName);
-        if (!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdir();
         }
-         fileName = dir+ "/video_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
-        Log.i("filePath",fileName);
-        return  new File(fileName);
+        fileName = dir + "/video_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+        Log.i("filePath", fileName);
+        return new File(fileName);
     }
 
     /**
      * 判断录制时间
+     *
      * @return
      */
-    private boolean isLongEnough(){
-        return Calendar.getInstance().getTimeInMillis() - time > 3000;
+    private boolean isLongEnough() {
+        return Calendar.getInstance().getTimeInMillis() - time > 1000;
     }
 
     /**
@@ -282,7 +289,7 @@ public class VideoInputDialog extends DialogFragment {
      * PS  录制视频回调
      */
 
-    public static interface VideoCall{
+    public static interface VideoCall {
         public void videoPathCall(String path);
     }
 

@@ -17,7 +17,7 @@ public class MediaBean extends MBaseBean {
 
     private transient String[] images;//上传时才用
     private transient ArrayList<String> imageList;
-    private transient List<ImageItem> imageItems;
+    private transient ArrayList<ImageItem> imageItems;
     private transient MediaVideoContent mediaVideo;
     private transient MediaLinkContent mediaLink;
 
@@ -162,13 +162,13 @@ public class MediaBean extends MBaseBean {
         }
     }
 
-    public List<ImageItem> getImageItems() {
+    public ArrayList<ImageItem> getImageItems() {
         if (imageItems == null) initContent();
         if (imageItems == null) imageItems = new ArrayList<>();
         return imageItems;
     }
 
-    public void setImageItems(List<ImageItem> imageItems) {
+    public void setImageItems(ArrayList<ImageItem> imageItems) {
         this.imageItems = imageItems;
     }
 
@@ -196,6 +196,10 @@ public class MediaBean extends MBaseBean {
     public MediaVideoContent getMediaVideo() {
         if (mediaVideo == null) initContent();
         if (mediaVideo == null) mediaVideo = new MediaVideoContent();
+        return mediaVideo;
+    }
+
+    public MediaVideoContent getCreateMediaVideo(){
         return mediaVideo;
     }
 

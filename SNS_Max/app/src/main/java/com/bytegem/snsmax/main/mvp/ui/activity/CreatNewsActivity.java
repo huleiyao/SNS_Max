@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -17,10 +19,10 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaLinkContent;
+import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.widget.TagEditTextView;
-import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -37,8 +39,11 @@ import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
 import com.sh.shvideolibrary.VideoInputDialog;
+import com.sh.shvideolibrary.compression.CompressListener;
+import com.sh.shvideolibrary.compression.CompressorUtils;
 
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -86,6 +91,8 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     ImageView url_cover;
 
 
+    @BindView(R.id.toolbar_send)
+    TextView toolbar_send;
     @BindView(R.id.creat_news_url_text)
     TextView url_text;
     @BindView(R.id.creat_news_group_name)
@@ -127,6 +134,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 feedType = FeedType.CAMERA;
                 adapter.setFeedType(feedType);
                 mediaBean.setType("image");
+                setAdapterData(mediaBean.getImageItems());
                 openPhotos();
                 break;
             case R.id.creat_news_video://视频
@@ -139,8 +147,8 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                 feedType = FeedType.VIDEO;
                 adapter.setFeedType(feedType);
                 mediaBean.setType("video");
-                VideoInputDialog.show(getSupportFragmentManager(),mPresenter,VideoInputDialog.Q720,this);
-//                RecorderManagerFactory.getRecordVideoRequest().startRecordVideo(this, 313);
+                adapter.setVideoData(mediaBean.getCreateMediaVideo());
+                toCameraVideo();
                 break;
             case R.id.creat_news_link://链接
                 if (feedType == FeedType.LINK)
@@ -189,6 +197,25 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
         recycle_view.setItemAnimator(new DefaultItemAnimator());
         adapter.setOnItemClickListener(mPresenter);
         adapter.setOnItemChildClickListener(mPresenter);
+        content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().isEmpty())
+                    toolbar_send.setTextColor(getResources().getColor(R.color.color_665e6ce7));
+                else
+                    toolbar_send.setTextColor(getResources().getColor(R.color.color_5e6ce7));
+            }
+        });
     }
 
     private void initImagePicker() {
@@ -198,6 +225,11 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
         imagePicker.setShowCamera(true);
         imagePicker.setSelectLimit(9);
         imagePicker.setCrop(false);
+    }
+
+    @Override
+    public void toCameraVideo() {
+        VideoInputDialog.show(getSupportFragmentManager(), mPresenter, VideoInputDialog.Q720, this);
     }
 
     @Override
@@ -231,7 +263,33 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @Override
     public void remove(int position) {
         adapter.remove(position);
-        mediaBean.setImageItems(adapter.getData());
+        mediaBean.setImageItems((ArrayList<ImageItem>) adapter.getData());
+    }
+
+    String newFileName;
+
+    @Override
+    public void showVideo(MediaVideoContent mediaVideoContent) {
+        mediaBean.setMediaVideo(mediaVideoContent);
+        adapter.setVideoData(mediaVideoContent);
+        newFileName = mediaVideoContent.getVideo().replace(".mp4", "com.mp4");
+        CompressorUtils compressorUtils = new CompressorUtils(mediaVideoContent.getVideo(), newFileName, this);
+        compressorUtils.execCommand(new CompressListener() {
+            @Override
+            public void onExecSuccess(String message) {
+                new File(mediaBean.getMediaVideo().getVideo()).delete();//删除原图
+                mediaBean.getMediaVideo().setVideo(newFileName);
+            }
+
+            @Override
+            public void onExecFail(String reason) {
+                int i = 0;
+            }
+
+            @Override
+            public void onExecProgress(String message) {
+            }
+        });
     }
 
     @Override

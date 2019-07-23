@@ -117,6 +117,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     public void changeCity() {
+        if (nearByCommuntiyPostList == null) return;
         nearByCommuntiyPostList.changeCity();
     }
 

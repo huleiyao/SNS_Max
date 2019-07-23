@@ -3,6 +3,7 @@ package com.bytegem.snsmax.main.mvp.contract;
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 import com.lzy.imagepicker.bean.ImageItem;
@@ -32,6 +33,10 @@ public interface CreatNewsContract {
         void openPhotos();
 
         void remove(int position);
+
+        void showVideo(MediaVideoContent mediaVideoContent);
+
+        void toCameraVideo();
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

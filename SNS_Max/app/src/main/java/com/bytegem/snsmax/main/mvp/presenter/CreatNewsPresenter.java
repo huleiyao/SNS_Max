@@ -11,6 +11,7 @@ import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
+import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 import com.bytegem.snsmax.main.mvp.contract.CreatNewsContract;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.sh.shvideolibrary.VideoInputDialog;
 
 import java.io.EOFException;
@@ -95,7 +97,16 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 } else send();
                 break;
             case VIDEO:
-//                getSign("video", imageItems.get(i), i);
+                ImageItem video = new ImageItem();
+                video.path = mMediaBean.getCreateMediaVideo().getVideo();
+                video.size = ImageGridActivity.getFileSize(new File(mMediaBean.getCreateMediaVideo().getVideo()));
+                video.mimeType = ImageGridActivity.getMimeTypeFromUrl(mMediaBean.getCreateMediaVideo().getVideo());
+                ImageItem cover = new ImageItem();
+                cover.path = mMediaBean.getCreateMediaVideo().getCover();
+                cover.size = ImageGridActivity.getFileSize(new File(mMediaBean.getCreateMediaVideo().getCover()));
+                cover.mimeType = ImageGridActivity.getMimeTypeFromUrl(mMediaBean.getCreateMediaVideo().getCover());
+                getSign("video", video, -1);
+                getSign("image", cover, -1);
                 break;
             case LINK:
                 send();
@@ -108,6 +119,11 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
 
     public void getSign(String type, ImageItem imageItem, int position) {
         mRootView.showLoading();
+        if (imageItem.mimeType == null) {
+            mRootView.showMessage("上传失败");
+            mRootView.hideLoading();
+            return;
+        }
         File tempCover = M.getTempFile(mApplication, imageItem.mimeType);
         if (tempCover == null) {
             mRootView.showMessage("上传失败");
@@ -126,12 +142,12 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 .subscribe(new ErrorHandleSubscriber<FileSignBean>(mErrorHandler) {
                     @Override
                     public void onNext(FileSignBean data) {
-                        updataCover(data, imageItem, position);
+                        updataCover(type, data, imageItem, position);
                     }
                 });
     }
 
-    public void updataCover(FileSignBean fileSignBean, ImageItem imageItem, int position) {
+    public void updataCover(String type, FileSignBean fileSignBean, ImageItem imageItem, int position) {
         mModel.updataCover(fileSignBean, imageItem)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -142,9 +158,19 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 .doOnError((Throwable onError) -> {
                     if (onError instanceof EOFException) {
                         //无数据返回  成功
-                        mMediaBean.setImages(position, Utils.checkUrl(fileSignBean.getPath()));
-                        if (!isStartSend && mMediaBean.checkImage())
-                            send();
+                        if (position == -1) {
+                            //视频
+                            if (type.equals("video"))
+                                mMediaBean.getMediaVideo().setVideo(Utils.checkUrl(fileSignBean.getPath()));
+                            else
+                                mMediaBean.getMediaVideo().setCover(Utils.checkUrl(fileSignBean.getPath()));
+                            if (mMediaBean.getMediaVideo().getVideo().contains("http") && mMediaBean.getMediaVideo().getCover().contains("http"))//都是网络地址，发送动态
+                                send();
+                        } else {
+                            mMediaBean.setImages(position, Utils.checkUrl(fileSignBean.getPath()));
+                            if (!isStartSend && mMediaBean.checkImage())
+                                send();
+                        }
                     } else {
                         mRootView.showMessage("上传失败");
                         mRootView.hideLoading();
@@ -212,7 +238,7 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 CreatNewsActivity.FeedType feedType = ((CreateImageAdapter) adapter).getFeedType();
                 if (feedType == CreatNewsActivity.FeedType.CAMERA) mRootView.openPhotos();
                 else if (feedType == CreatNewsActivity.FeedType.VIDEO) {
-
+                    mRootView.toCameraVideo();
                 }
                 break;
         }
@@ -220,7 +246,11 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        mRootView.watchImagePicker(position);
+        if (this.adapter.getFeedType() == CreatNewsActivity.FeedType.CAMERA)
+            mRootView.watchImagePicker(position);
+        else {
+
+        }
     }
 
     @Override
@@ -235,9 +265,14 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
      */
     @Override
     public void videoPathCall(String path) {
-//        this.path = path;
-//        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MINI_KIND);
-//        image.setImageBitmap(bitmap);
-//        first.setText(getFileSize(path));
+        if (path != null && !path.isEmpty() && new File(path).exists()) {
+            MediaVideoContent mediaVideoContent = new MediaVideoContent();
+            mediaVideoContent.setVideo(path);
+            mediaVideoContent.setCover(Utils.getNetVideoImagePath(path));
+            if (mediaVideoContent != null && mediaVideoContent.getVideo()
+                    != null && mediaVideoContent.getCover() != null) {
+                mRootView.showVideo(mediaVideoContent);
+            }
+        }
     }
 }

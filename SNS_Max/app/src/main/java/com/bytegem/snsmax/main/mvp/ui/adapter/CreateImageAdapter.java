@@ -1,6 +1,7 @@
 package com.bytegem.snsmax.main.mvp.ui.adapter;
 
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.MediaUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
@@ -29,6 +30,20 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
     public void setFeedType(CreatNewsActivity.FeedType feedType, ArrayList<ImageItem> imageItems) {
         this.feedType = feedType;
         setNewData(imageItems);
+    }
+
+    public void setVideoData(MediaVideoContent mediaVideoContent) {
+        ArrayList<ImageItem> items = new ArrayList<>();
+        if (mediaVideoContent == null) ;
+        else {
+            ImageItem imageItem = new ImageItem();
+            imageItem.path = mediaVideoContent.getVideo();
+            items.add(imageItem);
+        }
+        ImageItem imageItemAdd = new ImageItem();
+        imageItemAdd.path = "add";
+        items.add(imageItemAdd);
+        setNewData(items);
     }
 
     public CreatNewsActivity.FeedType getFeedType() {
@@ -61,7 +76,7 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
                     }
                     break;
                 case VIDEO:
-                    if (super.getItemCount() == 1 && viewHolder.getPosition() == 0) {
+                    if (super.getItemCount() == 2 && viewHolder.getPosition() == 0) {
                         viewHolder.setVisible(R.id.creat_image_item_is_video, true)
                                 .setVisible(R.id.creat_image_item_delete, true)
                                 .setVisible(R.id.creat_image_item_img, true)
@@ -72,7 +87,6 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
                                 GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.creat_image_item_cover));
                             }
                         });
-//                        GlideLoaderUtil.LoadRoundImage20(mContext, bean.path, viewHolder.getView(R.id.creat_image_item_cover));
                     } else if (bean.path.equals("add")) {
                         //添加
                         viewHolder.setVisible(R.id.creat_image_item_img, false)

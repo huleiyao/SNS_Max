@@ -105,7 +105,7 @@ dependencies {
 
     api rootProject.ext.dependencies["bga-swipitem"]
     api rootProject.ext.dependencies["swipebacklayout"]
-
+    api 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 }
 
 //apply from: '../bintray.gradle'

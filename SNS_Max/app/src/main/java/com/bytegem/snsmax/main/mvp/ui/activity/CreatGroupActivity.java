@@ -76,7 +76,7 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
             case R.id.creat_group_bt:
                 String name = group_name.getText().toString();
                 String detail = group_detail.getText().toString();
-                if (isHaveCover || name.isEmpty() || detail.isEmpty())
+                if (!isHaveCover || name.isEmpty() || detail.isEmpty())
                     return;
                 mPresenter.createGroup(name, detail, switch_button.getCurrstate() == SwitchButton.CLOSE ? 0 : 1);
                 break;
@@ -128,7 +128,6 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
         if (isHaveCover && !group_name.getText().toString().isEmpty() && !group_detail.getText().toString().isEmpty()) {
             creat_group.setBackground(getResources().getDrawable(R.drawable.shape_group_create_bg));
             creat_group.setTextColor(getResources().getColor(R.color.white));
-            creat_group.setTextColor(getResources().getColor(R.color.create_group_txt_unclickable));
         } else {
             creat_group.setBackground(getResources().getDrawable(R.drawable.shape_group_not_create_bg));
             creat_group.setTextColor(getResources().getColor(R.color.create_group_txt_unclickable));

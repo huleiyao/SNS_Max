@@ -1,6 +1,7 @@
 package com.sh.shvideolibrary.compression;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
