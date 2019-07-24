@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,8 +62,11 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
     AppBarLayout appbar;
     @BindView(R.id.back_cover)
     ImageView back_cover;
+    @BindView(R.id.title_cover)
+    ImageView title_cover;
     @BindView(R.id.more)
     TextView more;
+
     @BindView(R.id.owner_home_head_layout)
     LinearLayout head_layout;
     @BindView(R.id.user_info_user_name)
@@ -116,22 +120,33 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
                     toolbar_title.setText(title);
                     back_cover.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_151b26));
                     more.setTextColor(getResources().getColor(R.color.color_151b26));
+                    toolbar_title.setTextColor(getResources().getColor(R.color.color_151b26));
+                    title_cover.setVisibility(View.VISIBLE);
                 } else {
                     toolbar_title.setText(" ");
                     back_cover.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_white));
                     more.setTextColor(getResources().getColor(R.color.white));
+                    toolbar_title.setTextColor(getResources().getColor(R.color.white));
+                    title_cover.setVisibility(View.GONE);
                 }
             }
         });
-
+        if (isMe) {
+            send_message.setVisibility(View.GONE);
+            follow_the_user.setVisibility(View.GONE);
+        } else {
+            send_message.setVisibility(View.VISIBLE);
+            follow_the_user.setVisibility(View.VISIBLE);
+        }
         mPresenter.getUserData(isMe, id);
     }
 
     public void initUserData(UserBean userBean) {
-        if (userBean.getAvatar() == null || userBean.getAvatar().isEmpty())
-            GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover);
-        else
-            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
+        if (userBean.getAvatar() == null || userBean.getAvatar().isEmpty()) {
+            GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover,title_cover);
+        } else {
+            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover,title_cover);
+        }
         title = userBean.getName();
 //        GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);
         user_name.setText(userBean.getName());

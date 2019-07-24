@@ -50,7 +50,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class MessagesFragment extends BaseFragment<MessageListPresenter> implements MessageListContract.View {
-    int type;
     @Inject
     ChatsAdapter adapter;
     @BindView(R.id.springview)
@@ -58,14 +57,9 @@ public class MessagesFragment extends BaseFragment<MessageListPresenter> impleme
     @BindView(R.id.recycle_view)
     RecyclerView recyclerView;
 
-    public static MessagesFragment newInstance(int type) {
+    public static MessagesFragment newInstance() {
         MessagesFragment fragment = new MessagesFragment();
-        fragment.setType(type);
         return fragment;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     @Override

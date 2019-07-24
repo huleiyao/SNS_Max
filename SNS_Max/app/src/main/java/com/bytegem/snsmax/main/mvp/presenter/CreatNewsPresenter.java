@@ -201,7 +201,7 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                 , "media", bean
         );
         (mTopicBean == null ?
-                mModel.send(jsonData)
+                mModel.sendNewFeed(jsonData)
                 : mModel.topicSend(mTopicBean.getId(), jsonData))
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())

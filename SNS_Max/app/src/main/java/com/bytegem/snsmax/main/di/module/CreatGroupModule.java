@@ -1,13 +1,12 @@
 package com.bytegem.snsmax.main.di.module;
 
-import com.jess.arms.di.scope.ActivityScope;
+import com.bytegem.snsmax.main.mvp.model.CreatGroupModel;
+import com.bytegem.snsmax.main.mvp.model.FeedFragmentModel;
 
 import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
 
 import com.bytegem.snsmax.main.mvp.contract.CreatGroupContract;
-import com.bytegem.snsmax.main.mvp.model.CreatGroupModel;
 
 
 /**

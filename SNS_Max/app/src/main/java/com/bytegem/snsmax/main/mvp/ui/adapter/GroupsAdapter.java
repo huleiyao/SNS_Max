@@ -24,7 +24,7 @@ public class GroupsAdapter extends BaseQuickAdapter<GroupBean, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder viewHolder, GroupBean bean) {
         viewHolder.setText(R.id.group_name, bean.getName())
-                .addOnClickListener(R.id.join_us);
+                .addOnClickListener(R.id.group_join_us);
         GlideLoaderUtil.LoadRoundImage8(mContext, Utils.checkUrl(bean.getAvatar()), viewHolder.getView(R.id.group_cover));
     }
 }

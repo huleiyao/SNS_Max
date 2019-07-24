@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.view.View;
 
+import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
@@ -93,7 +94,11 @@ public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsC
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-
+        switch (view.getId()) {
+            case R.id.group_join_us:
+                mRootView.showMessage("加入或退出");
+                break;
+        }
     }
 
     @Override

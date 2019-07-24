@@ -68,7 +68,7 @@ public class FeedNewCommentPresenter extends BasePresenter<FeedNewCommentContrac
 
     public void getList(boolean isLoadMore, int postId, int commentId) {
         feedId = postId;
-        mModel.getList(postId, limit, commentId, isDefaultOrder, !isLoadMore)
+        mModel.getCommentList(postId, limit, commentId, isDefaultOrder, !isLoadMore)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -193,11 +194,18 @@ public class GlideLoaderUtil {
     /**
      * 圆形图片
      *
-     * @param context   上下文
-     * @param url       图片链接
-     * @param imageView 目标view
+     * @param context    上下文
+     * @param url        图片链接
+     * @param imageViews 目标view
      */
-    public static void LoadCircleImage(Context context, Object url, ImageView imageView) {
+    public static void LoadCircleImage(Context context, Object url, ImageView... imageViews) {
+        if (imageViews != null)
+            for (ImageView imageView : imageViews)
+//                Glide.with(context)
+//                        .load(url)
+//                        .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+//                        .into(imageView);
+
         Glide.with(context).load(url)
                 .apply(new RequestOptions()
                         .transform(new GlideCircleTransform(context))

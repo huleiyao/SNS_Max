@@ -27,14 +27,28 @@
             android:src="@drawable/ic_ico_title_back_white" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/toolbar_title"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:textColor="@color/white"
-        android:textSize="36sp"
-        tools:text="@string/app_name" />
+        android:layout_marginRight="32dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/title_cover"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            tools:text="@string/app_name" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -46,17 +60,17 @@
             android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:layout_marginRight="32dp"
-            android:src="@drawable/ic_ico_title_search_white" />
+            android:src="@drawable/ic_ico_title_search_white"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/white"
             android:text="···"
+            android:textColor="@color/white"
             android:textSize="35dp" />
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

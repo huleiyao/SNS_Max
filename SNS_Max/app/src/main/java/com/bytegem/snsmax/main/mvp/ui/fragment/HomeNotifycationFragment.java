@@ -6,27 +6,29 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.TypedValue;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
-import com.bytegem.snsmax.common.bean.FragmentBean;
+import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.mvp.ui.adapter.ChatsAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytegem.snsmax.main.di.component.DaggerHomeMessageComponent;
-import com.bytegem.snsmax.main.mvp.contract.HomeMessageContract;
-import com.bytegem.snsmax.main.mvp.presenter.HomeMessagePresenter;
+import com.bytegem.snsmax.main.di.component.DaggerHomeNotifycationComponent;
+import com.bytegem.snsmax.main.mvp.contract.HomeNotifycationContract;
+import com.bytegem.snsmax.main.mvp.presenter.HomeNotifycationPresenter;
 
 import com.bytegem.snsmax.R;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.liaoinstan.springview.widget.SpringView;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 
@@ -37,7 +39,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/05/2019 16:51
+ * Created by MVPArmsTemplate on 07/25/2019 00:00
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -45,22 +47,22 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class HomeMessageFragment extends BaseFragment<HomeMessagePresenter> implements HomeMessageContract.View {
-    private static HomeMessageFragment instance;
-    @BindView(R.id.tabs)
-    SmartTabLayout tabs;
-    @BindView(R.id.projectPager)
-    ViewPager viewPager;
+public class HomeNotifycationFragment extends BaseFragment<HomeNotifycationPresenter> implements HomeNotifycationContract.View {
+    @Inject
+    ChatsAdapter adapter;
+    @BindView(R.id.springview)
+    SpringView springView;
+    @BindView(R.id.recycle_view)
+    RecyclerView recyclerView;
 
-    public static HomeMessageFragment newInstance() {
-        if (instance == null)
-            instance = new HomeMessageFragment();
-        return instance;
+    public static HomeNotifycationFragment newInstance() {
+        HomeNotifycationFragment fragment = new HomeNotifycationFragment();
+        return fragment;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerHomeMessageComponent //如找不到该类,请编译一下项目
+        DaggerHomeNotifycationComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -70,57 +72,39 @@ public class HomeMessageFragment extends BaseFragment<HomeMessagePresenter> impl
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home_message, container, false);
+        return inflater.inflate(R.layout.fragment_home_notifycation, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        ArrayList<FragmentBean> fragmentList = new ArrayList<>();
-        fragmentList.add(new FragmentBean("通知", HomeNotifycationFragment.newInstance()));
-        fragmentList.add(new FragmentBean("聊天", MessagesFragment.newInstance()));
-        showFragment(fragmentList);
+        initList();
     }
 
-    public void showFragment(ArrayList<FragmentBean> fragmenList) {
-        viewPager.setAdapter(new VPFragmentAdapter(getChildFragmentManager(), fragmenList));
-        viewPager.setOffscreenPageLimit(fragmenList.size() - 1);
-//        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-//        tabs.setupWithViewPager(viewPager);
-        tabs.setViewPager(viewPager);
-        try {
-            changeTextSize(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    private void initList() {
+        if (adapter == null) adapter = new ChatsAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        springView.setType(SpringView.Type.FOLLOW);
+        springView.setListener(new SpringView.OnFreshListener() {
             @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
+            public void onRefresh() {
+//                loadData(true);
             }
 
             @Override
-            public void onPageSelected(int i) {
-                if (i == defaultPosition) return;
-                changeTextSize(false);
-                defaultPosition = i;
-                changeTextSize(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
+            public void onLoadmore() {
+//                loadData(false);
             }
         });
-    }
 
-    int defaultPosition = 0;
-
-    private void changeTextSize(boolean isSelect) {
-        View view = tabs.getTabAt(defaultPosition).findViewById(R.id.custom_text);
-        if (view != null)
-            if (view instanceof TextView) {
-                ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(isSelect ? R.dimen.sp_40 : R.dimen.sp_34));
-            }
+//        adapter.setOnItemChildClickListener(mPresenter);
+//        adapter.setOnItemClickListener(mPresenter);
+        ArrayList<MBaseBean> list = new ArrayList<>();
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        adapter.setNewData(list);
     }
 
     /**

@@ -3,9 +3,11 @@ package com.bytegem.snsmax.main.di.component;
 import dagger.BindsInstance;
 import dagger.Component;
 
+import com.bytegem.snsmax.main.di.module.FeedNewCommentModule;
+import com.bytegem.snsmax.main.mvp.model.FeedActivityModel;
+import com.bytegem.snsmax.main.mvp.model.FeedFragmentModel;
 import com.jess.arms.di.component.AppComponent;
 
-import com.bytegem.snsmax.main.di.module.FeedNewCommentModule;
 import com.bytegem.snsmax.main.mvp.contract.FeedNewCommentContract;
 
 import com.jess.arms.di.scope.ActivityScope;

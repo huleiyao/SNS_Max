@@ -1,5 +1,7 @@
 package com.bytegem.snsmax.main.di.module;
 
+import com.bytegem.snsmax.main.mvp.model.FeedActivityModel;
+import com.bytegem.snsmax.main.mvp.model.FeedFragmentModel;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
@@ -8,7 +10,6 @@ import dagger.Module;
 import dagger.Provides;
 
 import com.bytegem.snsmax.main.mvp.contract.FeedNewCommentContract;
-import com.bytegem.snsmax.main.mvp.model.FeedNewCommentModel;
 
 
 /**
@@ -27,7 +28,7 @@ import com.bytegem.snsmax.main.mvp.model.FeedNewCommentModel;
 public abstract class FeedNewCommentModule {
 
     @Binds
-    abstract FeedNewCommentContract.Model bindFeedNewCommentModel(FeedNewCommentModel model);
+    abstract FeedNewCommentContract.Model bindFeedModel(FeedActivityModel model);
 
     @ActivityScope
     @Provides

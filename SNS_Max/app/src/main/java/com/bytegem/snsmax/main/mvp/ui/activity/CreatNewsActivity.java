@@ -92,7 +92,6 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @BindView(R.id.creat_news_url_cover)
     ImageView url_cover;
 
-
     @BindView(R.id.toolbar_send)
     TextView toolbar_send;
     @BindView(R.id.creat_news_url_text)

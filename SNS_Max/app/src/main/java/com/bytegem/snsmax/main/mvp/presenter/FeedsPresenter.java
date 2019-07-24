@@ -98,7 +98,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
         if (location == null)
             location = new LocationBean();
         (type == 0 ? mModel.getRecommendList(per_page + "", page + "") :
-                mModel.getList(location.getLatitude() + "", location.getLongitude() + "", per_page + "", page + ""))
+                mModel.getFeedList(location.getLatitude() + "", location.getLongitude() + "", per_page + "", page + ""))
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -120,7 +120,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     }
 
     public void commit(int feedId, String content) {
-        mModel.commit(feedId, M.getMapString(
+        mModel.commitFeedComment(feedId, M.getMapString(
                 "contents", content
         ))
                 .subscribeOn(Schedulers.io())

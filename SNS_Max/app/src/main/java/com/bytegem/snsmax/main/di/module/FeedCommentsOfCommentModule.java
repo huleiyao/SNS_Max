@@ -1,7 +1,8 @@
 package com.bytegem.snsmax.main.di.module;
 
 import com.bytegem.snsmax.main.mvp.contract.FeedCommentsOfCommentContract;
-import com.bytegem.snsmax.main.mvp.model.FeedCommentsOfCommentModel;
+import com.bytegem.snsmax.main.mvp.model.FeedActivityModel;
+import com.bytegem.snsmax.main.mvp.model.FeedFragmentModel;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
@@ -26,7 +27,7 @@ import dagger.Provides;
 public abstract class FeedCommentsOfCommentModule {
 
     @Binds
-    abstract FeedCommentsOfCommentContract.Model bindCommunityPostCommentsOfCommentModel(FeedCommentsOfCommentModel model);
+    abstract FeedCommentsOfCommentContract.Model bindFeedModel(FeedActivityModel model);
 
     @ActivityScope
     @Provides

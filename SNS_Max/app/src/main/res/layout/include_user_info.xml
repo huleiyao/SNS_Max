@@ -26,6 +26,7 @@
             <ImageView
                 android:id="@+id/user_info_user_cover"
                 android:layout_width="114dp"
+                android:scaleType="fitXY"
                 android:layout_height="114dp" />
 
             <TextView
