@@ -113,10 +113,6 @@ public class OwnerGroupsFragment extends BaseFragment<OwnerGroupsPresenter> impl
             }
         });
 
-//        adapter.setOnItemChildClickListener(mPresenter);
-//        adapter.setOnItemClickListener(mPresenter);
-        springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
-        springView.setFooter(new DefaultFooter(getActivity()));
         if (isMe) {
             header = new CreatGroupHeaderView(getContext(), mPresenter);
             adapter.addHeaderView(header.getView());

@@ -14,7 +14,6 @@ android {
 
 dependencies {
     api project(':imagepicker')
-    api rootProject.ext.dependencies["SpringView"]
     api rootProject.ext.dependencies["BaseAdapterHelper"]
     api 'com.afollestad.material-dialogs:core:0.9.6.0'
     api 'com.ogaclejapan.smarttablayout:library:1.7.0@aar'

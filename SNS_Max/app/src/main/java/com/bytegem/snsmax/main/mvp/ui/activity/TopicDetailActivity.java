@@ -145,8 +145,6 @@ public class TopicDetailActivity extends BaseActivity<TopicDetailPresenter> impl
             }
         });
 
-        springView.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字
-        springView.setFooter(new DefaultFooter(this));
         mPresenter.setId(topicBean.getId(), false);
     }
 

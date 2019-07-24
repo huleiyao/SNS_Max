@@ -6,7 +6,7 @@
     android:background="@color/default_background"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title" />
+    <include layout="@layout/include_title_more_white" />
 
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/springview"
@@ -54,7 +54,6 @@
             android:paddingRight="20dp"
             android:text="发送"
             android:textColor="@color/white"
-            android:textSize="24sp"
-            android:visibility="gone" />
+            android:textSize="24sp" />
     </LinearLayout>
 </LinearLayout>

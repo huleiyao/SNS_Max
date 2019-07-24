@@ -29,6 +29,7 @@ import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.LruCache;
+import com.liaoinstan.springview.widget.SpringView;
 
 /**
  * ================================================
@@ -131,4 +132,8 @@ public interface IFragment {
      * @param data 当不需要参数时 {@code data} 可以为 {@code null}
      */
     void setData(@Nullable Object data);
+
+    SpringView.DragHander getRefreshHeaderView();
+
+    SpringView.DragHander getLoadMoreFooterView();
 }

@@ -97,11 +97,6 @@ public class OwnerFeedsFragment extends BaseFragment<OwnerFeedsPresenter> implem
             }
         });
 
-//        adapter.setOnItemChildClickListener(mPresenter);
-//        adapter.setOnItemClickListener(mPresenter);
-        springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
-        springView.setFooter(new DefaultFooter(getActivity()));
-
         ArrayList<MBaseBean> list = new ArrayList<>();
         list.add(new MBaseBean());
         list.add(new MBaseBean());

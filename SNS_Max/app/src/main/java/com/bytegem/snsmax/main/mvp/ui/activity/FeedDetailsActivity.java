@@ -161,7 +161,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
 
     @OnClick({R.id.post_detail_follow_the_user, R.id.feed_detail_group_join_us, R.id.post_detail_user_cover, R.id.post_detail_one_img, R.id.post_detail_share_to_wechat
             , R.id.post_detail_share_to_moments, R.id.post_detail_share_to_qq, R.id.feed_detail_zan_the_post, R.id.feed_detail_comment_the_post
-            , R.id.feed_detail_share_the_post, R.id.post_detail_tv_address, R.id.bg, R.id.more_comment})
+            , R.id.feed_detail_share_the_post, R.id.post_detail_tv_address, R.id.bg, R.id.more_comment, R.id.more})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.post_detail_follow_the_user://关注动态发起人
@@ -208,8 +208,12 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                 else ;
                 changeFeedLike();
                 break;
-            case R.id.feed_detail_comment_the_post://发评论
+            case R.id.more://顶部右边更多按钮
                 bottomSheetDialog.show();
+                break;
+            case R.id.feed_detail_comment_the_post://发评论
+                commitBottomSheetDialog.show();
+//                bottomSheetDialog.show();
                 break;
             case R.id.feed_detail_share_the_post://分享
                 showMessage("去分享");
@@ -308,17 +312,18 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
 
         adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
-        springview.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字
-        springview.setFooter(new DefaultFooter(this));
         mPresenter.getList(false, feedBean.getId(), 0);
         mPresenter.getHotComment(feedBean.getId());
     }
 
     private void changeFeedLike() {
-        if (feedBean.isHas_liked())
+        if (feedBean.isHas_liked()) {
             feed_detail_zan_the_post_img.setImageResource(R.drawable.ic_ico_moment_zan_on);
-        else
+            zan_the_post_count.setTextColor(getResources().getColor(R.color.color_EC414B));
+        } else {
             feed_detail_zan_the_post_img.setImageResource(R.drawable.ic_ico_moment_zan);
+            zan_the_post_count.setTextColor(getResources().getColor(R.color.color_9CA6AF));
+        }
         zan_the_post_count.setText(feedBean.getLikes_count() + "");
     }
 

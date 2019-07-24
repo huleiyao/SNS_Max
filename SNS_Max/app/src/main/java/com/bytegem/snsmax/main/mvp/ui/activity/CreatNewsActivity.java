@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -22,6 +23,7 @@ import com.bytegem.snsmax.main.app.bean.feed.MediaLinkContent;
 import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.SoftKeyBroadManager;
 import com.bytegem.snsmax.main.app.widget.TagEditTextView;
 import com.bytegem.snsmax.main.mvp.ui.adapter.CreateImageAdapter;
 import com.jess.arms.base.BaseActivity;
@@ -99,6 +101,10 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     TextView group_name;
     @BindView(R.id.creat_news_address_txt)
     TextView address_txt;
+    @BindView(R.id.mBottomView)
+    RelativeLayout mBottomView;
+    @BindView(R.id.root)
+    RelativeLayout root;
     MediaBean mediaBean = new MediaBean();
     @Inject
     CreateImageAdapter adapter;
@@ -216,7 +222,24 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                     toolbar_send.setTextColor(getResources().getColor(R.color.color_5e6ce7));
             }
         });
+
+        SoftKeyBroadManager softKeyBroadManager = new SoftKeyBroadManager(root);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
+
     }
+
+    SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
+
+        @Override
+        public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+            mBottomView.requestLayout();
+        }
+
+        @Override
+        public void onSoftKeyboardClosed() {
+            mBottomView.requestLayout();
+        }
+    };
 
     private void initImagePicker() {
         ImagePicker imagePicker = ImagePicker.getInstance();

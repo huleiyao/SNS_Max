@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
@@ -117,6 +119,23 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                 });
     }
 
+    public void commit(int feedId, String content) {
+        mModel.commit(feedId, M.getMapString(
+                "contents", content
+        ))
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
+                    @Override
+                    public void onNext(NetDefaultBean data) {
+                    }
+                });
+    }
+
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
@@ -162,7 +181,10 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                 }
                 break;
             case R.id.feed_item_comment:
-                mRootView.showMessage("评论");
+                mRootView.toComment((FeedBean) adapter.getItem(position));
+                break;
+            case R.id.feed_item_more:
+                mRootView.showMore((FeedBean) adapter.getItem(position));
                 break;
             case R.id.feed_item_share:
                 mRootView.showMessage("分享");

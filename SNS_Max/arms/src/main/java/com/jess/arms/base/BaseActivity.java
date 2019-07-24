@@ -36,6 +36,8 @@ import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DefaultSpringUtils;
+import com.liaoinstan.springview.widget.SpringView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import javax.inject.Inject;
@@ -215,5 +217,15 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     public void onSwipeBackLayoutCancel() {
 
+    }
+
+    @Override
+    public SpringView.DragHander getRefreshHeaderView() {
+        return DefaultSpringUtils.getRefreshHeaderView(this);
+    }
+
+    @Override
+    public SpringView.DragHander getLoadMoreFooterView() {
+        return DefaultSpringUtils.getLoadMoreFooterView(this);
     }
 }

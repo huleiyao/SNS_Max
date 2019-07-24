@@ -30,6 +30,8 @@ import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.FragmentLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DefaultSpringUtils;
+import com.liaoinstan.springview.widget.SpringView;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import javax.inject.Inject;
@@ -112,5 +114,15 @@ public abstract class BaseFragment<P extends IPresenter> extends Fragment implem
     @Override
     public boolean useEventBus() {
         return true;
+    }
+
+    @Override
+    public SpringView.DragHander getRefreshHeaderView() {
+        return DefaultSpringUtils.getRefreshHeaderView(getContext());
+    }
+
+    @Override
+    public SpringView.DragHander getLoadMoreFooterView() {
+        return DefaultSpringUtils.getLoadMoreFooterView(getContext());
     }
 }

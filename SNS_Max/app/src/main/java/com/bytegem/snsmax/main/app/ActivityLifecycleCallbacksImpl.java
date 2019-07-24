@@ -24,6 +24,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.R;
+import com.jess.arms.base.delegate.IActivity;
+import com.jess.arms.utils.DefaultSpringUtils;
+import com.liaoinstan.springview.widget.SpringView;
 
 import timber.log.Timber;
 
@@ -71,6 +74,16 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
                 });
             }
         }
+        if (activity.findViewById(R.id.springview) != null)
+            if (activity instanceof IActivity) {
+                if (((IActivity) activity).getLoadMoreFooterView() != null)
+                    ((SpringView) activity.findViewById(R.id.springview)).setFooter(((IActivity) activity).getLoadMoreFooterView());
+                if (((IActivity) activity).getRefreshHeaderView() != null)
+                    ((SpringView) activity.findViewById(R.id.springview)).setHeader(((IActivity) activity).getRefreshHeaderView());
+            } else {
+                ((SpringView) activity.findViewById(R.id.springview)).setFooter(DefaultSpringUtils.getLoadMoreFooterView(activity));
+                ((SpringView) activity.findViewById(R.id.springview)).setHeader(DefaultSpringUtils.getRefreshHeaderView(activity));
+            }
     }
 
     @Override

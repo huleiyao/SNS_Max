@@ -53,6 +53,7 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
                 .addOnClickListener(R.id.feed_item_zan)
                 .addOnClickListener(R.id.feed_item_comment)
                 .addOnClickListener(R.id.feed_item_share)
+                .addOnClickListener(R.id.feed_item_more)
         ;
         if (bean.isHas_liked())
             viewHolder.setImageResource(R.id.feed_item_zan_cover, R.drawable.ic_ico_moment_zan_on);

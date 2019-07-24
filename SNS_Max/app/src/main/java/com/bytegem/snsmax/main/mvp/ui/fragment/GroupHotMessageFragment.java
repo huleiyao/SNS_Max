@@ -99,8 +99,6 @@ public class GroupHotMessageFragment extends BaseFragment<GroupHotMessagePresent
 
 //        adapter.setOnItemChildClickListener(mPresenter);
 //        adapter.setOnItemClickListener(mPresenter);
-        springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
-        springView.setFooter(new DefaultFooter(getActivity()));
         ArrayList<MBaseBean> arrayList = new ArrayList<>();
         arrayList.add(null);
         arrayList.add(null);

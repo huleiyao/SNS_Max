@@ -80,8 +80,6 @@ public class FeedNewCommentActivity extends BaseActivity<FeedNewCommentPresenter
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
-        springView.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字
-        springView.setFooter(new DefaultFooter(this));
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(new SpringView.OnFreshListener() {
             @Override

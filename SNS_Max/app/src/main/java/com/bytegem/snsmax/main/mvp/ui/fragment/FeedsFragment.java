@@ -5,18 +5,22 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
 import com.bytegem.snsmax.main.mvp.ui.activity.AddressSelectActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
@@ -54,7 +58,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class FeedsFragment extends BaseFragment<FeedsPresenter> implements FeedsContract.View {
+public class FeedsFragment extends BaseFragment<FeedsPresenter> implements FeedsContract.View, View.OnClickListener {
     int type;
     @Inject
     FeedsAdapter adapter;
@@ -66,12 +70,27 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
     FrameLayout address;
     @BindView(R.id.city)
     TextView city;
+    TextView commit_content;
+    BottomSheetDialog bottomSheetDialog;
+    BottomSheetDialog commitBottomSheetDialog;
+    FeedBean feedBean;
 
     @OnClick({R.id.address})
-    void onClick(View view) {
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.address:
                 launchActivity(new Intent(getContext(), AddressSelectActivity.class));
+                break;
+            case R.id.to_commit:
+                bottomSheetDialog.dismiss();
+                commitBottomSheetDialog.show();
+                break;
+            case R.id.to_report:
+                showMessage("举报");
+                bottomSheetDialog.dismiss();
+                break;
+            case R.id.cancel:
+                bottomSheetDialog.dismiss();
                 break;
         }
     }
@@ -104,6 +123,8 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         initList();
+        initBottomSheetDialog();
+        initCommitBottomSheetDialog();
     }
 
     private void initList() {
@@ -139,9 +160,47 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
             }
         });
 
-        springView.setHeader(new DefaultHeader(getActivity()));   //参数为：logo图片资源，是否显示文字
-        springView.setFooter(new DefaultFooter(getActivity()));
         mPresenter.setType(type, false);
+    }
+
+    private void initCommitBottomSheetDialog() {
+        commitBottomSheetDialog = new BottomSheetDialog(getContext());
+        commitBottomSheetDialog.setContentView(R.layout.view_commit);
+        commitBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        commitBottomSheetDialog.findViewById(R.id.dialog_send_comment).setOnClickListener(this);
+        commit_content = commitBottomSheetDialog.findViewById(R.id.commit_content);
+        commit_content.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {//发送按键action
+                    if (commit_content != null) {
+                        String content = commit_content.getText().toString();
+                        if (content.isEmpty()) {
+//                        showMessage("请输入评论内容");
+                            commit_content.setError("请输入评论内容");
+                            return true;
+                        }
+                        if (feedBean != null)
+                            mPresenter.commit(feedBean.getId(), content);
+                        commit_content.setText("");
+                        commitBottomSheetDialog.dismiss();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void initBottomSheetDialog() {
+        bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog.setContentView(R.layout.dialog_community_commit);
+        bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        bottomSheetDialog.findViewById(R.id.to_commit).setOnClickListener(this);
+        bottomSheetDialog.findViewById(R.id.to_report).setOnClickListener(this);
+        bottomSheetDialog.findViewById(R.id.cancel).setOnClickListener(this);
     }
 
     public void changeCity() {
@@ -158,6 +217,18 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
 
     public void onFinishFreshAndLoad() {
         springView.onFinishFreshAndLoad();
+    }
+
+    @Override
+    public void toComment(FeedBean feedBean) {
+        this.feedBean = feedBean;
+        commitBottomSheetDialog.show();
+    }
+
+    @Override
+    public void showMore(FeedBean feedBean) {
+        this.feedBean = feedBean;
+        bottomSheetDialog.show();
     }
 
     /**

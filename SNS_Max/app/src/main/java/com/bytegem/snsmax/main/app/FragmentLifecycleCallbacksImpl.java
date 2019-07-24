@@ -20,8 +20,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+
+import com.bytegem.snsmax.R;
+import com.jess.arms.base.delegate.IFragment;
 import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DefaultSpringUtils;
+import com.liaoinstan.springview.widget.SpringView;
 import com.squareup.leakcanary.RefWatcher;
 import timber.log.Timber;
 
@@ -48,12 +53,22 @@ public class FragmentLifecycleCallbacksImpl extends FragmentManager.FragmentLife
         // https://developer.android.com/reference/android/app/Fragment.html?hl=zh-cn#setRetainInstance(boolean)
         // 如果在 XML 中使用 <Fragment/> 标签,的方式创建 Fragment 请务必在标签中加上 android:id 或者 android:tag 属性,否则 setRetainInstance(true) 无效
         // 在 Activity 中绑定少量的 Fragment 建议这样做,如果需要绑定较多的 Fragment 不建议设置此参数,如 ViewPager 需要展示较多 Fragment
-        f.setRetainInstance(true);
     }
 
     @Override
     public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v, Bundle savedInstanceState) {
         Timber.i(f.toString() + " - onFragmentViewCreated");
+        f.setRetainInstance(true);
+        if (v.findViewById(R.id.springview) != null)
+            if (v instanceof IFragment) {
+                if (((IFragment) f).getLoadMoreFooterView() != null)
+                    ((SpringView) v.findViewById(R.id.springview)).setFooter(((IFragment) f).getLoadMoreFooterView());
+                if (((IFragment) f).getRefreshHeaderView() != null)
+                    ((SpringView) v.findViewById(R.id.springview)).setHeader(((IFragment) f).getRefreshHeaderView());
+            } else {
+                ((SpringView) v.findViewById(R.id.springview)).setFooter(DefaultSpringUtils.getLoadMoreFooterView(f.getContext()));
+                ((SpringView) v.findViewById(R.id.springview)).setHeader(DefaultSpringUtils.getRefreshHeaderView(f.getContext()));
+            }
     }
 
     @Override

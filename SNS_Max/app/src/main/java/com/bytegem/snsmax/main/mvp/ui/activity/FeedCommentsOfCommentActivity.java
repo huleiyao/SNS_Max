@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +51,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCommentPresenter> implements FeedCommentsOfCommentContract.View {
+public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCommentPresenter> implements FeedCommentsOfCommentContract.View, View.OnClickListener {
     @BindView(R.id.springview)
     SpringView springview;
     @BindView(R.id.recycle_view)
@@ -63,6 +64,7 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
     public static final String FEED_ID = "feed-id";
     public static final String COMMENT_ID = "feedCommentBean";
     FeedCommentBean feedCommentBean;
+    BottomSheetDialog bottomSheetDialog;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -74,8 +76,8 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
                 .inject(this);
     }
 
-    @OnClick(R.id.feed_comments_send_comment)
-    void onClick(View view) {
+    @OnClick({R.id.feed_comments_send_comment, R.id.more})
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.feed_comments_send_comment:
                 String content = comment.getText().toString();
@@ -85,6 +87,21 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
                 }
                 mPresenter.commit(content);
                 comment.setText("");
+                break;
+            case R.id.more:
+                bottomSheetDialog.show();
+                break;
+            case R.id.to_commit:
+                bottomSheetDialog.dismiss();
+                comment.callOnClick();
+
+                break;
+            case R.id.to_report:
+                showMessage("举报");
+                bottomSheetDialog.dismiss();
+                break;
+            case R.id.cancel:
+                bottomSheetDialog.dismiss();
                 break;
         }
     }
@@ -123,8 +140,6 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
 
         adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
-        springview.setHeader(new DefaultHeader(this));   //参数为：logo图片资源，是否显示文字
-        springview.setFooter(new DefaultFooter(this));
         mPresenter.setId(false, feedId, feedCommentBean.getId());
 
         comment.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -143,7 +158,20 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
                 return false;
             }
         });
+        initBottomSheetDialog();
     }
+
+
+    private void initBottomSheetDialog() {
+        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.dialog_community_commit);
+        bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        bottomSheetDialog.findViewById(R.id.to_commit).setOnClickListener(this);
+        bottomSheetDialog.findViewById(R.id.to_report).setOnClickListener(this);
+        bottomSheetDialog.findViewById(R.id.cancel).setOnClickListener(this);
+    }
+
 
     @Override
     public void onFinishFreshAndLoad() {

@@ -106,6 +106,8 @@ dependencies {
     api rootProject.ext.dependencies["bga-swipitem"]
     api rootProject.ext.dependencies["swipebacklayout"]
     api 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+
+    api rootProject.ext.dependencies["SpringView"]
 }
 
 //apply from: '../bintray.gradle'

@@ -3,6 +3,7 @@ package com.bytegem.snsmax.main.mvp.model;
 import android.app.Application;
 
 import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
@@ -15,6 +16,7 @@ import com.jess.arms.di.scope.FragmentScope;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 
 /**
@@ -53,6 +55,13 @@ public class FeedsModel extends BaseModel implements FeedsContract.Model {
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
                 .getRecommendList(MApplication.getTokenOrType(), per_page, page);
+    }
+
+    @Override
+    public Observable<NetDefaultBean> commit(int id, String jsonData) {
+        return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .sendFeedComment(MApplication.getTokenOrType(), id, RequestBody.create(mediaType, jsonData));
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.ActivityLifecycle;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.LruCache;
+import com.liaoinstan.springview.widget.SpringView;
 
 /**
  * ================================================
@@ -92,4 +93,8 @@ public interface IActivity {
      * @return
      */
     boolean useFragment();
+
+    SpringView.DragHander getRefreshHeaderView();
+
+    SpringView.DragHander getLoadMoreFooterView();
 }
