@@ -37,6 +37,7 @@ import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DefaultSpringUtils;
+import com.jess.arms.utils.StatusBarUtil;
 import com.liaoinstan.springview.widget.SpringView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -97,15 +98,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     }
 
     //获取状态栏高度
-    public int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier(
-                "status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,12 +105,8 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         //设置虚拟键盘跟着屏幕自动
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        if (Build.VERSION.SDK_INT >= 28) {
-            WindowManager.LayoutParams lp = getWindow().getAttributes();
-            lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-            window.setAttributes(lp);
-        }
-        initSwipeBackFinish();
+        StatusBarUtil.setImmersiveStatusBar(this, true);
+//        initSwipeBackFinish();
         super.onCreate(savedInstanceState);
         try {
             int layoutResID = initView(savedInstanceState);
