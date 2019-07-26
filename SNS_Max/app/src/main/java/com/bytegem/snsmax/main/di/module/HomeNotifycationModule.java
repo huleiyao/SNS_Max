@@ -1,6 +1,7 @@
 package com.bytegem.snsmax.main.di.module;
 
 import com.bytegem.snsmax.main.mvp.ui.adapter.ChatsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.NotifycationAdapter;
 import com.jess.arms.di.scope.FragmentScope;
 
 import dagger.Binds;
@@ -31,7 +32,7 @@ public abstract class HomeNotifycationModule {
 
     @FragmentScope
     @Provides
-    static ChatsAdapter provideChatListAdapter() {
-        return new ChatsAdapter();
+    static NotifycationAdapter provideNotifycationAdapter() {
+        return new NotifycationAdapter();
     }
 }

@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="128dp"
+    android:layout_height="84dp"
+    android:paddingTop="22dp"
     android:minHeight="0dp"
-    android:paddingTop="44dp"
     app:contentInsetStart="0dp"
     app:layout_collapseMode="pin"
     app:layout_scrollFlags="scroll|enterAlways">
@@ -39,7 +39,8 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:scaleType="fitXY"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="VectorDrawableCompat" />
 
         <TextView
             android:id="@+id/toolbar_title"

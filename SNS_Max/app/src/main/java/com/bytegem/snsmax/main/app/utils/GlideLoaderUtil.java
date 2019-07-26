@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -213,12 +214,12 @@ public class GlideLoaderUtil {
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                        .placeholder(R.mipmap.default_img)
 //                        .error(R.mipmap.default_img)
-                        .dontAnimate())
-                .transition(new DrawableTransitionOptions().crossFade(800))
+//                        .dontAnimate()
+                )
+                .transition(new DrawableTransitionOptions().crossFade(1200))
                 .into(imageView);
 
     }
-
 
     /**
      * 自定义RequestOptions使用

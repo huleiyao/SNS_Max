@@ -1,23 +1,20 @@
 package com.bytegem.snsmax.main.di.module;
 
-import com.bytegem.snsmax.main.mvp.ui.adapter.GroupHotMessageAdapter;
-import com.bytegem.snsmax.main.mvp.ui.adapter.GroupMemberAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-import com.bytegem.snsmax.main.mvp.contract.GroupDetailsContract;
-import com.bytegem.snsmax.main.mvp.model.GroupDetailsModel;
-import com.jess.arms.di.scope.FragmentScope;
+import com.bytegem.snsmax.main.mvp.contract.GroupMemberContract;
+import com.bytegem.snsmax.main.mvp.model.GroupMemberModel;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 07/10/2019 19:45
+ * Created by MVPArmsTemplate on 07/26/2019 15:34
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -26,14 +23,8 @@ import com.jess.arms.di.scope.FragmentScope;
  * ================================================
  */
 @Module
-public abstract class GroupDetailsModule {
+public abstract class GroupMemberModule {
 
     @Binds
-    abstract GroupDetailsContract.Model bindGroupDetailsModel(GroupDetailsModel model);
-
-    @ActivityScope
-    @Provides
-    static GroupMemberAdapter provideGroupMemberAdapter() {
-        return new GroupMemberAdapter();
-    }
+    abstract GroupMemberContract.Model bindGroupMemberModel(GroupMemberModel model);
 }

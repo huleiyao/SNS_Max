@@ -2,9 +2,6 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.group.DATAGroup;
-import com.bytegem.snsmax.main.app.config.GroupService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -13,16 +10,14 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
-import com.bytegem.snsmax.main.mvp.contract.GroupSettingContract;
-
-import io.reactivex.Observable;
+import com.bytegem.snsmax.main.mvp.contract.GroupMemberContract;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 07/12/2019 14:36
+ * Created by MVPArmsTemplate on 07/26/2019 15:34
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -31,22 +26,15 @@ import io.reactivex.Observable;
  * ================================================
  */
 @ActivityScope
-public class GroupSettingModel extends BaseModel implements GroupSettingContract.Model {
+public class GroupMemberModel extends BaseModel implements GroupMemberContract.Model {
     @Inject
     Gson mGson;
     @Inject
     Application mApplication;
 
     @Inject
-    public GroupSettingModel(IRepositoryManager repositoryManager) {
+    public GroupMemberModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
-    }
-
-    @Override
-    public Observable<DATAGroup> getGroupData(int id) {
-        return mRepositoryManager
-                .obtainRetrofitService(GroupService.class)
-                .getGroupDetails(MApplication.getTokenOrType(), id);
     }
 
     @Override

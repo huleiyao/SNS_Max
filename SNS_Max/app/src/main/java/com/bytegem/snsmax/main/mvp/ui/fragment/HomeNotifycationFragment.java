@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ChatsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.NotifycationAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -49,7 +50,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  */
 public class HomeNotifycationFragment extends BaseFragment<HomeNotifycationPresenter> implements HomeNotifycationContract.View {
     @Inject
-    ChatsAdapter adapter;
+    NotifycationAdapter adapter;
     @BindView(R.id.springview)
     SpringView springView;
     @BindView(R.id.recycle_view)
@@ -81,7 +82,7 @@ public class HomeNotifycationFragment extends BaseFragment<HomeNotifycationPrese
     }
 
     private void initList() {
-        if (adapter == null) adapter = new ChatsAdapter();
+        if (adapter == null) adapter = new NotifycationAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -8,6 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,8 +23,10 @@ import android.widget.TextView;
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
+import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupMemberAdapter;
 import com.bytegem.snsmax.main.mvp.ui.fragment.DiscussListFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerFeedsFragment;
 import com.jess.arms.base.BaseActivity;
@@ -33,10 +38,13 @@ import com.bytegem.snsmax.main.mvp.contract.GroupDetailsContract;
 import com.bytegem.snsmax.main.mvp.presenter.GroupDetailsPresenter;
 
 import com.bytegem.snsmax.R;
+import com.liaoinstan.springview.widget.SpringView;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -97,15 +105,21 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
     TextView notice_content;
     private GroupBean mGroup;
     BottomSheetDialog notice;
+    @Inject
+    GroupMemberAdapter adapter;
 
-    @OnClick({R.id.more, R.id.group_detail_group_message})
+    @OnClick({R.id.more, R.id.group_detail_group_message, R.id.group_detail_group_member})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.more:
-                launchActivity(new Intent(this, GroupSettingActivity.class));
+                launchActivity(new Intent(this, GroupSettingActivity.class)
+                        .putExtra("group", mGroup));
                 break;
             case R.id.group_detail_group_message:
                 notice.show();
+                break;
+            case R.id.group_detail_group_member:
+                launchActivity(new Intent(this, GroupMemberActivity.class).putExtra("group", mGroup));
                 break;
             case R.id.exit_notice:
                 notice.dismiss();
@@ -130,8 +144,8 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        GroupBean group = (GroupBean) getIntent().getSerializableExtra("group");
-        if (group == null) {
+        mGroup = (GroupBean) getIntent().getSerializableExtra("group");
+        if (mGroup == null) {
             killMyself();
             return;
         }
@@ -141,7 +155,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (verticalOffset <= -head_layout.getHeight() / 2) {
                     more.setTextColor(getResources().getColor(R.color.color_151b26));
-                    toolbar_title.setText(group.getName());
+                    toolbar_title.setText(mGroup.getName());
                     back_cover.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_back_151b26));
                     search.setImageDrawable(getResources().getDrawable(R.drawable.ic_ico_title_search_151b26));
                 } else {
@@ -153,10 +167,28 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
             }
         });
         search.setVisibility(View.VISIBLE);
-        showGroupData(group);
+        member_covers.setLayoutManager(new GridLayoutManager(this, 1));// 布局管理器
+        member_covers.setAdapter(adapter);
+        member_covers.setItemAnimator(new DefaultItemAnimator());
+        showGroupData(mGroup);
         initFragment();
         initNotice();
-        mPresenter.getGroupData(group.getId());
+//        adapter.setOnItemChildClickListener(mPresenter);
+//        adapter.setOnItemClickListener(mPresenter);
+        mPresenter.getGroupData(mGroup.getId());
+    }
+
+    public void showGroupMember(GroupBean group) {
+        ArrayList<UserBean> members = new ArrayList<>();
+        if (group.getRequester() != null)
+            members.add(group.getRequester());
+        if (group.getPreview_members() != null)
+            for (UserBean userBean : group.getPreview_members())
+                if (members.size() < 6)
+                    members.add(userBean);
+        if (members.size() > 0)
+            member_covers.setLayoutManager(new GridLayoutManager(this, members.size()));// 布局管理器
+        adapter.setNewData(members);
     }
 
     private void initNotice() {
@@ -180,6 +212,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
         }
         group_detail.setText(mGroup.getDesc());
         group_member_count.setText(Utils.getNumberIfPeople(mGroup.getMembers_count()) + " 成员");
+        showGroupMember(group);
     }
 
     private void initFragment() {

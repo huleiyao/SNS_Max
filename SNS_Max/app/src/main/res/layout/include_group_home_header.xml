@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_collapseMode="parallax"
-    app:layout_collapseParallaxMultiplier="0.7"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#99000000"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_collapseMode="parallax"
+    app:layout_collapseParallaxMultiplier="0.7">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -114,10 +114,11 @@
         <LinearLayout
             android:id="@+id/group_detail_group_member"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="38dp"
+            android:layout_height="128dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="38dp"
+            android:paddingTop="38dp">
 
             <TextView
                 android:id="@+id/group_detail_group_member_count"
@@ -139,6 +140,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/group_detail_member_covers"
                 android:layout_width="wrap_content"
+                android:foregroundGravity="right"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -151,7 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/shape_group_message_white_bg"
             android:paddingBottom="12dp"
             android:paddingLeft="49dp"

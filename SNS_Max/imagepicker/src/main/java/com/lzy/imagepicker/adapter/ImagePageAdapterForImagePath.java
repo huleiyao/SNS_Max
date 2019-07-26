@@ -59,6 +59,7 @@ public class ImagePageAdapterForImagePath extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         PhotoView photoView = new PhotoView(mActivity);
+        photoView.setScaleType(ImageView.ScaleType.FIT_XY);
         if (images.get(position).contains("http"))
             imagePicker.getImageLoader().displayImagePreview(mActivity, images.get(position), photoView, screenWidth, screenHeight);
         else

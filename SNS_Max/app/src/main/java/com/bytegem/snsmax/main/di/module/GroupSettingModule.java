@@ -1,5 +1,6 @@
 package com.bytegem.snsmax.main.di.module;
 
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupMemberAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
@@ -27,4 +28,10 @@ public abstract class GroupSettingModule {
 
     @Binds
     abstract GroupSettingContract.Model bindGroupSettingModel(GroupSettingModel model);
+
+    @ActivityScope
+    @Provides
+    static GroupMemberAdapter provideGroupMemberAdapter() {
+        return new GroupMemberAdapter();
+    }
 }
