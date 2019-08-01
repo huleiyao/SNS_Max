@@ -1,14 +1,17 @@
 package com.bytegem.snsmax.main.mvp.ui.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,14 +63,13 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     TextView user_follow_count;
     @BindView(R.id.user_fans_count)
     TextView user_fans_count;
-
     @BindView(R.id.user_cover)
     ImageView user_cover;
 
 
     @OnClick({R.id.setting, R.id.owner_qrcode, R.id.scan, R.id.user_cover
             , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
-            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner})
+            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner, R.id.user_name})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting:
@@ -79,8 +81,12 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
             case R.id.scan:
                 showMessage("去扫码");
                 break;
-            case R.id.user_cover:
+            case R.id.user_name:
                 launchActivity(new Intent(getContext(), OwnerHomeActivity.class).putExtra(OwnerHomeActivity.ISME, true));
+                break;
+            case R.id.user_cover:
+                showMessage("修改头像");
+                showBottomDialog();
                 break;
             case R.id.owner:
                 showMessage("我的圈子");
@@ -136,42 +142,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
         mPresenter.getUserData();
     }
 
-    /**
-     * 通过此方法可以使 Fragment 能够与外界做一些交互和通信, 比如说外部的 Activity 想让自己持有的某个 Fragment 对象执行一些方法,
-     * 建议在有多个需要与外界交互的方法时, 统一传 {@link Message}, 通过 what 字段来区分不同的方法, 在 {@link #setData(Object)}
-     * 方法中就可以 {@code switch} 做不同的操作, 这样就可以用统一的入口方法做多个不同的操作, 可以起到分发的作用
-     * <p>
-     * 调用此方法时请注意调用时 Fragment 的生命周期, 如果调用 {@link #setData(Object)} 方法时 {@link Fragment#onCreate(Bundle)} 还没执行
-     * 但在 {@link #setData(Object)} 里却调用了 Presenter 的方法, 是会报空的, 因为 Dagger 注入是在 {@link Fragment#onCreate(Bundle)} 方法中执行的
-     * 然后才创建的 Presenter, 如果要做一些初始化操作,可以不必让外部调用 {@link #setData(Object)}, 在 {@link #initData(Bundle)} 中初始化就可以了
-     * <p>
-     * Example usage:
-     * <pre>
-     * public void setData(@Nullable Object data) {
-     *     if (data != null && data instanceof Message) {
-     *         switch (((Message) data).what) {
-     *             case 0:
-     *                 loadData(((Message) data).arg1);
-     *                 break;
-     *             case 1:
-     *                 refreshUI();
-     *                 break;
-     *             default:
-     *                 //do something
-     *                 break;
-     *         }
-     *     }
-     * }
-     *
-     * // call setData(Object):
-     * Message data = new Message();
-     * data.what = 0;
-     * data.arg1 = 1;
-     * fragment.setData(data);
-     * </pre>
-     *
-     * @param data 当不需要参数时 {@code data} 可以为 {@code null}
-     */
+
     @Override
     public void setData(@Nullable Object data) {
 
@@ -211,10 +182,50 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
         user_follow_count.setText(userBean.getFollowers_count() + "");
         user_fans_count.setText(userBean.getFollowings_count() + "");
 //        user_content.setText(userBean.get());
-        if (userBean.getAvatar() == null ||userBean.getAvatar().isEmpty())
+        if (userBean.getAvatar() == null || userBean.getAvatar().isEmpty())
             GlideLoaderUtil.LoadCircleImage(mContext, R.drawable.ic_deskicon, user_cover);
         else
             GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(userBean.getAvatar()), user_cover);
 //        GlideLoaderUtil.LoadCircleImage(getContext(), Utils.checkUrl(userBean.getAvatar()), user_cover);
     }
+
+    private void showBottomDialog() {
+        //1、使用Dialog、设置style
+        final Dialog dialog = new Dialog(getContext(), R.style.DialogTheme);
+        //2、设置布局
+        View view = View.inflate(getContext(), R.layout.dialog_custom_layout, null);
+        dialog.setContentView(view);
+
+        Window window = dialog.getWindow();
+        //设置弹出位置
+        window.setGravity(Gravity.BOTTOM);
+        //设置弹出动画
+        window.setWindowAnimations(R.style.main_menu_animStyle);
+        //设置对话框大小
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.show();
+
+        dialog.findViewById(R.id.tv_take_photo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.tv_take_pic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
 }
