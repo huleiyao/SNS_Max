@@ -27,6 +27,11 @@ import com.bytegem.snsmax.main.mvp.contract.HomeContract;
 import com.bytegem.snsmax.main.mvp.presenter.HomePresenter;
 
 import com.bytegem.snsmax.R;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageCropActivity;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.ui.ImagePreviewActivity;
 import com.next.easynavigation.view.EasyNavigationBar;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
@@ -34,12 +39,15 @@ import com.tencent.map.geolocation.TencentLocationManager;
 import com.tencent.map.geolocation.TencentLocationRequest;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.lzy.imagepicker.ui.ImageGridActivity.getFileSize;
+import static com.lzy.imagepicker.ui.ImageGridActivity.getMimeTypeFromUrl;
 
 
 /**
@@ -236,6 +244,48 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     public void launchActivity(@NonNull Intent intent) {
         checkNotNull(intent);
         ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ImagePicker.REQUEST_CODE_CROP && data != null && data.getExtras() != null) {
+            ImagePicker.getInstance().setCrop(false);
+            ArrayList<ImageItem> images = ImagePicker.getInstance().getSelectedImages();
+            if (images != null && images.size() > 0) {
+                ImageItem imageItem = images.get(0);
+                imageItem.mimeType = getMimeTypeFromUrl(imageItem.path);
+                imageItem.size = getFileSize(new File(imageItem.path));
+                OwnerFragment.newInstance().updataCover(imageItem);
+            }
+        } else {
+            //如果是裁剪，因为裁剪指定了存储的Uri，所以返回的data一定为null
+            if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE_TAKE) {
+                //发送广播通知图片增加了
+                ImagePicker.galleryAddPic(this, ImagePicker.getInstance().getTakeImageFile());
+                String path = ImagePicker.getInstance().getTakeImageFile().getAbsolutePath();
+                ImageItem imageItem = new ImageItem();
+                imageItem.path = path;
+                imageItem.mimeType = getMimeTypeFromUrl(path);
+                imageItem.size = getFileSize(new File(path));
+                ImagePicker.getInstance().clearSelectedImages();
+                ImagePicker.getInstance().addSelectedImageItem(0, imageItem, true);
+
+                Intent intent = new Intent(this, ImageCropActivity.class);
+                startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
+            } else {//添加图片
+                if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+                    ArrayList<ImageItem> imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                    if (imageItems != null && imageItems.size() > 0) {
+                        ImagePicker.getInstance().clearSelectedImages();
+                        ImagePicker.getInstance().addSelectedImageItem(0, imageItems.get(0), true);
+
+                        Intent intent = new Intent(this, ImageCropActivity.class);
+                        startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
+                    }
+                }
+            }
+        }
     }
 
     @Override

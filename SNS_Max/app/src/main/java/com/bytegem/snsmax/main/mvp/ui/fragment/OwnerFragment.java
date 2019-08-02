@@ -1,19 +1,14 @@
 package com.bytegem.snsmax.main.mvp.ui.fragment;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.Gravity;
+import android.support.design.widget.BottomSheetDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
@@ -31,6 +26,10 @@ import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
 import com.bytegem.snsmax.main.mvp.presenter.OwnerPresenter;
 
 import com.bytegem.snsmax.R;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageCropActivity;
+import com.lzy.imagepicker.ui.ImageGridActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,7 +49,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class OwnerFragment extends BaseFragment<OwnerPresenter> implements OwnerContract.View {
+public class OwnerFragment extends BaseFragment<OwnerPresenter> implements OwnerContract.View, View.OnClickListener {
     private static OwnerFragment instance;
 
     @BindView(R.id.user_name)
@@ -65,12 +64,12 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     TextView user_fans_count;
     @BindView(R.id.user_cover)
     ImageView user_cover;
-
+    BottomSheetDialog changeUserCoverBottomSheetDialog;
 
     @OnClick({R.id.setting, R.id.owner_qrcode, R.id.scan, R.id.user_cover
             , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
             , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner, R.id.user_name})
-    void onClick(View view) {
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting:
                 launchActivity(new Intent(getContext(), SettingsActivity.class));
@@ -85,8 +84,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 launchActivity(new Intent(getContext(), OwnerHomeActivity.class).putExtra(OwnerHomeActivity.ISME, true));
                 break;
             case R.id.user_cover:
-                showMessage("修改头像");
-                showBottomDialog();
+                changeUserCoverBottomSheetDialog.show();
                 break;
             case R.id.owner:
                 showMessage("我的圈子");
@@ -112,7 +110,28 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
             case R.id.help_or_feedback:
                 showMessage("帮助与反馈");
                 break;
+            case R.id.tv_take_photo:
+                changeUserCoverBottomSheetDialog.dismiss();
+                ImagePicker.getInstance().setCrop(true);
+                ImagePicker.getInstance().takePicture(getActivity(), ImagePicker.REQUEST_CODE_TAKE);
+                break;
+            case R.id.tv_take_pic:
+                changeUserCoverBottomSheetDialog.dismiss();
+                Intent intent = new Intent(getContext(), ImageGridActivity.class);
+                startActivityForResult(intent, 801);
+                break;
+            case R.id.tv_cancel:
+                changeUserCoverBottomSheetDialog.dismiss();
+                break;
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ImagePicker.REQUEST_CODE_TAKE) {
+            Intent intent = new Intent(getContext(), ImageCropActivity.class);
+            startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
         }
     }
 
@@ -140,8 +159,22 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         mPresenter.getUserData();
+        initCommitBottomSheetDialog();
     }
 
+    public void updataCover(ImageItem imageItem) {
+        mPresenter.getSign("image", imageItem);
+    }
+
+    private void initCommitBottomSheetDialog() {
+        changeUserCoverBottomSheetDialog = new BottomSheetDialog(getContext());
+        changeUserCoverBottomSheetDialog.setContentView(R.layout.dialog_change_user_cover);
+        changeUserCoverBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_photo).setOnClickListener(this);
+        changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_pic).setOnClickListener(this);
+        changeUserCoverBottomSheetDialog.findViewById(R.id.tv_cancel).setOnClickListener(this);
+    }
 
     @Override
     public void setData(@Nullable Object data) {
@@ -176,7 +209,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     }
 
     @Override
-    public void initUserData(UserBean userBean) {
+    public void showUserData(UserBean userBean) {
         user_name.setText(userBean.getName());
         user_zan_count.setText(userBean.getLikes_count() + "");
         user_follow_count.setText(userBean.getFollowers_count() + "");
@@ -186,46 +219,5 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
             GlideLoaderUtil.LoadCircleImage(mContext, R.drawable.ic_deskicon, user_cover);
         else
             GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(userBean.getAvatar()), user_cover);
-//        GlideLoaderUtil.LoadCircleImage(getContext(), Utils.checkUrl(userBean.getAvatar()), user_cover);
     }
-
-    private void showBottomDialog() {
-        //1、使用Dialog、设置style
-        final Dialog dialog = new Dialog(getContext(), R.style.DialogTheme);
-        //2、设置布局
-        View view = View.inflate(getContext(), R.layout.dialog_custom_layout, null);
-        dialog.setContentView(view);
-
-        Window window = dialog.getWindow();
-        //设置弹出位置
-        window.setGravity(Gravity.BOTTOM);
-        //设置弹出动画
-        window.setWindowAnimations(R.style.main_menu_animStyle);
-        //设置对话框大小
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.show();
-
-        dialog.findViewById(R.id.tv_take_photo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.findViewById(R.id.tv_take_pic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-    }
-
 }
