@@ -68,7 +68,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
 
     @OnClick({R.id.setting, R.id.owner_qrcode, R.id.scan, R.id.user_cover
             , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
-            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner, R.id.user_name})
+            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner, R.id.user_detail})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting:
@@ -80,7 +80,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
             case R.id.scan:
                 showMessage("去扫码");
                 break;
-            case R.id.user_name:
+            case R.id.user_detail:
                 launchActivity(new Intent(getContext(), OwnerHomeActivity.class).putExtra(OwnerHomeActivity.ISME, true));
                 break;
             case R.id.user_cover:

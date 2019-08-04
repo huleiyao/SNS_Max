@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,8 +38,6 @@ import com.jess.arms.utils.ArmsUtils;
 import com.bytegem.snsmax.main.di.component.DaggerFeedDetailsComponent;
 
 import com.bytegem.snsmax.R;
-import com.liaoinstan.springview.container.DefaultFooter;
-import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 import com.lzy.imagepicker.ImagePicker;
 
@@ -76,6 +75,12 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     @Inject
     ImageAdapter2 imageAdapter2;
 
+    @BindView(R.id.feed_detail_appbar)
+    AppBarLayout appbar;
+    @BindView(R.id.feed_detail_head_layout)
+    LinearLayout head_layout;
+    @BindView(R.id.toolbar_title_center)
+    TextView toolbar_title_center;
     @BindView(R.id.post_detail_url_text)
     TextView url_text;
     @BindView(R.id.post_detail_one_img)
@@ -94,9 +99,13 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
 
     @BindView(R.id.post_detail_url)
     LinearLayout url;
+    @BindView(R.id.more_comment)
+    LinearLayout more_comment;
 
     @BindView(R.id.post_detail_follow_the_user)
     TextView follow_the_user;
+    @BindView(R.id.post_detail_title_follow_the_user)
+    TextView title_follow_the_user;
     @BindView(R.id.post_detail_tv_address)
     TextView tv_address;
     @BindView(R.id.post_detail_content)
@@ -143,8 +152,6 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     RecyclerView comment_comment_recycleview;//最热评论的评论列表
     @BindView(R.id.recycle_view)
     RecyclerView recycle_view;//动态图片列表
-    @BindView(R.id.more_comment)
-    LinearLayout more_comment;
     @BindView(R.id.post_detail_address)
     LinearLayout address;
     @BindView(R.id.comment_zan)
@@ -155,15 +162,23 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     LinearLayout group;//圈子相关，如果没有关联圈子  这部分需要隐藏
     EditText commit_content;//发送评论的edittext
 
+    @BindView(R.id.toolbar_title)
+    TextView toolbar_title;
+    @BindView(R.id.more)
+    TextView more;
+    @BindView(R.id.title_cover)
+    ImageView title_cover;
+
     FeedCommentBean hotFeedCommentBean;
     BottomSheetDialog bottomSheetDialog;
     BottomSheetDialog commitBottomSheetDialog;
 
     @OnClick({R.id.post_detail_follow_the_user, R.id.feed_detail_group_join_us, R.id.post_detail_user_cover, R.id.post_detail_one_img, R.id.post_detail_share_to_wechat
             , R.id.post_detail_share_to_moments, R.id.post_detail_share_to_qq, R.id.feed_detail_zan_the_post, R.id.feed_detail_comment_the_post
-            , R.id.feed_detail_share_the_post, R.id.post_detail_tv_address, R.id.bg, R.id.more_comment, R.id.more})
+            , R.id.feed_detail_share_the_post, R.id.post_detail_tv_address, R.id.bg, R.id.more_comment, R.id.more, R.id.post_detail_title_follow_the_user})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.post_detail_title_follow_the_user://关注动态发起人
             case R.id.post_detail_follow_the_user://关注动态发起人
                 mPresenter.changeUserFollowState(feedBean.getUser().getId());
                 break;
@@ -278,16 +293,40 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        setTitle("贴子详情");
         feedBean = (FeedBean) getIntent().getSerializableExtra("data");
         if (feedBean == null) {
             killMyself();
             return;
         }
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset <=  -head_layout.getHeight() / 2) {
+                    toolbar_title_center.setText(" ");
+                    toolbar_title.setText(feedBean.getUser().getName());
+                    toolbar_title.setTextColor(getResources().getColor(R.color.color_151b26));
+                    toolbar_title_center.setVisibility(View.GONE);
+                    more.setVisibility(View.GONE);
+                    toolbar_title.setVisibility(View.VISIBLE);
+                    title_cover.setVisibility(View.VISIBLE);
+                    title_follow_the_user.setVisibility(View.VISIBLE);
+                } else {
+                    toolbar_title_center.setText("贴子详情");
+                    toolbar_title.setText(" ");
+                    toolbar_title.setTextColor(getResources().getColor(R.color.white));
+                    toolbar_title_center.setVisibility(View.VISIBLE);
+                    more.setVisibility(View.VISIBLE);
+                    toolbar_title.setVisibility(View.GONE);
+                    title_cover.setVisibility(View.GONE);
+                    title_follow_the_user.setVisibility(View.GONE);
+                }
+            }
+        });
         adapter.setAll(false);
         showFeed(feedBean);
         initCommitBottomSheetDialog();
         initBottomSheetDialog();
+        comment_recycleview.setNestedScrollingEnabled(false);
         comment_recycleview.setLayoutManager(new LinearLayoutManager(this));// 布局管理器
         comment_recycleview.setAdapter(adapter);
         comment_recycleview.setItemAnimator(new DefaultItemAnimator());
@@ -341,9 +380,9 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         UserBean user = feedBean.getUser();
         if (user != null) {
             if (feedBean.getUser().getAvatar() == null || feedBean.getUser().getAvatar().isEmpty())
-                GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover);
+                GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover, title_cover);
             else
-                GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(feedBean.getUser().getAvatar()), user_cover);
+                GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(feedBean.getUser().getAvatar()), user_cover, title_cover);
             user_name.setText(feedBean.getUser().getName());
 //            user_content.setText(feedBean.getUser().getName());
         }

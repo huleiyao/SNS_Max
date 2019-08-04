@@ -34,7 +34,7 @@ public interface GroupService {
     Observable<DATAGroup> getGroupDetails(@Header("Authorization") String authorization, @Path("id") int groupId);
 
     //发现页圈子列表
-    @GET("/user/groups")
+    @GET("/groups")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<LISTGroup> getGroupList(@Header("Authorization") String authorization);
 

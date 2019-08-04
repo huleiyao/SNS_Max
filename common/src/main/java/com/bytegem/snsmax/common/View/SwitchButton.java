@@ -26,7 +26,7 @@ public class SwitchButton extends View {
     //默认的宽度
     private int mDefaultWidth = 68;
     //圆弧半径
-    private int mDefaultRx = 15;
+    private int mDefaultRx = 30;
     //打开
     public static final int OPEN = 2;
     //关闭

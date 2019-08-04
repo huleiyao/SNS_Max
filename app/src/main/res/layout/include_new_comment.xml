@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
     android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -18,11 +18,17 @@
 
     <View style="@style/default_line_hor" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/comment_recycleview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" />
+        android:descendantFocusability="blocksDescendants">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/comment_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/more_comment"
@@ -36,11 +42,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="28dp"
             android:paddingTop="28dp"
+            android:paddingBottom="28dp"
             android:text="查看全部评论"
             android:textColor="@color/color_5e6ce7"
             android:textSize="26sp" />
     </LinearLayout>
-
 </LinearLayout>
