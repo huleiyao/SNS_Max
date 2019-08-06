@@ -1,7 +1,5 @@
 package com.bytegem.snsmax.main.mvp.model;
 
-import android.app.Application;
-
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
@@ -15,6 +13,7 @@ import com.bytegem.snsmax.main.app.config.UpdataImageService;
 import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.mvp.contract.CreatNewsContract;
 import com.bytegem.snsmax.main.mvp.contract.FeedCommentsOfCommentContract;
+import com.bytegem.snsmax.main.mvp.contract.FeedDetailContract;
 import com.bytegem.snsmax.main.mvp.contract.FeedDetailsContract;
 import com.bytegem.snsmax.main.mvp.contract.FeedNewCommentContract;
 import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
@@ -29,8 +28,8 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public  class FeedModel extends BaseModel implements FeedsContract.Model,FeedCommentsOfCommentContract.Model
-        ,FeedDetailsContract.Model,FeedNewCommentContract.Model,CreatNewsContract.Model {
+public class FeedModel extends BaseModel implements FeedsContract.Model, FeedCommentsOfCommentContract.Model
+        , FeedDetailsContract.Model, FeedNewCommentContract.Model, CreatNewsContract.Model, FeedDetailContract.Model {
 
     public FeedModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
@@ -106,13 +105,13 @@ public  class FeedModel extends BaseModel implements FeedsContract.Model,FeedCom
         if (isFirst)
             return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsCommentsListDefault(MApplication.getTokenOrType(),id, limit, isDefaultOrder ? "desc" : "asc");
+                    .getCommentsCommentsListDefault(MApplication.getTokenOrType(), id, limit, isDefaultOrder ? "desc" : "asc");
         else if (isDefaultOrder) return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
-                .getCommentsCommentsListBefore(MApplication.getTokenOrType(),id, limit, "desc", commentId);
+                .getCommentsCommentsListBefore(MApplication.getTokenOrType(), id, limit, "desc", commentId);
         else return mRepositoryManager
                     .obtainRetrofitService(CommunityService.class)
-                    .getCommentsCommentsListAfter(MApplication.getTokenOrType(),id, limit, "asc", commentId);
+                    .getCommentsCommentsListAfter(MApplication.getTokenOrType(), id, limit, "asc", commentId);
     }
 
     @Override

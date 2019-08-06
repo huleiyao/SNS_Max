@@ -15,6 +15,7 @@ import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
+import com.bytegem.snsmax.main.app.utils.MediaUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.CreatNewsActivity;
@@ -161,13 +162,13 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
                         if (position == -1) {
                             //视频
                             if (type.equals("video"))
-                                mMediaBean.getMediaVideo().setVideo(Utils.checkUrl(fileSignBean.getPath()));
+                                mMediaBean.getMediaVideo().setVideo(fileSignBean.getPath());
                             else
-                                mMediaBean.getMediaVideo().setCover(Utils.checkUrl(fileSignBean.getPath()));
-                            if (mMediaBean.getMediaVideo().getVideo().contains("http") && mMediaBean.getMediaVideo().getCover().contains("http"))//都是网络地址，发送动态
+                                mMediaBean.getMediaVideo().setCover(fileSignBean.getPath());
+                            if (mMediaBean.getMediaVideo().isCoverChange() && mMediaBean.getMediaVideo().isVideoChange())//都是网络地址，发送动态
                                 send();
                         } else {
-                            mMediaBean.setImages(position, Utils.checkUrl(fileSignBean.getPath()));
+                            mMediaBean.setImages(position, fileSignBean.getPath());
                             if (!isStartSend && mMediaBean.checkImage())
                                 send();
                         }
@@ -192,12 +193,12 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
         MBaseBean bean = mMediaBean.getMedia();
         if (bean == null || mMediaBean.getType().isEmpty())
             jsonData = M.getMapString(
-                    "geo", location.getGeo()
-                    , "contents", mContent
+                    /*"geo", location.getGeo()
+                    ,*/ "contents", mContent
             );
         else jsonData = M.getMapString(
-                "geo", location.getGeo()
-                , "contents", mContent
+                /*"geo", location.getGeo()
+                ,*/ "contents", mContent
                 , "media", bean
         );
         (mTopicBean == null ?
@@ -266,13 +267,16 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     @Override
     public void videoPathCall(String path) {
         if (path != null && !path.isEmpty() && new File(path).exists()) {
-            MediaVideoContent mediaVideoContent = new MediaVideoContent();
-            mediaVideoContent.setVideo(path);
-            mediaVideoContent.setCover(Utils.getNetVideoImagePath(path));
-            if (mediaVideoContent != null && mediaVideoContent.getVideo()
-                    != null && mediaVideoContent.getCover() != null) {
-                mRootView.showVideo(mediaVideoContent);
-            }
+            MediaUtils.getImageForVideo(path, new MediaUtils.OnLoadVideoImageListener() {
+                @Override
+                public void onLoadImage(File file) {
+                    MediaVideoContent mediaVideoContent = new MediaVideoContent(path, file.getPath());
+                    if (mediaVideoContent != null && mediaVideoContent.getVideo()
+                            != null && mediaVideoContent.getCover() != null) {
+                        mRootView.showVideo(mediaVideoContent);
+                    }
+                }
+            });
         }
     }
 }

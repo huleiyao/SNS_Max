@@ -34,6 +34,7 @@
             android:name=".ui.ImagePreviewDelActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/ImagePickerThemeFullScreen" />
+
         <provider
             android:name=".ImagePickerProvider"
             android:authorities="${applicationId}.provider"
@@ -43,7 +44,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
-
 </manifest>

@@ -41,7 +41,9 @@ public class GlideLoaderUtil {
     public static void LoadImage(Context context, Object url, ImageView imageView) {
         Glide.with(context).load(url)
                 .apply(new RequestOptions()
-                                .centerCrop()
+
+                        .fitCenter()
+//                                .centerCrop()
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                        .placeholder(R.mipmap.default_img)
                                 .error(R.drawable.placeholder)

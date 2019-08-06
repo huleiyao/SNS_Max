@@ -44,29 +44,6 @@ public class Utils {
         else return Api.FILE_LOOK_DOMAIN + path;
     }
 
-    public static String getNetVideoImagePath(String videoUrl) {
-        Bitmap bitmap = getNetVideoBitmap(videoUrl);
-        if (bitmap == null) return "";
-        String pathPic = null;
-        try {
-            FileOutputStream fos = null;
-            pathPic = LocationCache.IMAGE_LOCATION + File.separator + System.currentTimeMillis() + ".jpg";
-            new File(LocationCache.IMAGE_LOCATION + File.separator).mkdirs();
-            fos = new FileOutputStream(pathPic);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
-            fos.close();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (pathPic == null || !new File(pathPic).exists()) return null;
-        else
-            return pathPic;
-    }
-
     public static Bitmap getNetVideoBitmap(String videoUrl) {
         Bitmap bitmap = null;
 
@@ -77,6 +54,8 @@ public class Utils {
             //获得第一帧图片
             bitmap = retriever.getFrameAtTime();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             retriever.release();

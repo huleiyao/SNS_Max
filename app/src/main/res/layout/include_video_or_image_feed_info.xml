@@ -16,6 +16,7 @@
             android:layout_height="90dp"
             android:layout_gravity="center"
             android:paddingLeft="24dp"
+            android:visibility="gone"
             android:paddingRight="24dp"
             android:src="@drawable/ic_ico_video_more_white" />
 

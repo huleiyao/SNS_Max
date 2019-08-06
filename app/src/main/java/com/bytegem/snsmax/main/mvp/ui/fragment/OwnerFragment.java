@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.mvp.ui.activity.OwnerFeedHistoryActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
@@ -68,7 +69,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
 
     @OnClick({R.id.setting, R.id.owner_qrcode, R.id.scan, R.id.user_cover
             , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
-            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner, R.id.user_detail})
+            , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner_history, R.id.user_detail})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting:
@@ -86,11 +87,11 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
             case R.id.user_cover:
                 changeUserCoverBottomSheetDialog.show();
                 break;
-            case R.id.owner:
-                showMessage("我的圈子");
+            case R.id.owner_history:
+                launchActivity(new Intent(getContext(), OwnerFeedHistoryActivity.class));
                 break;
             case R.id.owner_group:
-                showMessage("我的迹记");
+                showMessage("我的圈子");
                 break;
             case R.id.owner_favorites:
                 showMessage("我的收藏");

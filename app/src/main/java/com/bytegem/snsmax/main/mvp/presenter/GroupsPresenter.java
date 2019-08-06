@@ -76,8 +76,13 @@ public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsC
                 .subscribe(new ErrorHandleSubscriber<LISTGroup>(mErrorHandler) {
                     @Override
                     public void onNext(LISTGroup data) {
-                        ArrayList<GroupBean> feedBeans = data.getData();
-                        adapter.setNewData(feedBeans);
+                        ArrayList<GroupBean> groupBeans = data.getData();
+                        for (GroupBean groupBean : groupBeans)
+                            if (groupBean.getFeeds() != null && groupBean.getFeeds().size() > 0)
+                                for (FeedBean feedBean : groupBean.getFeeds())
+                                    if (feedBean.getMedia() != null)
+                                        feedBean.getMedia().initContent();
+                        adapter.setNewData(groupBeans);
                         mRootView.onFinishFreshAndLoad();
                     }
                 });

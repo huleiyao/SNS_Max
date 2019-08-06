@@ -38,6 +38,7 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
         else {
             ImageItem imageItem = new ImageItem();
             imageItem.path = mediaVideoContent.getVideo();
+            imageItem.videoCoverPath = mediaVideoContent.getCover();
             items.add(imageItem);
         }
         ImageItem imageItemAdd = new ImageItem();
@@ -81,12 +82,15 @@ public class CreateImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHold
                                 .setVisible(R.id.creat_image_item_delete, true)
                                 .setVisible(R.id.creat_image_item_img, true)
                                 .setVisible(R.id.creat_image_item_add, false);
-                        MediaUtils.getImageForVideo(bean.path, new MediaUtils.OnLoadVideoImageListener() {
-                            @Override
-                            public void onLoadImage(File file) {
-                                GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.creat_image_item_cover));
-                            }
-                        });
+                        if (bean.videoCoverPath != null && !bean.videoCoverPath.isEmpty())
+                            GlideLoaderUtil.LoadRoundImage20(mContext, bean.videoCoverPath, viewHolder.getView(R.id.creat_image_item_cover));
+                        else
+                            MediaUtils.getImageForVideo(bean.path, new MediaUtils.OnLoadVideoImageListener() {
+                                @Override
+                                public void onLoadImage(File file) {
+                                    GlideLoaderUtil.LoadRoundImage20(mContext, file, viewHolder.getView(R.id.creat_image_item_cover));
+                                }
+                            });
                     } else if (bean.path.equals("add")) {
                         //添加
                         viewHolder.setVisible(R.id.creat_image_item_img, false)

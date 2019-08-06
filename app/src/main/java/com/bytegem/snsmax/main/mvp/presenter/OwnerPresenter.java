@@ -118,7 +118,7 @@ public class OwnerPresenter extends BasePresenter<OwnerContract.Model, OwnerCont
                 .doOnError((Throwable onError) -> {
                     if (onError instanceof EOFException) {
                         //无数据返回  成功
-                        String url = Utils.checkUrl(fileSignBean.getPath());
+                        String url = fileSignBean.getPath();
                         updataUser("avatar", url);
                     } else {
                         mRootView.showMessage("上传失败");
@@ -134,7 +134,7 @@ public class OwnerPresenter extends BasePresenter<OwnerContract.Model, OwnerCont
     }
 
 
-    public void updataUser(String... map) {
+    public void updataUser(Object... map) {
         mModel.updataUser(
                 M.getMapString(map))
                 .subscribeOn(Schedulers.io())

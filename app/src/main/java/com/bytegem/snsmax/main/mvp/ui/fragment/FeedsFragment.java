@@ -24,6 +24,7 @@ import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.mvp.contract.FeedsContract;
 import com.bytegem.snsmax.main.mvp.ui.activity.AddressSelectActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.dialog.CommitFeedCommentBottomSheetDialog;
 import com.bytegem.snsmax.main.mvp.ui.view.HomeBannerView;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
@@ -31,9 +32,6 @@ import com.jess.arms.utils.ArmsUtils;
 
 import com.bytegem.snsmax.main.di.component.DaggerFeedsComponent;
 import com.bytegem.snsmax.main.mvp.presenter.FeedsPresenter;
-
-import com.liaoinstan.springview.container.DefaultFooter;
-import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
 import java.util.ArrayList;
@@ -164,26 +162,20 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
     }
 
     private void initCommitBottomSheetDialog() {
-        commitBottomSheetDialog = new BottomSheetDialog(getContext());
-        commitBottomSheetDialog.setContentView(R.layout.view_commit);
-        commitBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
-                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
-        commitBottomSheetDialog.findViewById(R.id.dialog_send_comment).setOnClickListener(this);
-        commit_content = commitBottomSheetDialog.findViewById(R.id.commit_content);
-        commit_content.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        commitBottomSheetDialog = new CommitFeedCommentBottomSheetDialog(getContext()
+                , this
+                , new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {//发送按键action
-                    if (commit_content != null) {
-                        String content = commit_content.getText().toString();
+                    if (textView != null) {
+                        String content = textView.getText().toString();
                         if (content.isEmpty()) {
-//                        showMessage("请输入评论内容");
-                            commit_content.setError("请输入评论内容");
+                            textView.setError("请输入评论内容");
                             return true;
                         }
-                        if (feedBean != null)
-                            mPresenter.commit(feedBean.getId(), content);
-                        commit_content.setText("");
+                        mPresenter.commit(feedBean.getId(), content);
+                        textView.setText("");
                         commitBottomSheetDialog.dismiss();
                     }
                     return true;
@@ -196,7 +188,7 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
     private void initBottomSheetDialog() {
         bottomSheetDialog = new BottomSheetDialog(getContext());
         bottomSheetDialog.setContentView(R.layout.dialog_community_commit);
-        bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+        bottomSheetDialog.getDelegate().findViewById(R.id.design_bottom_sheet)
                 .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
         bottomSheetDialog.findViewById(R.id.to_commit).setOnClickListener(this);
         bottomSheetDialog.findViewById(R.id.to_report).setOnClickListener(this);

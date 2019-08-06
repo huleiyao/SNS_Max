@@ -7,6 +7,13 @@ public class MediaVideoContent extends MBaseBean {
     //video
     private String cover;
     private String video;
+    private boolean coverChange = false;
+    private boolean videoChange = false;
+
+    public MediaVideoContent(String video, String cover) {
+        this.cover = cover;
+        this.video = video;
+    }
 
     public void complementUrl() {
         if (cover != null && !cover.isEmpty() && !cover.contains("http"))
@@ -21,6 +28,7 @@ public class MediaVideoContent extends MBaseBean {
 
     public void setCover(String cover) {
         this.cover = cover;
+        coverChange = true;
     }
 
     public String getVideo() {
@@ -29,5 +37,14 @@ public class MediaVideoContent extends MBaseBean {
 
     public void setVideo(String video) {
         this.video = video;
+        videoChange = true;
+    }
+
+    public boolean isCoverChange() {
+        return coverChange;
+    }
+
+    public boolean isVideoChange() {
+        return videoChange;
     }
 }

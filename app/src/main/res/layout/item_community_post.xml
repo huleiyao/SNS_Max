@@ -5,9 +5,9 @@
     android:layout_marginBottom="20dp"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingBottom="32dp"
     android:paddingLeft="32dp"
-    android:paddingRight="32dp">
+    android:paddingRight="32dp"
+    android:paddingBottom="32dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,8 +25,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="24dp"
-                android:paddingTop="24dp">
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp">
 
                 <ImageView
                     android:id="@+id/feed_item_group_cover"
@@ -171,10 +171,10 @@
                 android:background="@drawable/shape_community_address_frame"
                 android:gravity="left"
                 android:orientation="horizontal"
-                android:paddingBottom="12dp"
                 android:paddingLeft="20dp"
+                android:paddingTop="12dp"
                 android:paddingRight="20dp"
-                android:paddingTop="12dp">
+                android:paddingBottom="12dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -203,10 +203,11 @@
             <LinearLayout
                 android:id="@+id/feed_item_zan"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="33dp">
 
                 <ImageView
                     android:id="@+id/feed_item_zan_cover"
@@ -230,12 +231,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="33dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="66dp"
+                    android:layout_marginLeft="33dp"
                     android:src="@drawable/ic_ico_moment_comment" />
 
                 <TextView
@@ -253,12 +255,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="33dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="66dp"
+                    android:layout_marginLeft="33dp"
                     android:src="@drawable/ic_ico_moment_share" />
 
                 <TextView
@@ -280,7 +283,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="20dp"
-                android:src="@drawable/ic_ico_moment_more" />
+                android:src="@drawable/ic_ico_moment_more"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

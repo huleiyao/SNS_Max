@@ -1,24 +1,23 @@
 package com.bytegem.snsmax.main.di.module;
 
-import com.bytegem.snsmax.main.mvp.model.FeedActivityModel;
+import com.bytegem.snsmax.main.mvp.model.FeedFragmentModel;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsOfCommentAdapter;
-import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
-import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-import com.bytegem.snsmax.main.mvp.contract.FeedDetailsContract;
+import com.bytegem.snsmax.main.mvp.contract.FeedDetailContract;
+import com.jess.arms.di.scope.FragmentScope;
 
 
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/23/2019 15:23
+ * Created by MVPArmsTemplate on 08/06/2019 12:04
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -27,20 +26,20 @@ import com.bytegem.snsmax.main.mvp.contract.FeedDetailsContract;
  * ================================================
  */
 @Module
-public abstract class FeedDetailsModule {
+public abstract class FeedDetailModule {
 
     @Binds
-    abstract FeedDetailsContract.Model bindFeedModel(FeedActivityModel model);
+    abstract FeedDetailContract.Model bindFeedModel(FeedFragmentModel model);
 
-    @ActivityScope
+    @FragmentScope
     @Provides
-    static ImageAdapter provideImageAdapter() {
-        return new ImageAdapter();
+    static FeedCommentsAdapter provideCommunityCommentsAdapter() {
+        return new FeedCommentsAdapter();
     }
 
-    @ActivityScope
+    @FragmentScope
     @Provides
-    static ImageAdapter2 provideImageAdapter2() {
-        return new ImageAdapter2();
+    static FeedCommentsOfCommentAdapter provideCommuntiyCommentsOfCommentAdapter() {
+        return new FeedCommentsOfCommentAdapter();
     }
 }

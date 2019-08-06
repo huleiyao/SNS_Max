@@ -62,7 +62,8 @@ public class ResponseErrorListenerImpl implements ResponseErrorListener {
             //没有数据不处理
             return;
         }
-        ArmsUtils.snackbarText(msg);
+        if (!msg.equals("未知错误"))
+            ArmsUtils.snackbarText(msg);
     }
 
     private String convertStatusCode(HttpException httpException) {

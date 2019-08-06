@@ -55,9 +55,9 @@
             android:name="TencentMapSDK"
             android:value="3NEBZ-W7UCP-FIBD4-VM2FU-DKBPF-7GBHD" />
         <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
+     ATTENTION: This was auto-generated to add Google Play services to your project for
+         App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+            -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="4030500" />
@@ -211,6 +211,11 @@
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.OwnerFeedHistoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
     </application>
-
 </manifest>

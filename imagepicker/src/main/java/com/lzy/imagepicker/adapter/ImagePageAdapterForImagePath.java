@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.R;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.util.Utils;
 
@@ -59,7 +60,9 @@ public class ImagePageAdapterForImagePath extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         PhotoView photoView = new PhotoView(mActivity);
-        photoView.setScaleType(ImageView.ScaleType.FIT_XY);
+        if (mActivity != null)
+            photoView.setBackgroundColor(mActivity.getResources().getColor(R.color.albumIconDark));
+        photoView.setScaleType(ImageView.ScaleType.CENTER);
         if (images.get(position).contains("http"))
             imagePicker.getImageLoader().displayImagePreview(mActivity, images.get(position), photoView, screenWidth, screenHeight);
         else

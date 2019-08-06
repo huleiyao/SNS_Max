@@ -63,8 +63,8 @@ public class ImagePicker {
     private boolean isSaveRectangle = false;  //裁剪后的图片是否是矩形，否者跟随裁剪框的形状
     private int outPutX = 800;           //裁剪保存宽度
     private int outPutY = 800;           //裁剪保存高度
-    private int focusWidth = 280;         //焦点框的宽度
-    private int focusHeight = 280;        //焦点框的高度
+    private int focusWidth = 560;         //焦点框的宽度
+    private int focusHeight = 560;        //焦点框的高度
     private ImageLoader imageLoader;     //图片加载器
     private CropImageView.Style style = CropImageView.Style.RECTANGLE; //裁剪框的形状
     private File cropCacheFolder;

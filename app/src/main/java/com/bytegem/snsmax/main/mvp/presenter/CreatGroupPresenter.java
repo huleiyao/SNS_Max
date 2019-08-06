@@ -95,7 +95,7 @@ public class CreatGroupPresenter extends BasePresenter<CreatGroupContract.Model,
                         //无数据返回  成功
                         mRootView.showMessage("上传成功");
                         avatar = fileSignBean.getPath();
-                        mRootView.showGroupCover(Utils.checkUrl(fileSignBean.getPath()));
+                        mRootView.showGroupCover(Utils.checkUrl(avatar));
                     } else {
                         mRootView.showMessage("上传失败");
                     }

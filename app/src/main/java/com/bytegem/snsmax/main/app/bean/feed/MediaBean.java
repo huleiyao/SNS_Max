@@ -195,11 +195,11 @@ public class MediaBean extends MBaseBean {
 
     public MediaVideoContent getMediaVideo() {
         if (mediaVideo == null) initContent();
-        if (mediaVideo == null) mediaVideo = new MediaVideoContent();
+        if (mediaVideo == null) mediaVideo = new MediaVideoContent("", "");
         return mediaVideo;
     }
 
-    public MediaVideoContent getCreateMediaVideo(){
+    public MediaVideoContent getCreateMediaVideo() {
         return mediaVideo;
     }
 
