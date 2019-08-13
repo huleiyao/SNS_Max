@@ -5,6 +5,10 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
 
+
+    <color name="start_background">#141E2E</color>
+    <color name="start_txt_down">#646F79</color>
+
     <!-- 底部导航栏 -->
     <color name="home_bottom_selected_color">@color/colorPrimary</color>
     <color name="home_unselected_color">@color/color_78</color>

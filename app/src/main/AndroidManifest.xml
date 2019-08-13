@@ -98,7 +98,7 @@
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".main.mvp.ui.activity.LoginActivity"
+            android:name=".main.mvp.ui.StartActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
@@ -109,6 +109,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".main.mvp.ui.activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
             android:name=".main.mvp.ui.activity.RegisterActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
