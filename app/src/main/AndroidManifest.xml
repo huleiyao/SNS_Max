@@ -50,6 +50,27 @@
         android:theme="@style/AppThemeHasActionBar"
         tools:replace="theme,label,icon">
 
+        <service
+            android:name=".main.app.service.JPushService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pushcore">
+            <intent-filter>
+                <action android:name="cn.jiguang.user.service.action" />
+            </intent-filter>
+        </service>
+        <!-- 替换原生极光推送接收器 -->
+        <receiver
+            android:name=".main.app.receiver.JPushReceiver"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="replace">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+                <category android:name="com.bytegen.snsmax" /> <!--JPush上注册的包名 -->
+            </intent-filter>
+        </receiver>
+
         <!-- 腾讯地图配置 -->
         <meta-data
             android:name="TencentMapSDK"
@@ -98,7 +119,7 @@
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".main.mvp.ui.activity.LoginActivity"
+            android:name=".main.mvp.ui.StartActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
@@ -109,6 +130,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".main.mvp.ui.activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
             android:name=".main.mvp.ui.activity.RegisterActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
