@@ -24,7 +24,10 @@ public class GroupFeedsAdapter extends BaseQuickAdapter<FeedBean, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder viewHolder, FeedBean bean) {
-        viewHolder.setText(R.id.comment_count_or_zan_count, bean.getComments_count() + "评论  |  " + bean.getLikes_count() + "赞");
+        viewHolder
+                .setText(R.id.comment_count_or_zan_count, bean.getComments_count() + "评论  |  " + bean.getLikes_count() + "赞")
+                .setText(R.id.feed_content, bean.getContents())
+        ;
         if (bean.getMedia() != null) {
             switch (bean.getMedia().getType()) {
                 case "image":

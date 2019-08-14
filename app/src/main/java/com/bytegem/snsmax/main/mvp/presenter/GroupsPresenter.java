@@ -6,10 +6,8 @@ import android.view.View;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
-import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
-import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.mvp.contract.GroupsContract;
 import com.bytegem.snsmax.main.mvp.ui.activity.GroupDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupHeadersAdapter;
@@ -30,8 +28,6 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import javax.inject.Inject;
 
-import static com.bytegem.snsmax.main.app.MApplication.location;
-
 
 /**
  * ================================================
@@ -46,7 +42,7 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @FragmentScope
-public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
+public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsContract.View> implements BaseQuickAdapter.OnItemClickListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -95,15 +91,6 @@ public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsC
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
-    }
-
-    @Override
-    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        switch (view.getId()) {
-            case R.id.group_join_us:
-                mRootView.showMessage("加入或退出");
-                break;
-        }
     }
 
     @Override

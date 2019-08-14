@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class GroupsFeedsViewHolder extends BaseViewHolder {
     GroupFeedsAdapter adapter;
-    private BaseQuickAdapter.OnItemChildClickListener mOnItemChildClickListener;
     private BaseQuickAdapter.OnItemClickListener mOnItemClickListener;
 
     public GroupsFeedsViewHolder(View view) {
@@ -24,12 +23,9 @@ public class GroupsFeedsViewHolder extends BaseViewHolder {
         return adapter;
     }
 
-    public void setListener(BaseQuickAdapter.OnItemChildClickListener onItemChildClickListener, BaseQuickAdapter.OnItemClickListener onItemClickListener) {
-        mOnItemChildClickListener = onItemChildClickListener;
+    public void setListener( BaseQuickAdapter.OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
         if (adapter != null) {
-            if (mOnItemChildClickListener != null)
-                adapter.setOnItemChildClickListener(mOnItemChildClickListener);
             if (mOnItemClickListener != null)
                 adapter.setOnItemClickListener(mOnItemClickListener);
         }

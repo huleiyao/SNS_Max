@@ -110,10 +110,8 @@ public class GroupsFragment extends BaseFragment<GroupsPresenter> implements Gro
 //                loadData(false);
             }
         });
-
-        adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
-        adapter.setListener(mPresenter, mPresenter);
+        adapter.setListener(mPresenter);
         ArrayList<MBaseBean> list = new ArrayList<>();
         list.add(null);
         list.add(null);

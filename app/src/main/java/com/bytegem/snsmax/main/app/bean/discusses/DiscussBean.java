@@ -1,15 +1,18 @@
-package com.bytegem.snsmax.main.app.bean.group;
+package com.bytegem.snsmax.main.app.bean.discusses;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 
 public class DiscussBean extends MBaseBean {
     private int id;
     private int feeds_count;
     private int follower_count;
+    private int popularity;
     private String title;
     private String desc;
     private MediaBean media;
+    private GroupBean group;
 
     public int getId() {
         return id;
@@ -57,5 +60,21 @@ public class DiscussBean extends MBaseBean {
 
     public void setMedia(MediaBean media) {
         this.media = media;
+    }
+
+    public GroupBean getGroup() {
+        return group;
+    }
+
+    public void setGroup(GroupBean group) {
+        this.group = group;
+    }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
     }
 }

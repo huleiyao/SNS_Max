@@ -12,6 +12,7 @@ import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
@@ -71,6 +72,7 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
     @Inject
     CreateImageAdapter adapter;
     MediaBean mMediaBean;
+    GroupBean mGroupBean;
     String mContent;
     TopicBean mTopicBean;
     boolean isStartSend = false;
@@ -80,8 +82,9 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
         super(model, rootView);
     }
 
-    public void checkSend(String content, MediaBean mediaBean, CreatNewsActivity.FeedType feedType, TopicBean topicBean) {
+    public void checkSend(String content, MediaBean mediaBean, CreatNewsActivity.FeedType feedType, TopicBean topicBean, GroupBean groupBean) {
         mRootView.showLoading();
+        mGroupBean = groupBean;
         mContent = content;
         mTopicBean = topicBean;
         mMediaBean = mediaBean;
@@ -193,16 +196,18 @@ public class CreatNewsPresenter extends BasePresenter<CreatNewsContract.Model, C
         MBaseBean bean = mMediaBean.getMedia();
         if (bean == null || mMediaBean.getType().isEmpty())
             jsonData = M.getMapString(
-                    /*"geo", location.getGeo()
-                    ,*/ "contents", mContent
+                    "geo", location.getGeo()
+                    , "contents", mContent
             );
         else jsonData = M.getMapString(
-                /*"geo", location.getGeo()
-                ,*/ "contents", mContent
+                "geo", location.getGeo()
+                , "contents", mContent
                 , "media", bean
         );
         (mTopicBean == null ?
-                mModel.sendNewFeed(jsonData)
+                mGroupBean == null ?
+                        mModel.sendNewFeed(jsonData)
+                        : mModel.groupSend(mGroupBean.getId(), jsonData)
                 : mModel.topicSend(mTopicBean.getId(), jsonData))
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())

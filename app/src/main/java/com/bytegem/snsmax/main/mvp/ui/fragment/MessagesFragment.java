@@ -100,8 +100,8 @@ public class MessagesFragment extends BaseFragment<MessageListPresenter> impleme
             }
         });
 
-//        adapter.setOnItemChildClickListener(mPresenter);
-//        adapter.setOnItemClickListener(mPresenter);
+        adapter.setOnItemChildClickListener(mPresenter);
+        adapter.setOnItemClickListener(mPresenter);
         ArrayList<MBaseBean> list = new ArrayList<>();
         list.add(null);
         list.add(null);

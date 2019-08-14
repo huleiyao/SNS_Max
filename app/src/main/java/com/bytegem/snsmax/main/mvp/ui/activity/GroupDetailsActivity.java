@@ -28,6 +28,7 @@ import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupMemberAdapter;
 import com.bytegem.snsmax.main.mvp.ui.fragment.DiscussListFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.FeedsFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerFeedsFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -217,7 +218,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
 
     private void initFragment() {
         ArrayList<FragmentBean> fragmentBeans = new ArrayList<>();
-        fragmentBeans.add(new FragmentBean("动态", OwnerFeedsFragment.newInstance()));
+        fragmentBeans.add(new FragmentBean("动态", FeedsFragment.newInstance(3, mGroup.getId())));
         fragmentBeans.add(new FragmentBean("讨论", DiscussListFragment.newInstance(mGroup)));
         viewPager.setAdapter(new VPFragmentAdapter(getSupportFragmentManager(), fragmentBeans));
         viewPager.setOffscreenPageLimit(fragmentBeans.size() - 1);

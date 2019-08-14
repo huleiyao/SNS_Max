@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GroupsAdapter extends BaseQuickAdapter<GroupBean, GroupsFeedsViewHolder> {
     private BaseQuickAdapter.OnItemClickListener mOnItemClickListener;
@@ -25,15 +26,16 @@ public class GroupsAdapter extends BaseQuickAdapter<GroupBean, GroupsFeedsViewHo
         super(R.layout.item_community_group_list);
     }
 
-    public void setListener(BaseQuickAdapter.OnItemClickListener onItemClickListener, BaseQuickAdapter.OnItemChildClickListener onItemChildClickListener) {
+    public void setListener(BaseQuickAdapter.OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
-        mOnItemChildClickListener = onItemChildClickListener;
     }
 
     @Override
     protected void convert(GroupsFeedsViewHolder viewHolder, GroupBean bean) {
-        viewHolder.setText(R.id.group_name, bean.getName())
-                .addOnClickListener(R.id.group_join_us);
+        viewHolder
+                .setText(R.id.group_name, bean.getName())
+                .setText(R.id.group_updata_time, Utils.getUpdataTime(bean.getUpdated_at()))
+        ;
         GlideLoaderUtil.LoadRoundImage8(mContext, Utils.checkUrl(bean.getAvatar()), viewHolder.getView(R.id.group_cover));
         RecyclerView recyclerView = viewHolder.getView(R.id.recycle_view);
         if (bean.getFeeds() == null || bean.getFeeds().size() == 0)
@@ -41,7 +43,7 @@ public class GroupsAdapter extends BaseQuickAdapter<GroupBean, GroupsFeedsViewHo
         else {
             viewHolder.setVisible(R.id.recycle_view, true);
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));// 布局管理器
-            viewHolder.setListener(mOnItemChildClickListener, mOnItemClickListener);
+            viewHolder.setListener(mOnItemClickListener);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(viewHolder.getAdapter());
             viewHolder.setFeeds(bean.getFeeds());

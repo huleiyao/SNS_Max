@@ -62,7 +62,7 @@ public class ResponseErrorListenerImpl implements ResponseErrorListener {
             //没有数据不处理
             return;
         }
-        if (!msg.equals("未知错误"))
+        if (!msg.equals("未知错误") && !msg.equals("请求地址不存在"))
             ArmsUtils.snackbarText(msg);
     }
 

@@ -45,6 +45,8 @@ public interface CreatNewsContract {
 
         Observable<NetDefaultBean> topicSend(int topicId, String jsonData);
 
+        Observable<NetDefaultBean> groupSend(int topicId, String jsonData);
+
         Observable<MBaseBean> updataCover(FileSignBean fileSignBean, ImageItem imageItem);
 
         Observable<FileSignBean> getSign(String type, File file, long length, String md5);

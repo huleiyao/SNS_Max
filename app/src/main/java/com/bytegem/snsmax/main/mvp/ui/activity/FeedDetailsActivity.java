@@ -144,7 +144,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     BottomSheetDialog bottomSheetDialog;
     CommitFeedCommentBottomSheetDialog commitBottomSheetDialog;
 
-    @OnClick({R.id.post_detail_follow_the_user,  R.id.post_detail_user_cover, R.id.post_detail_one_img, R.id.post_detail_share_to_wechat
+    @OnClick({R.id.post_detail_follow_the_user, R.id.post_detail_user_cover, R.id.post_detail_one_img, R.id.post_detail_share_to_wechat
             , R.id.post_detail_share_to_moments, R.id.post_detail_share_to_qq, R.id.feed_detail_zan_the_post, R.id.feed_detail_comment_the_post
             , R.id.feed_detail_share_the_post, R.id.post_detail_tv_address, R.id.more, R.id.post_detail_title_follow_the_user})
     public void onClick(View view) {
@@ -202,7 +202,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                 showMessage("去分享");
                 break;
             case R.id.post_detail_tv_address://地址
-                showMessage("地址，定位");
+//                showMessage("地址，定位");
                 break;
             case R.id.to_commit:
                 bottomSheetDialog.dismiss();
@@ -316,6 +316,10 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
             user_name.setText(feedBean.getUser().getName());
 //            user_content.setText(feedBean.getUser().getName());
         }
+        if (feedBean.getGeo() != null && !feedBean.getGeo().getAddress().isEmpty()) {
+            address.setVisibility(View.VISIBLE);
+            tv_address.setText(feedBean.getGeo().getAddress());
+        } else address.setVisibility(View.GONE);
         changeFeedLike();
         content.setText(feedBean.getContents());
         comment_the_post_count.setText(feedBean.getComments_count() + "");

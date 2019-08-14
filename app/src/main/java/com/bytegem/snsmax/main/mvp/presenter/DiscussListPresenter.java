@@ -2,11 +2,8 @@ package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.main.app.bean.group.DiscussBean;
-import com.bytegem.snsmax.main.app.bean.group.GroupBean;
-import com.bytegem.snsmax.main.app.bean.group.LISTDiscusses;
-import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
-import com.bytegem.snsmax.main.app.bean.location.LocationBean;
+import com.bytegem.snsmax.main.app.bean.discusses.DiscussBean;
+import com.bytegem.snsmax.main.app.bean.discusses.LISTDiscusses;
 import com.bytegem.snsmax.main.mvp.ui.adapter.DiscussAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
@@ -24,8 +21,6 @@ import com.bytegem.snsmax.main.mvp.contract.DiscussListContract;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
-
-import static com.bytegem.snsmax.main.app.MApplication.location;
 
 
 /**

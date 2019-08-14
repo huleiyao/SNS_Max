@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:paddingBottom="30dp"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:paddingTop="30dp">
+
+    <ImageView
+        android:id="@+id/group_cover"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/group_select_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="一万个哈哈哈的理由"
+            android:textColor="@color/color_151b26"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/group_select_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="6dp"
+            android:maxLines="2"
+            android:text="你会不会忽然的出现 在街角的咖啡店 我会带着笑脸挥手寒暄 和你 坐着聊聊天"
+            android:textColor="@color/color_b0b8bf"
+            android:textSize="24sp" />
+    </LinearLayout>
+</LinearLayout>

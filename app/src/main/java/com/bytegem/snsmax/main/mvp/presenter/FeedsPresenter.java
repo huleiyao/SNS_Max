@@ -10,6 +10,7 @@ import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
+import com.bytegem.snsmax.main.app.bean.group.LISTGroupFeeds;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
@@ -70,6 +71,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     private int per_page = 15;
     private int page = 1;
     int type;
+    int groupId;
 
     @Inject
     public FeedsPresenter(FeedsContract.Model model, FeedsContract.View rootView) {
@@ -85,9 +87,39 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
         this.mApplication = null;
     }
 
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
     public void setType(int type, boolean isLoadMore) {
         this.type = type;
-        getList(isLoadMore);
+        if (type == 3)
+            getGroupFeedList(isLoadMore);
+        else
+            getList(isLoadMore);
+    }
+
+    public void getGroupFeedList(boolean isLoadMore) {
+        mModel.getGroupList(groupId, isLoadMore ? (adapter.getData() == null || adapter.getData().size() == 0) ? -1 : adapter.getData().get(adapter.getData().size() - 1).getId() : -1)
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<LISTGroupFeeds>(mErrorHandler) {
+                    @Override
+                    public void onNext(LISTGroupFeeds data) {
+                        ArrayList<FeedBean> feedBeans = data.getFeeds();
+                        if (feedBeans != null)
+                            for (FeedBean feedBean : feedBeans)
+                                if (feedBean.getMedia() != null)
+                                    feedBean.getMedia().initContent();
+                        if (isLoadMore) adapter.addData(feedBeans);
+                        else adapter.setNewData(feedBeans);
+                        mRootView.onFinishFreshAndLoad();
+                    }
+                });
     }
 
     public void getList(boolean isLoadMore) {
@@ -109,9 +141,10 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                     @Override
                     public void onNext(LISTFeeds data) {
                         ArrayList<FeedBean> feedBeans = data.getData();
-                        for (FeedBean feedBean : feedBeans)
-                            if (feedBean.getMedia() != null)
-                                feedBean.getMedia().initContent();
+                        if (feedBeans != null)
+                            for (FeedBean feedBean : feedBeans)
+                                if (feedBean.getMedia() != null)
+                                    feedBean.getMedia().initContent();
                         if (isLoadMore) adapter.addData(feedBeans);
                         else adapter.setNewData(feedBeans);
                         mRootView.onFinishFreshAndLoad();

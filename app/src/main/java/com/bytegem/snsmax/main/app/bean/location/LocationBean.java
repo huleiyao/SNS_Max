@@ -35,6 +35,14 @@ public class LocationBean extends MBaseBean {
         geo.setLatitude(latitude + "");
     }
 
+    public String getAddress() {
+        return geo.getAddress();
+    }
+
+    public void setAddress(String address) {
+        geo.setAddress(address);
+    }
+
     public Geo getGeo() {
         return geo;
     }

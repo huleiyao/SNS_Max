@@ -5,7 +5,6 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="84dp"
-    android:paddingTop="22dp"
     android:minHeight="0dp"
     app:contentInsetStart="0dp"
     app:layout_collapseMode="pin"

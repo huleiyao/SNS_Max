@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.bean.feed.MediaBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaLinkContent;
 import com.bytegem.snsmax.main.app.bean.feed.MediaVideoContent;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.SoftKeyBroadManager;
@@ -75,6 +76,8 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @BindView(R.id.recycle_view)
     RecyclerView recycle_view;
 
+    @BindView(R.id.creat_news_select_group)
+    LinearLayout creat_news_select_group;
     @BindView(R.id.creat_news_address)
     LinearLayout address;
     @BindView(R.id.creat_news_url)
@@ -91,6 +94,10 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     ImageView link;
     @BindView(R.id.creat_news_url_cover)
     ImageView url_cover;
+    @BindView(R.id.group_cover)
+    ImageView group_cover;
+    @BindView(R.id.creat_news_topic)
+    View creat_news_topic;
 
     @BindView(R.id.toolbar_send)
     TextView toolbar_send;
@@ -109,6 +116,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     CreateImageAdapter adapter;
     FeedType feedType = DEFAULT;
     MaterialDialog materialDialog;
+    GroupBean mGroupBean;
 
     public enum FeedType {
         CAMERA, VIDEO, LINK, DEFAULT
@@ -125,9 +133,10 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                     showMessage("请输入内容！");
                     return;
                 }
-                mPresenter.checkSend(content_str, mediaBean, feedType, content.getTopicBean());
+                mPresenter.checkSend(content_str, mediaBean, feedType, content.getTopicBean(),mGroupBean);
                 break;
             case R.id.creat_news_select_group://选择圈子
+                startActivityForResult(new Intent(this, GroupSelectActivity.class), 868);
                 break;
             case R.id.creat_news_camera://图片
                 if (feedType == FeedType.CAMERA)
@@ -314,6 +323,21 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
         });
     }
 
+    private void showGroup(GroupBean groupBean) {
+        mGroupBean = groupBean;
+        if (mGroupBean == null) {
+            creat_news_topic.setVisibility(View.VISIBLE);
+            GlideLoaderUtil.LoadRoundImage6(this, groupBean.getAvatar(), group_cover);
+            group_name.setText("选择圈子 ");
+            group_name.setTextColor(getResources().getColor(R.color.color_b0b8bf));
+        } else {
+            creat_news_topic.setVisibility(View.GONE);
+            GlideLoaderUtil.LoadImage(this, R.drawable.ic_ico_circle_grey, group_cover);
+            group_name.setText(groupBean.getName());
+            group_name.setTextColor(getResources().getColor(R.color.color_5e6ce7));
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -342,6 +366,10 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
             if (topicBean == null) ;
             else
                 showTopic(topicBean);
+        } else if (requestCode == 868) {
+            if (resultCode == 878) {
+                showGroup((GroupBean) data.getSerializableExtra("group"));
+            }
         }
     }
 

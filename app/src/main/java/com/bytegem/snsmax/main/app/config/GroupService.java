@@ -2,10 +2,11 @@ package com.bytegem.snsmax.main.app.config;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.DATAGroup;
-import com.bytegem.snsmax.main.app.bean.group.GroupBean;
-import com.bytegem.snsmax.main.app.bean.group.LISTDiscusses;
+import com.bytegem.snsmax.main.app.bean.discusses.LISTDiscusses;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
+import com.bytegem.snsmax.main.app.bean.group.LISTGroupFeeds;
 import com.bytegem.snsmax.main.app.bean.user.LISTUser;
 
 import io.reactivex.Observable;
@@ -37,6 +38,22 @@ public interface GroupService {
     @GET("/groups")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<LISTGroup> getGroupList(@Header("Authorization") String authorization);
+
+    //圈子动态列表
+    @GET("/groups/{id}/feeds")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LISTGroupFeeds> getGroupFeedList(@Header("Authorization") String authorization, @Path("id") int groupId);
+
+
+    //圈子动态列表
+    @GET("/groups/{id}/feeds")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LISTGroupFeeds> getGroupFeedList(@Header("Authorization") String authorization, @Path("id") int groupId, @Query("after") int feedId);
+
+    //搜索圈子
+    @GET("/search/groups")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LISTGroup> searchGroup(@Header("Authorization") String authorization, @Query("keywords") String keyword);
 
     //获取圈子管理员列表
     @GET("/groups/{id}/managers")
@@ -83,6 +100,11 @@ public interface GroupService {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<LISTDiscusses> getGroupDiscusses(@Header("Authorization") String authorizationid, @Path("id") int id, @Query("after") int after);
 
+    //获取发现也热议列表
+    @GET("/discusses")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LISTDiscusses> getGroupDiscussesList(@Header("Authorization") String authorizationid);
+
     /*
     发布讨论
     request:
@@ -90,5 +112,9 @@ public interface GroupService {
     @POST("/groups/{id}/discusses")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<NetDefaultBean> sendDiscusses(@Header("Authorization") String authorization, @Path("id") int id, @Body RequestBody requestBody);
+
+    @POST("/groups/{id}/feeds")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<NetDefaultBean> sendFeedInGroup(@Header("Authorization") String authorization, @Path("id") int id, @Body RequestBody requestBody);
 
 }

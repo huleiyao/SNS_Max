@@ -3,8 +3,7 @@ package com.bytegem.snsmax.main.mvp.model;
 import android.app.Application;
 
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.group.LISTDiscusses;
-import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
+import com.bytegem.snsmax.main.app.bean.discusses.LISTDiscusses;
 import com.bytegem.snsmax.main.app.config.GroupService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;

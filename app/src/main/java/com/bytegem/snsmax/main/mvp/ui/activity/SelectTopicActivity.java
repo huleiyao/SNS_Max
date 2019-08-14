@@ -49,16 +49,16 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class SelectTopicActivity extends BaseActivity<SelectTopicPresenter> implements SelectTopicContract.View {
-    @BindView(R.id.select_topic_keyword)
-    EditText keyword;
-    @BindView(R.id.recycle_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.select_topic_empty)
-    LinearLayout empty;
-    @BindView(R.id.select_topic_topic_name)
-    TextView topic_name;
-    @Inject
-    TopicsAdapter adapter;
+        @BindView(R.id.select_topic_keyword)
+        EditText keyword;
+        @BindView(R.id.recycle_view)
+        RecyclerView recyclerView;
+        @BindView(R.id.select_topic_empty)
+        LinearLayout empty;
+        @BindView(R.id.select_topic_topic_name)
+        TextView topic_name;
+        @Inject
+        TopicsAdapter adapter;
 
     @OnClick({R.id.select_topic_cancel, R.id.select_topic_creat_topic})
     void onClick(View view) {

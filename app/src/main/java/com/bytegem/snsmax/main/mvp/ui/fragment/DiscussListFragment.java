@@ -13,11 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bytegem.snsmax.common.bean.MBaseBean;
-import com.bytegem.snsmax.main.app.bean.group.DiscussBean;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.mvp.ui.adapter.DiscussAdapter;
-import com.bytegem.snsmax.main.mvp.ui.adapter.OwnerFeedsAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -27,11 +24,7 @@ import com.bytegem.snsmax.main.mvp.contract.DiscussListContract;
 import com.bytegem.snsmax.main.mvp.presenter.DiscussListPresenter;
 
 import com.bytegem.snsmax.R;
-import com.liaoinstan.springview.container.DefaultFooter;
-import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 

@@ -1,4 +1,4 @@
-package com.bytegem.snsmax.main.app.bean.group;
+package com.bytegem.snsmax.main.app.bean.discusses;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 

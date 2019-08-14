@@ -3,9 +3,7 @@ package com.bytegem.snsmax.main.mvp.model;
 import android.app.Application;
 
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
-import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.app.config.GroupService;
 import com.bytegem.snsmax.main.mvp.contract.GroupsContract;
 import com.google.gson.Gson;

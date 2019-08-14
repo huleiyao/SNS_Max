@@ -1,8 +1,7 @@
 package com.bytegem.snsmax.main.mvp.ui.adapter;
 
 import com.bytegem.snsmax.R;
-import com.bytegem.snsmax.main.app.bean.group.DiscussBean;
-import com.bytegem.snsmax.main.app.bean.group.GroupBean;
+import com.bytegem.snsmax.main.app.bean.discusses.DiscussBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;

@@ -59,14 +59,12 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
             viewHolder.setImageResource(R.id.feed_item_zan_cover, R.drawable.ic_ico_moment_zan_on);
         else
             viewHolder.setImageResource(R.id.feed_item_zan_cover, R.drawable.ic_ico_moment_zan);
-        if (bean.getGeo() == null
-                || (bean.getGeo().getLatitude().isEmpty() && bean.getGeo().getLongitude().isEmpty())
-                || (bean.getGeo().getLatitude().equals("0") && bean.getGeo().getLongitude().equals("0")))
-            //@TODO 获取地址的文字信息
-            ;
-        else {
-            viewHolder.setVisible(R.id.feed_item_tv_address, true)
+        if (bean.getGeo() == null || bean.getGeo().getAddress().isEmpty())
+            viewHolder.setVisible(R.id.feed_item_address, false)
                     .setText(R.id.feed_item_tv_address, "");
+        else {
+            viewHolder.setVisible(R.id.feed_item_address, true)
+                    .setText(R.id.feed_item_tv_address, bean.getGeo().getAddress());
         }
         if (bean.getTopic() != null && bean.getTopic().getName() != null)
             ((TagTextView) viewHolder.getView(R.id.feed_item_content)).setContentAndTag(bean.getContents(), bean.getTopic());

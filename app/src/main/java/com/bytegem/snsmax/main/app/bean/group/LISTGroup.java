@@ -1,6 +1,7 @@
 package com.bytegem.snsmax.main.app.bean.group;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 
 import java.util.ArrayList;
 

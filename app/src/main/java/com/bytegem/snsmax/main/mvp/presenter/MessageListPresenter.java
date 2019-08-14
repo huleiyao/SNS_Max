@@ -1,7 +1,11 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
+import android.content.Intent;
+import android.view.View;
 
+import com.bytegem.snsmax.main.mvp.ui.activity.ChatActivity;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -27,7 +31,7 @@ import com.bytegem.snsmax.main.mvp.contract.MessageListContract;
  * ================================================
  */
 @FragmentScope
-public class MessageListPresenter extends BasePresenter<MessageListContract.Model, MessageListContract.View> {
+public class MessageListPresenter extends BasePresenter<MessageListContract.Model, MessageListContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -49,5 +53,15 @@ public class MessageListPresenter extends BasePresenter<MessageListContract.Mode
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        mRootView.launchActivity(new Intent(mApplication, ChatActivity.class));
     }
 }

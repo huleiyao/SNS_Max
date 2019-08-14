@@ -14,7 +14,8 @@
             android:id="@+id/feed_cover_view"
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginRight="30dp">
 
             <ImageView
                 android:id="@+id/feed_cover"
@@ -32,7 +33,6 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
             android:layout_weight="1"
             android:orientation="vertical">
 

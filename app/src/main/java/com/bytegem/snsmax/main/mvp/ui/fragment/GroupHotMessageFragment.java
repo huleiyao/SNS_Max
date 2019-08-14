@@ -88,24 +88,22 @@ public class GroupHotMessageFragment extends BaseFragment<GroupHotMessagePresent
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-//                loadData(true);
+                mPresenter.getList();
             }
 
             @Override
             public void onLoadmore() {
-//                loadData(false);
+
             }
         });
-
 //        adapter.setOnItemChildClickListener(mPresenter);
 //        adapter.setOnItemClickListener(mPresenter);
-        ArrayList<MBaseBean> arrayList = new ArrayList<>();
-        arrayList.add(null);
-        arrayList.add(null);
-        arrayList.add(null);
-        arrayList.add(null);
-        arrayList.add(null);
-        adapter.setNewData(arrayList);
+        mPresenter.getList();
+    }
+
+    @Override
+    public SpringView.DragHander getLoadMoreFooterView() {
+        return null;
     }
 
     /**
@@ -174,5 +172,10 @@ public class GroupHotMessageFragment extends BaseFragment<GroupHotMessagePresent
     @Override
     public void killMyself() {
 
+    }
+
+    @Override
+    public void onFinishFreshAndLoad() {
+        springView.onFinishFreshAndLoad();
     }
 }

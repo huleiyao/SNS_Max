@@ -7,7 +7,9 @@ import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.feed.DATAFeedComment;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
+import com.bytegem.snsmax.main.app.bean.group.LISTGroupFeeds;
 import com.bytegem.snsmax.main.app.config.CommunityService;
+import com.bytegem.snsmax.main.app.config.GroupService;
 import com.bytegem.snsmax.main.app.config.TopicService;
 import com.bytegem.snsmax.main.app.config.UpdataImageService;
 import com.bytegem.snsmax.main.app.config.UserService;
@@ -40,6 +42,17 @@ public class FeedModel extends BaseModel implements FeedsContract.Model, FeedCom
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
                 .getList(MApplication.getTokenOrType(), latitude, longitude, per_page, page);
+    }
+
+    @Override
+    public Observable<LISTGroupFeeds> getGroupList(int groupId, int feedId) {
+        if (feedId == -1)
+            return mRepositoryManager
+                    .obtainRetrofitService(GroupService.class)
+                    .getGroupFeedList(MApplication.getTokenOrType(), groupId);
+        else return mRepositoryManager
+                .obtainRetrofitService(GroupService.class)
+                .getGroupFeedList(MApplication.getTokenOrType(), groupId, feedId);
     }
 
     @Override
@@ -144,6 +157,13 @@ public class FeedModel extends BaseModel implements FeedsContract.Model, FeedCom
         return mRepositoryManager
                 .obtainRetrofitService(TopicService.class)
                 .sendFeedInTopic(MApplication.getTokenOrType(), topicId, RequestBody.create(mediaType, jsonData));
+    }
+
+    @Override
+    public Observable<NetDefaultBean> groupSend(int topicId, String jsonData) {
+        return mRepositoryManager
+                .obtainRetrofitService(GroupService.class)
+                .sendFeedInGroup(MApplication.getTokenOrType(), topicId, RequestBody.create(mediaType, jsonData));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.bytegem.snsmax.main.mvp.contract;
 
-import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;

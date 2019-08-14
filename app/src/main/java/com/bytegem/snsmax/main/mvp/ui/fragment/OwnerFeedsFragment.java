@@ -83,26 +83,19 @@ public class OwnerFeedsFragment extends BaseFragment<OwnerFeedsPresenter> implem
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        adapter.setOnItemClickListener(mPresenter);
-//        adapter.setOnItemChildClickListener(mPresenter);
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-//                mPresenter.getList(false);
+                mPresenter.getList(false);
             }
 
             @Override
             public void onLoadmore() {
-//                mPresenter.getList(true);
+                mPresenter.getList(true);
             }
         });
-
-        ArrayList<MBaseBean> list = new ArrayList<>();
-        list.add(new MBaseBean());
-        list.add(new MBaseBean());
-        list.add(new MBaseBean());
-        list.add(new MBaseBean());
-        adapter.setNewData(list);
+        springView.callFresh();
     }
 
     /**

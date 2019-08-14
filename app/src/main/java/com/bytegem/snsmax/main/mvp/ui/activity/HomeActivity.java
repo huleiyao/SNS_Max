@@ -311,6 +311,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             MApplication.location.setCity(tencentLocation.getCity());
             MApplication.location.setLatitude(tencentLocation.getLatitude());
             MApplication.location.setLongitude(tencentLocation.getLongitude());
+            MApplication.location.setAddress(tencentLocation.getAddress());
             HomeFragment.getInstance().changeCity();
 
 //            showMessage("定位  " + tencentLocation.getAddress() + " ++ " + tencentLocation.getCity());

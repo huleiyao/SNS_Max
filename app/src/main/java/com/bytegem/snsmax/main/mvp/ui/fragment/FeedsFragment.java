@@ -68,10 +68,10 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
     FrameLayout address;
     @BindView(R.id.city)
     TextView city;
-    TextView commit_content;
     BottomSheetDialog bottomSheetDialog;
     BottomSheetDialog commitBottomSheetDialog;
     FeedBean feedBean;
+    int groupId;
 
     @OnClick({R.id.address})
     public void onClick(View view) {
@@ -99,8 +99,19 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
         return fragment;
     }
 
+    public static FeedsFragment newInstance(int type, int groupId) {
+        FeedsFragment fragment = new FeedsFragment();
+        fragment.setType(type);
+        fragment.setGroupId(groupId);
+        return fragment;
+    }
+
     public void setType(int type) {
         this.type = type;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     @Override
@@ -140,6 +151,10 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
             adapter.setHeaderView(homeBannerView.getView());
         } else if (type == 1)
             address.setVisibility(View.VISIBLE);
+        else if (type == 3) {//圈子动态
+            address.setVisibility(View.GONE);
+            mPresenter.setGroupId(groupId);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -149,15 +164,20 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.getList(false);
+                if (type == 3)
+                    mPresenter.getGroupFeedList(false);
+                else
+                    mPresenter.getList(false);
             }
 
             @Override
             public void onLoadmore() {
-                mPresenter.getList(true);
+                if (type == 3)
+                    mPresenter.getGroupFeedList(true);
+                else
+                    mPresenter.getList(true);
             }
         });
-
         mPresenter.setType(type, false);
     }
 
