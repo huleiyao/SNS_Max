@@ -17,6 +17,7 @@ import java.util.Locale;
 import cn.ittiger.player.Config;
 import cn.ittiger.player.PlayerManager;
 import cn.ittiger.player.factory.ExoPlayerFactory;
+import cn.jpush.android.api.JPushInterface;
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
 import static com.bytegem.snsmax.main.app.Api.FILE_UPDATA_DOMAIN;
@@ -53,6 +54,8 @@ public class MApplication extends BaseApplication {
         initImagePicker();
         OkHttpUtils.init(this);
         initVideoPlayer();
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     public void initVideoPlayer() {
