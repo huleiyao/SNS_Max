@@ -67,12 +67,15 @@ public class FeedNewCommentPresenter extends BasePresenter<FeedNewCommentContrac
     }
 
     public void getList(boolean isLoadMore, int postId, int commentId) {
+        if (!isLoadMore)
+        mRootView.showLoading();
         feedId = postId;
         mModel.getCommentList(postId, limit, commentId, isDefaultOrder, !isLoadMore)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTFeedComments>(mErrorHandler) {
@@ -88,11 +91,13 @@ public class FeedNewCommentPresenter extends BasePresenter<FeedNewCommentContrac
 
 
     public void changeCommentLikeState(int commentId, boolean isLike) {
+        mRootView.showLoading();
         mModel.changeCommentLikeState(commentId, isLike)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {

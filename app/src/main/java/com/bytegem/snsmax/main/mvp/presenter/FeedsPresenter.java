@@ -100,11 +100,13 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     }
 
     public void getGroupFeedList(boolean isLoadMore) {
+        if (!isLoadMore) mRootView.showLoading();
         mModel.getGroupList(groupId, isLoadMore ? (adapter.getData() == null || adapter.getData().size() == 0) ? -1 : adapter.getData().get(adapter.getData().size() - 1).getId() : -1)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTGroupFeeds>(mErrorHandler) {
@@ -125,6 +127,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     public void getList(boolean isLoadMore) {
         if (isLoadMore) page++;
         else {
+            mRootView.showLoading();
             page = 1;
         }
         if (location == null)
@@ -135,6 +138,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTFeeds>(mErrorHandler) {
@@ -153,6 +157,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
     }
 
     public void commit(int feedId, String content) {
+        mRootView.showLoading();
         mModel.commitFeedComment(feedId, M.getMapString(
                 "contents", content
         ))
@@ -160,6 +165,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
@@ -207,11 +213,15 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
             case R.id.feed_item_zan:
                 FeedBean feedBean = (FeedBean) adapter.getItem(position);
                 feedBean.setHas_liked(!feedBean.isHas_liked());
+                ((FeedBean) adapter.getItem(position)).setHas_liked(feedBean.isHas_liked());
                 if (feedBean.isHas_liked()) {
-                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan_on);
+//                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan_on);
+                    ((FeedBean) adapter.getItem(position)).setLikes_count(feedBean.getLikes_count() + 1);
                 } else {
-                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan);
+//                    ((ImageView) view.findViewById(R.id.feed_item_zan_cover)).setImageResource(R.drawable.ic_ico_moment_zan);
+                    ((FeedBean) adapter.getItem(position)).setLikes_count(feedBean.getLikes_count() - 1);
                 }
+                adapter.notifyDataSetChanged();
                 break;
             case R.id.feed_item_comment:
                 mRootView.toComment((FeedBean) adapter.getItem(position));

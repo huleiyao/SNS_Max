@@ -4,7 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
+import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupMemberLineAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -14,7 +21,12 @@ import com.bytegem.snsmax.main.mvp.contract.GroupMemberContract;
 import com.bytegem.snsmax.main.mvp.presenter.GroupMemberPresenter;
 
 import com.bytegem.snsmax.R;
+import com.liaoinstan.springview.widget.SpringView;
 
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -32,6 +44,12 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class GroupMemberActivity extends BaseActivity<GroupMemberPresenter> implements GroupMemberContract.View {
+    @BindView(R.id.springview)
+    SpringView springview;
+    @BindView(R.id.recycle_view)
+    RecyclerView recycle_view;
+    @Inject
+    GroupMemberLineAdapter adapter;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -51,16 +69,44 @@ public class GroupMemberActivity extends BaseActivity<GroupMemberPresenter> impl
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         setTitle("圈子成员");
+        GroupBean groupBean = (GroupBean) getIntent().getSerializableExtra("group");
+        if (groupBean == null) {
+            killMyself();
+            return;
+        }
+        recycle_view.setLayoutManager(new LinearLayoutManager(this));// 布局管理器
+        recycle_view.setAdapter(adapter);
+        recycle_view.setItemAnimator(new DefaultItemAnimator());
+        springview.setType(SpringView.Type.FOLLOW);
+        springview.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.getGroupMemberList(false);
+            }
+
+            @Override
+            public void onLoadmore() {
+                mPresenter.getGroupMemberList(true);
+            }
+        });
+
+        adapter.setOnItemChildClickListener(mPresenter);
+        adapter.setOnItemClickListener(mPresenter);
+        adapter.setOnItemLongClickListener(mPresenter);
+        mPresenter.setGroupId(groupBean.getId());
     }
+
+    MaterialDialog materialDialog;
 
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override
@@ -78,5 +124,10 @@ public class GroupMemberActivity extends BaseActivity<GroupMemberPresenter> impl
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public void onFinishFreshAndLoad() {
+        springview.onFinishFreshAndLoad();
     }
 }

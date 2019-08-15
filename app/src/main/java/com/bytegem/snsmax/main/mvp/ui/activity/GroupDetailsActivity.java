@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
@@ -225,14 +226,17 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
         tabs.setViewPager(viewPager);
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

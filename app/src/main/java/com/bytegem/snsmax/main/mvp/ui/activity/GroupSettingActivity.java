@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.common.View.SwitchButton;
 import com.bytegem.snsmax.main.app.bean.group.GroupBean;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
@@ -141,14 +142,17 @@ public class GroupSettingActivity extends BaseActivity<GroupSettingPresenter> im
         adapter.setNewData(members);
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

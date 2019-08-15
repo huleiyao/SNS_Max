@@ -61,11 +61,13 @@ public class DiscussListPresenter extends BasePresenter<DiscussListContract.Mode
     }
 
     public void getList(boolean isRefresh) {
+        if (isRefresh) mRootView.showLoading();
         mModel.getDiscussList(mId, afterId)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTDiscusses>(mErrorHandler) {

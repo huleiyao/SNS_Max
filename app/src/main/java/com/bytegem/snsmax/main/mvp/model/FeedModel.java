@@ -5,6 +5,7 @@ import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.feed.DATAFeedComment;
+import com.bytegem.snsmax.main.app.bean.feed.DataFeed;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroupFeeds;
@@ -88,6 +89,13 @@ public class FeedModel extends BaseModel implements FeedsContract.Model, FeedCom
         return mRepositoryManager
                 .obtainRetrofitService(CommunityService.class)
                 .getHotComment(MApplication.getTokenOrType(), id);
+    }
+
+    @Override
+    public Observable<DataFeed> getFeedInfo(int id) {
+        return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .getFeedDetails(MApplication.getTokenOrType(), id);
     }
 
     @Override

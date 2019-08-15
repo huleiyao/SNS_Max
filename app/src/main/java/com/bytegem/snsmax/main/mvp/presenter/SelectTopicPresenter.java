@@ -60,11 +60,13 @@ public class SelectTopicPresenter extends BasePresenter<SelectTopicContract.Mode
     }
 
     public void search(String keyword) {
+        mRootView.showLoading();
         mModel.search(keyword)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTTopics>(mErrorHandler) {

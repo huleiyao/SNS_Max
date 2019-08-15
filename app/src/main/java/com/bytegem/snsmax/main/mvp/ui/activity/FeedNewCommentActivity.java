@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -18,8 +19,6 @@ import com.bytegem.snsmax.main.mvp.contract.FeedNewCommentContract;
 import com.bytegem.snsmax.main.mvp.presenter.FeedNewCommentPresenter;
 
 import com.bytegem.snsmax.R;
-import com.liaoinstan.springview.container.DefaultFooter;
-import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
 
@@ -101,14 +100,17 @@ public class FeedNewCommentActivity extends BaseActivity<FeedNewCommentPresenter
         springView.onFinishFreshAndLoad();
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

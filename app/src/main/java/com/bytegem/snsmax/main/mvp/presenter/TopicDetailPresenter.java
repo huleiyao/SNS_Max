@@ -79,6 +79,7 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
     }
 
     public void getTopicData() {
+        mRootView.showLoading();
         mModel.getTopicData(id)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 1))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
@@ -97,6 +98,8 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
     }
 
     public void getList(boolean isLoadMore) {
+        if (!isLoadMore)
+            mRootView.showLoading();
         mModel.getList(!isLoadMore, id, limit, isDefaultOrder
                 , adapter.getItemCount() == 0 ? 0
                         : adapter.getItem(adapter.getItemCount() - 1).getId())
@@ -104,6 +107,7 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTFeeds>(mErrorHandler) {
@@ -116,6 +120,7 @@ public class TopicDetailPresenter extends BasePresenter<TopicDetailContract.Mode
                         if (isLoadMore) adapter.addData(feedBeans);
                         else adapter.setNewData(feedBeans);
                         mRootView.onFinishFreshAndLoad();
+                        mRootView.hideLoading();
                     }
                 });
     }

@@ -60,12 +60,14 @@ public class OwnerPresenter extends BasePresenter<OwnerContract.Model, OwnerCont
     }
 
     public void getUserData() {
+        mRootView.showLoading();
         mModel.getUserData()
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 1))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<DATAUser>(mErrorHandler) {
@@ -135,6 +137,7 @@ public class OwnerPresenter extends BasePresenter<OwnerContract.Model, OwnerCont
 
 
     public void updataUser(Object... map) {
+        mRootView.showLoading();
         mModel.updataUser(
                 M.getMapString(map))
                 .subscribeOn(Schedulers.io())
@@ -142,6 +145,7 @@ public class OwnerPresenter extends BasePresenter<OwnerContract.Model, OwnerCont
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     getUserData();
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {

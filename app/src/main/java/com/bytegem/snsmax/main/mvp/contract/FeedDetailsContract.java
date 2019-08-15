@@ -1,5 +1,7 @@
 package com.bytegem.snsmax.main.mvp.contract;
 
+import com.bytegem.snsmax.main.app.bean.feed.DataFeed;
+import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.FeedCommentBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
 import com.bytegem.snsmax.main.app.bean.feed.DATAFeedComment;
@@ -26,10 +28,14 @@ public interface FeedDetailsContract {
     //对于经常使用的关于UI的方法可以定义到IView中,如显示隐藏进度条,和显示文字消息
     interface View extends IView {
         void getList();
+
+        void showFeed(FeedBean feedBean);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
+        Observable<DataFeed> getFeedInfo(int id);
+
         Observable<NetDefaultBean> changeLikeState(int id, boolean isLike);
 
         Observable<NetDefaultBean> changeUserFollowState(int id, boolean isFollow);

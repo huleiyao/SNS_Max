@@ -52,6 +52,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     }
 
     public void getCode(String phoneNumber) {
+        mRootView.showLoading();
         mModel.getCode(M.getMapString(
                 "phone_number"
                 , phoneNumber
@@ -61,6 +62,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .doOnError((Throwable onError) -> {
                     mRootView.getCodeFaild();
@@ -78,6 +80,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     }
 
     public void login(String phoneNumber, String code) {
+        mRootView.showLoading();
         mModel.login(
                 M.getMapString(
                         "phone_number"
@@ -90,6 +93,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LoginData>(mErrorHandler) {

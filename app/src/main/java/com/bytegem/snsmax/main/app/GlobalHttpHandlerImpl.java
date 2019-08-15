@@ -29,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -76,7 +78,6 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
 //                return response;
 //            }
 //        }
-
         /* 这里如果发现 token 过期, 可以先请求最新的 token, 然后在拿新的 token 放入 Request 里去重新请求
         注意在这个回调之前已经调用过 proceed(), 所以这里必须自己去建立网络请求, 如使用 Okhttp 使用新的 Request 去请求
         create a new request and modify it accordingly using the new token
@@ -104,6 +105,13 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
                     e.printStackTrace();
                 }
             }
+        }
+        if (httpResult != null && httpResult.length() > 1 && httpResult.charAt(1) == '\n') {
+            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+            // \n回车 \t 水平制表符 \s 空格 \r换行
+            Matcher m = p.matcher(httpResult);
+            httpResult = m.replaceAll("");
+            response = response.newBuilder().body(ResponseBody.create(null, httpResult)).removeHeader("Content-Length").removeHeader("content-encoding").build();
         }
         return response;
     }

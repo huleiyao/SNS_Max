@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
@@ -134,14 +135,17 @@ public class WatchImageActivity extends BaseActivity<WatchImagePresenter> implem
                 .inject(this);
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

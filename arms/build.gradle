@@ -108,6 +108,7 @@ dependencies {
     api 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 
     api rootProject.ext.dependencies["SpringView"]
+    api 'com.afollestad.material-dialogs:core:0.9.6.0'
 }
 
 //apply from: '../bintray.gradle'

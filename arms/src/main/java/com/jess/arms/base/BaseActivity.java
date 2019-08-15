@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jess.arms.R;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
@@ -215,5 +216,14 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     public SpringView.DragHander getLoadMoreFooterView() {
         return DefaultSpringUtils.getLoadMoreFooterView(this);
+    }
+
+    public MaterialDialog.Builder getMaterialDialog(String title, String content) {
+        return new MaterialDialog.Builder(this)
+                .title(title)
+                .content(content)
+//                .progress(true, 0)
+//                .progressIndeterminateStyle(false)
+                .canceledOnTouchOutside(false);
     }
 }

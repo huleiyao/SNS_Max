@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupsSelectAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -106,14 +107,17 @@ public class GroupSelectActivity extends BaseActivity<GroupSelectPresenter> impl
         }
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.mvp.ui.fragment.HomeFindFragment;
@@ -218,14 +219,17 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         mLocationManager.removeUpdates(this);
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override
@@ -312,6 +316,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             MApplication.location.setLatitude(tencentLocation.getLatitude());
             MApplication.location.setLongitude(tencentLocation.getLongitude());
             MApplication.location.setAddress(tencentLocation.getAddress());
+            MApplication.location.setAddressLocation(tencentLocation.getAddress());
+            MApplication.location.setAddressTitle(tencentLocation.getTown());
             HomeFragment.getInstance().changeCity();
 
 //            showMessage("定位  " + tencentLocation.getAddress() + " ++ " + tencentLocation.getCity());

@@ -137,10 +137,7 @@ public class CreatGroupActivity extends BaseActivity<CreatGroupPresenter> implem
     @Override
     public void showLoading() {
         hideLoading();
-        materialDialog = new MaterialDialog.Builder(this)
-//                .title("正在上传图片")
-                .content("上传图片中···")
-                .progress(true, 0)
+        materialDialog = getMaterialDialog("", "上传图片中···")
                 .progressIndeterminateStyle(false)
                 .canceledOnTouchOutside(false)
                 .show();

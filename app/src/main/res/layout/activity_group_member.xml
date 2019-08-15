@@ -7,4 +7,5 @@
 
     <include layout="@layout/include_title" />
     <!--<include layout="@layout/include_title_more_white" />-->
+    <include layout="@layout/include_springview_recyclerview" />
 </LinearLayout>

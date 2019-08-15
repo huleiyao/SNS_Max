@@ -1,5 +1,6 @@
 package com.bytegem.snsmax.main.di.module;
 
+import com.bytegem.snsmax.main.mvp.ui.adapter.AddressAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Binds;
@@ -27,4 +28,10 @@ public abstract class AddressSelectModule {
 
     @Binds
     abstract AddressSelectContract.Model bindAddressSelectModel(AddressSelectModel model);
+
+    @ActivityScope
+    @Provides
+    static AddressAdapter provideAddressAdapter() {
+        return new AddressAdapter();
+    }
 }

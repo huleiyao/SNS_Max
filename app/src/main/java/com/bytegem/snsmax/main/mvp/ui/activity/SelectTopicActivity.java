@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.adapter.TopicsAdapter;
@@ -115,14 +116,17 @@ public class SelectTopicActivity extends BaseActivity<SelectTopicPresenter> impl
         }
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

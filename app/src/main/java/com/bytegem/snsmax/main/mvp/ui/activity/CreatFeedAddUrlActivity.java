@@ -165,10 +165,7 @@ public class CreatFeedAddUrlActivity extends BaseActivity<CreatFeedAddUrlPresent
     @Override
     public void showLoading() {
         hideLoading();
-        materialDialog = new MaterialDialog.Builder(this)
-//                .title("正在上传图片")
-                .content("验证网页地址中···")
-                .progress(true, 0)
+        materialDialog = getMaterialDialog("", "验证网页地址中···")
                 .progressIndeterminateStyle(false)
                 .canceledOnTouchOutside(false)
                 .show();

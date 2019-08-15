@@ -61,17 +61,20 @@ public class FeedDetailPresenter extends BasePresenter<FeedDetailContract.Model,
     @Inject
     FeedCommentsAdapter adapter;
     int feedId;
+
     @Inject
     public FeedDetailPresenter(FeedDetailContract.Model model, FeedDetailContract.View rootView) {
         super(model, rootView);
     }
 
     public void getHotComment(int postId) {
+        mRootView.showLoading();
         mModel.getHotComment(postId)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<DATAFeedComment>(mErrorHandler) {
@@ -83,12 +86,15 @@ public class FeedDetailPresenter extends BasePresenter<FeedDetailContract.Model,
     }
 
     public void getList(boolean isLoadMore, int postId, int commentId) {
+        if (!isLoadMore)
+            mRootView.showLoading();
         feedId = postId;
         mModel.getCommentList(postId, limit, commentId, isDefaultOrder, !isLoadMore)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTFeedComments>(mErrorHandler) {
@@ -113,11 +119,13 @@ public class FeedDetailPresenter extends BasePresenter<FeedDetailContract.Model,
     }
 
     public void changeCommentLikeState(int commentId, boolean isLike) {
+        mRootView.showLoading();
         mModel.changeCommentLikeState(commentId, isLike)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {

@@ -2,6 +2,10 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.user.LISTUser;
+import com.bytegem.snsmax.main.app.config.CommunityService;
+import com.bytegem.snsmax.main.app.config.GroupService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -11,6 +15,9 @@ import com.jess.arms.di.scope.ActivityScope;
 import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.GroupMemberContract;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 
 /**
@@ -42,5 +49,12 @@ public class GroupMemberModel extends BaseModel implements GroupMemberContract.M
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public Observable<LISTUser> getGroupMemberList(int groupId, int per_page, int page) {
+        return mRepositoryManager
+                .obtainRetrofitService(GroupService.class)
+                .getGroupMember(MApplication.getTokenOrType(), groupId, per_page, page);
     }
 }

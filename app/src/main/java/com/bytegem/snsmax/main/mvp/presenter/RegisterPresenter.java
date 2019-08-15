@@ -52,6 +52,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
     }
 
     public void getCode(String phoneNumber) {
+        mRootView.showLoading();
         mModel.getCode(M.getMapString(
                 "phone_number", phoneNumber
         ))
@@ -60,6 +61,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .doOnError((Throwable onError) -> {
                     mRootView.getCodeFaild();
@@ -77,6 +79,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
     }
 
     public void register(String phoneNumber, String code) {
+        mRootView.showLoading();
         mModel.register(
                 M.getMapString(
                         "phone_number", phoneNumber
@@ -87,6 +90,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LoginData>(mErrorHandler) {

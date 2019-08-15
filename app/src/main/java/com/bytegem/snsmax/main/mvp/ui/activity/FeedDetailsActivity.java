@@ -20,9 +20,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
-import com.bytegem.snsmax.main.app.bean.feed.FeedCommentBean;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.MediaLinkContent;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
@@ -30,13 +30,10 @@ import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.contract.FeedDetailsContract;
 import com.bytegem.snsmax.main.mvp.presenter.FeedDetailsPresenter;
-import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
-import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsOfCommentAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
 import com.bytegem.snsmax.main.mvp.ui.dialog.CommitFeedCommentBottomSheetDialog;
 import com.bytegem.snsmax.main.mvp.ui.fragment.FeedDetailFragment;
-import com.bytegem.snsmax.main.mvp.ui.fragment.FeedsFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -44,7 +41,6 @@ import com.jess.arms.utils.ArmsUtils;
 import com.bytegem.snsmax.main.di.component.DaggerFeedDetailsComponent;
 
 import com.bytegem.snsmax.R;
-import com.liaoinstan.springview.widget.SpringView;
 import com.lzy.imagepicker.ImagePicker;
 
 
@@ -184,12 +180,12 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
                 break;
             case R.id.feed_detail_zan_the_post://底部赞
                 mPresenter.changeLikeState(feedBean.getId(), feedBean.isHas_liked());
-                feedBean.setHas_liked(!feedBean.isHas_liked());
-                int likeCount = feedBean.getLikes_count();
-                if (feedBean.isHas_liked()) feedBean.setLikes_count(likeCount++);
-                else if (likeCount > 0) feedBean.setLikes_count(likeCount--);
-                else ;
-                changeFeedLike();
+//                feedBean.setHas_liked(!feedBean.isHas_liked());
+//                int likeCount = feedBean.getLikes_count();
+//                if (feedBean.isHas_liked()) feedBean.setLikes_count(likeCount++);
+//                else if (likeCount > 0) feedBean.setLikes_count(likeCount--);
+//                else ;
+//                changeFeedLike();
                 break;
             case R.id.more://顶部右边更多按钮
                 bottomSheetDialog.show();
@@ -285,6 +281,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         showFeed(feedBean);
         initCommitBottomSheetDialog();
         initBottomSheetDialog();
+        mPresenter.getFeedInfo(feedBean.getId());
     }
 
     private void changeFeedLike() {
@@ -298,7 +295,8 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         zan_the_post_count.setText(feedBean.getLikes_count() + "");
     }
 
-    private void showFeed(FeedBean feedBean) {
+    @Override
+    public void showFeed(FeedBean feedBean) {
         url.setVisibility(View.GONE);
         more_img.setVisibility(View.GONE);
         f_one_img.setVisibility(View.GONE);
@@ -407,14 +405,17 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
         bottomSheetDialog.findViewById(R.id.cancel).setOnClickListener(this);
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

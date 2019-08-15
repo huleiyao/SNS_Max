@@ -88,7 +88,7 @@ public interface GroupService {
     //获取成员列表
     @GET("/groups/{id}/members")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<LISTUser> getGroupMember(@Header("Authorization") String authorizationid, @Path("id") int id, @Query("per_page") String per_page, @Query("page") String page);
+    Observable<LISTUser> getGroupMember(@Header("Authorization") String authorizationid, @Path("id") int id, @Query("per_page") int per_page, @Query("page") int page);
 
     //获取一个圈子讨论列表,第一次
     @GET("/groups/{id}/discusses")

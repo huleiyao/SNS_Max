@@ -56,11 +56,13 @@ public class GroupHotMessagePresenter extends BasePresenter<GroupHotMessageContr
     }
 
     public void getList() {
+        mRootView.showLoading();
         mModel.getDiscussList()
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTDiscusses>(mErrorHandler) {

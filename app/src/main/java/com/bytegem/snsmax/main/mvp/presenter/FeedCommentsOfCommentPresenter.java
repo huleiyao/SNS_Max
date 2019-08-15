@@ -77,12 +77,14 @@ public class FeedCommentsOfCommentPresenter extends BasePresenter<FeedCommentsOf
             ArrayList<FeedCommentBean> feedCommentBeans = new ArrayList<>();
             feedCommentBeans.add(feedCommentBean);
             adapter.setNewData(feedCommentBeans);
+            mRootView.showLoading();
         }
         mModel.getList(postId, commentId, limit, adapter.getItemCount() == 0 ? 0 : adapter.getItem(adapter.getItemCount() - 1).getId(), isDefaultOrder, !isLoadMore)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTFeedComments>(mErrorHandler) {
@@ -99,6 +101,7 @@ public class FeedCommentsOfCommentPresenter extends BasePresenter<FeedCommentsOf
     }
 
     public void commit(String content) {
+        mRootView.showLoading();
         mModel.commit(postId, commentId, M.getMapString(
                 "contents", content
         ))
@@ -106,6 +109,7 @@ public class FeedCommentsOfCommentPresenter extends BasePresenter<FeedCommentsOf
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {

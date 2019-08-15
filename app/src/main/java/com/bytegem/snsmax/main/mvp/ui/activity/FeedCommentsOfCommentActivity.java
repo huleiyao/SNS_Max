@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.bean.feed.FeedCommentBean;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedCommentsAdapter;
@@ -178,14 +179,17 @@ public class FeedCommentsOfCommentActivity extends BaseActivity<FeedCommentsOfCo
         springview.onFinishFreshAndLoad();
     }
 
+    MaterialDialog materialDialog;
+
     @Override
     public void showLoading() {
-
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override

@@ -5,6 +5,8 @@ import com.bytegem.snsmax.main.app.bean.location.Geo;
 
 public class LocationBean extends MBaseBean {
     private String city;
+    private String addressTitle;
+    private String addressLocation;
     private Geo geo;
 
     public LocationBean() {
@@ -49,5 +51,21 @@ public class LocationBean extends MBaseBean {
 
     public void setGeo(Geo geo) {
         this.geo = geo;
+    }
+
+    public String getAddressTitle() {
+        return addressTitle;
+    }
+
+    public void setAddressTitle(String addressTitle) {
+        this.addressTitle = addressTitle;
+    }
+
+    public String getAddressLocation() {
+        return addressLocation;
+    }
+
+    public void setAddressLocation(String addressLocation) {
+        this.addressLocation = addressLocation;
     }
 }

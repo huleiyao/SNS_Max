@@ -62,11 +62,13 @@ public class GroupsPresenter extends BasePresenter<GroupsContract.Model, GroupsC
     }
 
     public void getList() {
+        mRootView.showLoading();
         mModel.getGroupList()
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LISTGroup>(mErrorHandler) {

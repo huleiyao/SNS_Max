@@ -3,6 +3,7 @@ package com.bytegem.snsmax.main.app;
 import android.content.Context;
 
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
+import com.bytegem.snsmax.main.app.bean.location.TencentMapLocationBean;
 import com.jess.arms.base.BaseApplication;
 import com.lzy.imagepicker.GlideImageLoader;
 import com.lzy.imagepicker.ImagePicker;
@@ -34,6 +35,7 @@ public class MApplication extends BaseApplication {
     public static String token_type = "";
     public static String token = "";
     public static LocationBean location = new LocationBean();
+    public static TencentMapLocationBean selectLocation;
 
     public final static String getTokenOrType() {
         return MApplication.token_type + " " + MApplication.token;

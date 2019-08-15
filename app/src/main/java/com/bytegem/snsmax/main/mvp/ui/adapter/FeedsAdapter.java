@@ -37,7 +37,7 @@ public class FeedsAdapter extends BaseQuickAdapter<FeedBean, CommunityPostListVi
     protected void convert(CommunityPostListViewHolder viewHolder, FeedBean bean) {
         viewHolder.setText(R.id.feed_item_group_name, bean.getGroup().getName())
                 .setText(R.id.feed_item_user_name, bean.getUser().getName())
-//                .setText(R.id.feed_item_user_tag, bean.getUserBean().getContent())
+                .setText(R.id.feed_item_user_tag, Utils.getUpdataTime(bean.getCreated_at()))
                 .setText(R.id.feed_item_content, bean.getContents())
                 .setText(R.id.feed_item_likes_count, Utils.getNumberIfPeople(bean.getLikes_count()))
                 .setText(R.id.feed_item_comments_count, Utils.getNumberIfPeople(bean.getComments_count()))

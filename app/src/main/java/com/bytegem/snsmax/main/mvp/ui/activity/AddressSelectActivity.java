@@ -4,8 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.mvp.ui.adapter.AddressAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -15,9 +27,15 @@ import com.bytegem.snsmax.main.mvp.contract.AddressSelectContract;
 import com.bytegem.snsmax.main.mvp.presenter.AddressSelectPresenter;
 
 import com.bytegem.snsmax.R;
+import com.liaoinstan.springview.widget.SpringView;
 
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnEditorAction;
+import butterknife.OnTextChanged;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -35,6 +53,24 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class AddressSelectActivity extends BaseActivity<AddressSelectPresenter> implements AddressSelectContract.View {
+    @BindView(R.id.address_select_search_key)
+    EditText key;
+    @BindView(R.id.recycle_view)
+    RecyclerView recyclerView;
+    @Inject
+    AddressAdapter adapter;
+    @BindView(R.id.springview)
+    SpringView springView;
+
+    @OnEditorAction(R.id.address_select_search_key)
+    boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {//搜索按键action
+            Utils.hideKeyboard(AddressSelectActivity.this);
+            mPresenter.search(textView.getText().toString());
+            return true;
+        }
+        return false;
+    }
 
     @OnClick({R.id.cancel})
     void onClick(View view) {
@@ -62,17 +98,41 @@ public class AddressSelectActivity extends BaseActivity<AddressSelectPresenter> 
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        springView.setType(SpringView.Type.FOLLOW);
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
 
+            }
+
+            @Override
+            public void onLoadmore() {
+                mPresenter.search(true);
+            }
+        });
+        adapter.setOnItemClickListener(mPresenter);
+        mPresenter.search(false);
     }
 
     @Override
-    public void showLoading() {
+    public SpringView.DragHander getRefreshHeaderView() {
+        return null;
+    }
 
+    MaterialDialog materialDialog;
+
+    @Override
+    public void showLoading() {
+        hideLoading();
+        materialDialog = getMaterialDialog("", "").show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
     }
 
     @Override
@@ -90,5 +150,10 @@ public class AddressSelectActivity extends BaseActivity<AddressSelectPresenter> 
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public void onFinishFreshAndLoad() {
+        springView.onFinishFreshAndLoad();
     }
 }

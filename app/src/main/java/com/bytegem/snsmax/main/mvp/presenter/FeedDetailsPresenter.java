@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.bean.feed.DataFeed;
 import com.bytegem.snsmax.main.app.bean.feed.FeedCommentBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
 import com.bytegem.snsmax.main.app.bean.feed.DATAFeedComment;
@@ -66,6 +67,7 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
 
 
     public void commit(int feedId, String content) {
+        mRootView.showLoading();
         mModel.commitFeedComment(feedId, M.getMapString(
                 "contents", content
         ))
@@ -73,6 +75,7 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    getFeedInfo(feedId);
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
@@ -84,11 +87,13 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
     }
 
     public void changeLikeState(int feedId, boolean isLike) {
+        mRootView.showLoading();
         mModel.changeLikeState(feedId, isLike)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    getFeedInfo(feedId);
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
@@ -98,12 +103,32 @@ public class FeedDetailsPresenter extends BasePresenter<FeedDetailsContract.Mode
                 });
     }
 
+    public void getFeedInfo(int feedId) {
+        mRootView.showLoading();
+        mModel.getFeedInfo(feedId)
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<DataFeed>(mErrorHandler) {
+                    @Override
+                    public void onNext(DataFeed data) {
+                        mRootView.showFeed(data.getData());
+                    }
+                });
+    }
+
     public void changeUserFollowState(int userId) {
+        mRootView.showLoading();
         mModel.changeUserFollowState(userId, isFollow)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {

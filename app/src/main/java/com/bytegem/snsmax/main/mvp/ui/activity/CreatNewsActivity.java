@@ -133,7 +133,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
                     showMessage("请输入内容！");
                     return;
                 }
-                mPresenter.checkSend(content_str, mediaBean, feedType, content.getTopicBean(),mGroupBean);
+                mPresenter.checkSend(content_str, mediaBean, feedType, content.getTopicBean(), mGroupBean);
                 break;
             case R.id.creat_news_select_group://选择圈子
                 startActivityForResult(new Intent(this, GroupSelectActivity.class), 868);
@@ -412,10 +412,7 @@ public class CreatNewsActivity extends BaseActivity<CreatNewsPresenter> implemen
     @Override
     public void showLoading() {
         hideLoading();
-        materialDialog = new MaterialDialog.Builder(this)
-//                .title("正在上传图片")
-                .content("上传中···")
-                .progress(true, 0)
+        materialDialog = getMaterialDialog("", "上传中···")
                 .progressIndeterminateStyle(false)
                 .canceledOnTouchOutside(false)
                 .show();
