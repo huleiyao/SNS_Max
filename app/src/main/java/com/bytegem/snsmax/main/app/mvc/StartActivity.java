@@ -1,4 +1,4 @@
-package com.bytegem.snsmax.main.mvp.ui;
+package com.bytegem.snsmax.main.app.mvc;
 
 
 import android.Manifest;

@@ -25,8 +25,8 @@ package com.bytegem.snsmax.main.app;
  * ================================================
  */
 public interface Api {
-//    String APP_DOMAIN = "http://132.232.134.226:8002";
-    String APP_DOMAIN ="https://snsmax.bytegem.net";
+    //String APP_DOMAIN = "http://132.232.134.226:8002";
+    String APP_DOMAIN = "https://snsmax.bytegem.net";
     String FILE_UPDATA_DOMAIN_NAME = "file-updata";
     String FILE_UPDATA_DOMAIN = "https://bytegem-1251005678.cos.ap-chengdu.myqcloud.com";
     String FILE_LOOK_DOMAIN = "https://bytegem-1251005678.image.myqcloud.com";
