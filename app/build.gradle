@@ -91,5 +91,8 @@ dependencies {
     //极光推送
     implementation 'cn.jiguang.sdk:jpush:3.3.4'  // 此处以JPush 3.3.4 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.1.0'  // 此处以JCore 2.1.0 版本为例。
-//    implementation 'com.github.MingYueChunQiu:RecorderManager:0.2.25'
+    //implementation 'com.github.MingYueChunQiu:RecorderManager:0.2.25'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation project(':zxing-lib')
+
 }

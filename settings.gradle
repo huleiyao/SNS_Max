@@ -1,4 +1,4 @@
-include ':app', ':arms', ':arms-autolayout'
+include ':app', ':arms', ':arms-autolayout',':zxing-lib'
 include ':arms-imageloader-glide', ':common'
 include ':imagepicker', ':banner', ':tencentlocation'
 include ':photoview', ':shvideolibrary'

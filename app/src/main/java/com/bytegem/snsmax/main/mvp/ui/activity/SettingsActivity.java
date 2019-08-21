@@ -1,86 +1,184 @@
 package com.bytegem.snsmax.main.mvp.ui.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.jess.arms.base.BaseActivity;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
-
-import com.bytegem.snsmax.main.di.component.DaggerSettingsComponent;
-import com.bytegem.snsmax.main.mvp.contract.SettingsContract;
-import com.bytegem.snsmax.main.mvp.presenter.SettingsPresenter;
+import android.graphics.Color;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.common.View.SwitchButton;
+import com.bytegem.snsmax.main.app.mvc.UserBindActivity;
+import com.bytegem.snsmax.main.app.mvc.utils.DataCleanManager;
+import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
 
+import java.io.File;
+import java.math.BigDecimal;
 
-import static com.jess.arms.utils.Preconditions.checkNotNull;
+public class SettingsActivity extends BaseActivity implements View.OnClickListener {
 
-
-/**
- * ================================================
- * Description:
- * <p>
- * Created by MVPArmsTemplate on 06/12/2019 09:41
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
- * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
- * <a href="https://github.com/JessYanCoding/MVPArms/wiki">See me</a>
- * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
- * ================================================
- */
-public class SettingsActivity extends BaseActivity<SettingsPresenter> implements SettingsContract.View {
+    private TextView barTitle, txtUserCache;
+    private RelativeLayout barBack;
+    private LinearLayout btnUserBind, btnUserSetting, btnUserAbout, btnUserRecommend, btnUserScore, btnUserClear;
+    private Intent intent;
+    private Context context;
+    private SwitchButton btnEye;
 
     @Override
-    public void setupActivityComponent(@NonNull AppComponent appComponent) {
-        DaggerSettingsComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .view(this)
-                .build()
-                .inject(this);
+    public int getLayoutId() {
+        return R.layout.activity_settings;
     }
 
     @Override
-    public int initView(@Nullable Bundle savedInstanceState) {
-        return R.layout.activity_settings; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+    public void initView() {
+        context = this;
+        txtUserCache = findViewById(R.id.user_cache);
+        barTitle = findViewById(R.id.toolbar_title);
+        barBack = findViewById(R.id.toolbar_back);
+        btnUserBind = findViewById(R.id.user_bind);
+        btnUserSetting = findViewById(R.id.user_setting);
+        btnUserAbout = findViewById(R.id.user_about);
+        btnUserRecommend = findViewById(R.id.user_recommend);
+        btnUserScore = findViewById(R.id.user_score);
+        btnUserClear = findViewById(R.id.user_clear);
+        btnEye = findViewById(R.id.user_eye);
+        barTitle.setText("账号与绑定");
+        try {
+            initEX();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        setListener();
+    }
+
+    private void setListener() {
+        barBack.setOnClickListener(this);
+        btnUserBind.setOnClickListener(this);
+        btnUserSetting.setOnClickListener(this);
+        btnUserAbout.setOnClickListener(this);
+        btnUserRecommend.setOnClickListener(this);
+        btnUserScore.setOnClickListener(this);
+        btnUserClear.setOnClickListener(this);
+        btnEye.setOnClickListener(this);
     }
 
     @Override
-    public void initData(@Nullable Bundle savedInstanceState) {
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar_back:
+                finish();
+                break;
+            case R.id.user_bind:
+                intent = new Intent();
+                intent.setClass(this, UserBindActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.user_setting:
+                break;
+            case R.id.user_about:
+                break;
+            case R.id.user_recommend:
+                break;
+            case R.id.user_score:
+                break;
+            case R.id.user_clear:
+                // 这里的属性可以一直设置，因为每次设置后返回的是一个builder对象
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                // 设置提示框的标题
+                builder.setMessage("你确定清空缓存吗").
+                        // 设置确定按钮
+                                setPositiveButton("清除", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                DataCleanManager.cleanApplicationData(context);
+                                Toast.makeText(context, "清除成功", Toast.LENGTH_SHORT).show();
+                                txtUserCache.setText("0.0MB");
+                            }
+                        }).
+                        // 设置取消按钮,null是什么都不做，并关闭对话框
+                                setNegativeButton("取消", null);
+                // 生产对话框
+                AlertDialog alertDialog = builder.create();
+                // 显示对话框
+                alertDialog.show();
+                break;
+            case R.id.user_eye:
+
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    private void initEX() throws Exception {
+        long cacheSize = getFolderSize(getCacheDir());
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            cacheSize += getFolderSize(getExternalCacheDir());
+        }
+        txtUserCache.setText(getFormatSize(cacheSize).toString());//将获取到的大小set进去
 
     }
 
-    MaterialDialog materialDialog;
-
-    @Override
-    public void showLoading() {
-        hideLoading();
-        materialDialog = getMaterialDialog("", "").show();
+    // 获取文件
+    //Context.getExternalFilesDir() --> SDCard/Android/data/com.bytegem.snsmax/files/ 目录，一般放一些长时间保存的数据
+    //Context.getExternalCacheDir() --> SDCard/Android/data/com.bytegem.snsmax/cache/目录，一般存放临时缓存数据
+    public static long getFolderSize(File file) throws Exception {
+        long size = 0;
+        try {
+            File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                // 如果下面还有文件
+                if (fileList[i].isDirectory()) {
+                    size = size + getFolderSize(fileList[i]);
+                } else {
+                    size = size + fileList[i].length();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
     }
 
-    @Override
-    public void hideLoading() {
-        if (materialDialog != null && materialDialog.isShowing()) materialDialog.dismiss();
+    public static String getFormatSize(double size) throws Exception {
+        double kiloByte = size / 1024;
+        if (kiloByte < 1) {
+            return size + "Byte";
+        }
+
+        double megaByte = kiloByte / 1024;
+        if (megaByte < 1) {
+            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+            return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "KB";
+        }
+
+        double gigaByte = megaByte / 1024;
+        if (gigaByte < 1) {
+            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "MB";
+        }
+
+        double teraBytes = gigaByte / 1024;
+        if (teraBytes < 1) {
+            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+                + "TB";
+
     }
 
-    @Override
-    public void showMessage(@NonNull String message) {
-        checkNotNull(message);
-        ArmsUtils.snackbarText(message);
-    }
-
-    @Override
-    public void launchActivity(@NonNull Intent intent) {
-        checkNotNull(intent);
-        ArmsUtils.startActivity(intent);
-    }
-
-    @Override
-    public void killMyself() {
-        finish();
-    }
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_background"
@@ -11,80 +10,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
+        android:layout_weight="1"
         android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="32dp"
         android:paddingRight="32dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="推送通知设置"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="屏蔽设置"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="隐私设置"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/user_bind"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -106,6 +42,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/user_setting"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -129,14 +66,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
+        android:layout_weight="1"
         android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="32dp"
         android:paddingRight="32dp">
 
         <LinearLayout
+            android:id="@+id/user_about"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -158,6 +97,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/user_recommend"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -179,6 +119,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/user_score"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -202,14 +143,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
+        android:layout_weight="1"
         android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="32dp"
         android:paddingRight="32dp">
 
         <LinearLayout
+            android:id="@+id/user_clear"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -225,6 +168,7 @@
                 android:textSize="30sp" />
 
             <TextView
+                android:id="@+id/user_cache"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
@@ -254,7 +198,7 @@
                 android:textSize="30sp" />
 
             <com.bytegem.snsmax.common.View.SwitchButton
-                android:id="@+id/switch_button"
+                android:id="@+id/user_eye"
                 android:layout_width="68dp"
                 android:layout_height="36dp"
                 android:layout_centerInParent="true"
@@ -266,11 +210,14 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/user_sign_out"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:background="@color/white"
         android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="退出登录"
         android:textColor="@color/color_5e6ce7"
         android:textSize="30sp" />
