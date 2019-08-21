@@ -9,6 +9,7 @@ import com.bytegem.snsmax.main.app.bean.feed.FeedCommentBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
 import com.bytegem.snsmax.main.app.bean.user.LISTUser;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
+import com.bytegem.snsmax.main.mvp.ui.activity.GroupMemberActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupMemberLineAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -54,6 +55,7 @@ public class GroupMemberPresenter extends BasePresenter<GroupMemberContract.Mode
     AppManager mAppManager;
     @Inject
     GroupMemberLineAdapter adapter;
+    GroupMemberActivity.MemberType memberType;
     int per_page = 20;
     int page = 1;
     int groupId;
@@ -61,6 +63,10 @@ public class GroupMemberPresenter extends BasePresenter<GroupMemberContract.Mode
     @Inject
     public GroupMemberPresenter(GroupMemberContract.Model model, GroupMemberContract.View rootView) {
         super(model, rootView);
+    }
+
+    public void setMemberType(GroupMemberActivity.MemberType memberType) {
+        this.memberType = memberType;
     }
 
     public void setGroupId(int groupId) {
@@ -128,8 +134,30 @@ public class GroupMemberPresenter extends BasePresenter<GroupMemberContract.Mode
                     case "creator"://圈主
                         break;
                     case "manager"://管理员
+                        switch (memberType) {
+                            case Manager:
+                                //设置管理员或取消管理员
+                                break;
+                            case RemoveMember:
+                                //移除成员
+                                break;
+                            case MakeOverMaster:
+                                //转让圈主
+                                break;
+                        }
                         break;
                     default://普通人
+                        switch (memberType) {
+                            case Manager:
+                                //设置管理员或取消管理员
+                                break;
+                            case RemoveMember:
+                                //移除成员
+                                break;
+                            case MakeOverMaster:
+                                //转让圈主
+                                break;
+                        }
                 }
         }
         return false;

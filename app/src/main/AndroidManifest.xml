@@ -49,7 +49,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeHasActionBar"
         tools:replace="theme,label,icon">
-
         <service
             android:name=".main.app.service.JPushService"
             android:enabled="true"
@@ -67,7 +66,8 @@
             tools:node="replace">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-                <category android:name="com.bytegen.snsmax" /> <!--JPush上注册的包名 -->
+
+                <category android:name="com.bytegen.snsmax" /> <!-- JPush上注册的包名 -->
             </intent-filter>
         </receiver>
 
@@ -135,7 +135,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".main.mvp.ui.activity.RegisterActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -250,7 +250,18 @@
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity android:name=".main.mvp.ui.activity.GroupSelectActivity"></activity>
+        <activity
+            android:name=".main.mvp.ui.activity.GroupSelectActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+        <activity
+            android:name=".main.mvp.ui.activity.UserSettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
     </application>
 
 </manifest>

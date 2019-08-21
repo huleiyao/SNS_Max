@@ -50,6 +50,11 @@ public class GroupMemberActivity extends BaseActivity<GroupMemberPresenter> impl
     RecyclerView recycle_view;
     @Inject
     GroupMemberLineAdapter adapter;
+    MemberType memberType;
+
+    public enum MemberType {
+        Find, Manager, RemoveMember, MakeOverMaster
+    }
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -66,10 +71,28 @@ public class GroupMemberActivity extends BaseActivity<GroupMemberPresenter> impl
         return R.layout.activity_group_member; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    private void getMemberType(int type) {
+        switch (type) {
+            case 1:
+                memberType = MemberType.Manager;
+                break;
+            case 2:
+                memberType = MemberType.RemoveMember;
+                break;
+            case 3:
+                memberType = MemberType.MakeOverMaster;
+                break;
+            default:
+                memberType = MemberType.Find;
+        }
+        mPresenter.setMemberType(memberType);
+    }
+
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         setTitle("圈子成员");
         GroupBean groupBean = (GroupBean) getIntent().getSerializableExtra("group");
+        getMemberType(getIntent().getIntExtra("memberType", 0));
         if (groupBean == null) {
             killMyself();
             return;

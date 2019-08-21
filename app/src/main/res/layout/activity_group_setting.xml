@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/default_background"
     android:orientation="vertical">
 
@@ -12,7 +12,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,12 +22,46 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/group_srtting_group_member"
+                    android:id="@+id/group_setting_group_cover_"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="圈子头像"
+                        android:textColor="@color/color_151b26"
+                        android:textSize="30sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:id="@+id/group_setting_group_cover"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:layout_marginRight="20dp"
+                        android:scaleType="fitXY" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_smalarrow" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/group_setting_group_member"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -47,7 +82,7 @@
                         android:layout_weight="1" />
 
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/group_srtting_group_member_covers"
+                        android:id="@+id/group_setting_group_member_covers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -58,7 +93,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/group_srtting_group_nickname_set"
+                    android:id="@+id/group_setting_group_nickname_set"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -79,7 +114,7 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:id="@+id/group_srtting_group_nickname"
+                        android:id="@+id/group_setting_group_nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="国王"
@@ -90,13 +125,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/group_srtting_group_name_set"
+                    android:id="@+id/group_setting_group_name_set"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -117,7 +152,7 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:id="@+id/group_srtting_group_name"
+                        android:id="@+id/group_setting_group_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="哈哈哈！！！"
@@ -125,7 +160,13 @@
                         android:textSize="30sp" />
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_DFE6E8" />
+
                 <LinearLayout
+                    android:id="@+id/group_setting_is_public_"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -146,24 +187,88 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:id="@+id/group_srtting_is_public"
+                        android:id="@+id/group_setting_is_public"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="非公开"
                         android:textColor="@color/color_646F79"
                         android:textSize="30sp" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/group_setting_desc_"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:gravity="center_vertical"
+                        android:text="圈子简介"
+                        android:textColor="@color/color_151b26"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/group_setting_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="3"
+                        android:paddingBottom="40dp"
+                        android:text="你会不会忽然的出现 在街角的咖啡店 我会带着笑脸挥手寒暄 和你 坐着聊聊天 我多么想和你见一面 看看你最近改变"
+                        android:textColor="@color/color_646F79"
+                        android:textSize="30sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/group_setting_other_setting"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/group_srtting_group_message"
+                    android:id="@+id/group_setting_send_permission_"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="设置发表权限"
+                        android:textColor="@color/color_151b26"
+                        android:textSize="30sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/group_setting_send_permission"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="所有人"
+                        android:textColor="@color/color_646F79"
+                        android:textSize="30sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_smalarrow" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/group_setting_group_message"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -190,6 +295,34 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/group_setting_send_group_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="发布公告"
+                        android:textColor="@color/color_151b26"
+                        android:textSize="30sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_smalarrow" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/group_setting_is_open_message"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -221,10 +354,74 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/group_setting_created_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/group_setting_change_created"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="转让圈主"
+                        android:textColor="@color/color_151b26"
+                        android:textSize="30sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_smalarrow" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/group_setting_set_manager"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="设置管理员"
+                        android:textColor="@color/color_151b26"
+                        android:textSize="30sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_smalarrow" />
+                </LinearLayout>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/exit_group"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_marginBottom="40dp"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:gravity="center"

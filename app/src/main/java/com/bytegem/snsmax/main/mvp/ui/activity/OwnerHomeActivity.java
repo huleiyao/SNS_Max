@@ -37,6 +37,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -88,6 +89,15 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
     public static final String ID = "ID";
     private int id;
     private String title = "";
+
+    @OnClick({R.id.more})
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.more:
+                launchActivity(new Intent(this, UserSettingActivity.class));
+                break;
+        }
+    }
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -145,9 +155,9 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
 
     public void initUserData(UserBean userBean) {
         if (userBean.getAvatar() == null || userBean.getAvatar().isEmpty()) {
-            GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover,title_cover);
+            GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, user_cover, title_cover);
         } else {
-            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover,title_cover);
+            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover, title_cover);
         }
         title = userBean.getName();
 //        GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userBean.getAvatar()), user_cover);

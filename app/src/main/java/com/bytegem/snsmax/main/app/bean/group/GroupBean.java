@@ -22,7 +22,7 @@ public class GroupBean extends MBaseBean {
     private String updated_at;
     private UserBean group_member;//发现页返回的用户信息数据
     private UserBean creator;
-    private UserBean requester;//当前用户在圈子下面的信息，未加入则不存在！
+    private GroupMemberBean requester;//当前用户在圈子下面的信息，未加入则不存在！
     private ArrayList<UserBean> preview_members;//用户信息列表，第一个是圈主无需返回。第二个是已经加入的当前用户，补足五条
     private ArrayList<FeedBean> feeds;
 
@@ -133,11 +133,11 @@ public class GroupBean extends MBaseBean {
         this.creator = creator;
     }
 
-    public UserBean getRequester() {
+    public GroupMemberBean getRequester() {
         return requester;
     }
 
-    public void setRequester(UserBean requester) {
+    public void setRequester(GroupMemberBean requester) {
         this.requester = requester;
     }
 

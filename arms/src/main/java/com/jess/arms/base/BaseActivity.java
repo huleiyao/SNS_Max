@@ -221,7 +221,7 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     public MaterialDialog.Builder getMaterialDialog(String title, String content) {
         return new MaterialDialog.Builder(this)
                 .title(title)
-                .content(content)
+                .content(content == null || content.isEmpty() ? "  ...  " : content)
 //                .progress(true, 0)
 //                .progressIndeterminateStyle(false)
                 .canceledOnTouchOutside(false);

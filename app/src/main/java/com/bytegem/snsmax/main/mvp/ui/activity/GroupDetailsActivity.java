@@ -182,8 +182,8 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsPresenter> im
 
     public void showGroupMember(GroupBean group) {
         ArrayList<UserBean> members = new ArrayList<>();
-        if (group.getRequester() != null)
-            members.add(group.getRequester());
+//        if (group.getRequester() != null)
+//            members.add(group.getRequester());
         if (group.getPreview_members() != null)
             for (UserBean userBean : group.getPreview_members())
                 if (members.size() < 6)
