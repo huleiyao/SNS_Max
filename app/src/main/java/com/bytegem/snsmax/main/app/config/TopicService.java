@@ -1,8 +1,7 @@
 package com.bytegem.snsmax.main.app.config;
 
-import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
-import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.topic.DATATopic;
 import com.bytegem.snsmax.main.app.bean.topic.LISTTopics;
 

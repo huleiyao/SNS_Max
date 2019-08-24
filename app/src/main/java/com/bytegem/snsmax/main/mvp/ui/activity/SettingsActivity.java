@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.View.SwitchButton;
 import com.bytegem.snsmax.main.app.mvc.UserBindActivity;
+import com.bytegem.snsmax.main.app.mvc.utils.AppUtils;
 import com.bytegem.snsmax.main.app.mvc.utils.DataCleanManager;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
 
@@ -25,8 +26,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     private TextView barTitle, txtUserCache;
     private RelativeLayout barBack;
-    private LinearLayout btnUserBind, btnUserSetting, btnUserAbout, btnUserRecommend, btnUserScore, btnUserClear;
-    private Intent intent;
+    private LinearLayout btnUserBind, btnUserAbout, btnUserRecommend, btnUserScore, btnUserClear;
+    private Intent intent = new Intent();
     private Context context;
     private SwitchButton btnEye;
 
@@ -39,16 +40,15 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     public void initView() {
         context = this;
         txtUserCache = findViewById(R.id.user_cache);
-        barTitle = findViewById(R.id.toolbar_title);
-        barBack = findViewById(R.id.toolbar_back);
+        barTitle = findViewById(R.id.title_title);
+        barBack = findViewById(R.id.title_back);
         btnUserBind = findViewById(R.id.user_bind);
-        btnUserSetting = findViewById(R.id.user_setting);
         btnUserAbout = findViewById(R.id.user_about);
         btnUserRecommend = findViewById(R.id.user_recommend);
         btnUserScore = findViewById(R.id.user_score);
         btnUserClear = findViewById(R.id.user_clear);
         btnEye = findViewById(R.id.user_eye);
-        barTitle.setText("账号与绑定");
+        barTitle.setText("设置");
         try {
             initEX();
         } catch (Exception e) {
@@ -60,7 +60,6 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private void setListener() {
         barBack.setOnClickListener(this);
         btnUserBind.setOnClickListener(this);
-        btnUserSetting.setOnClickListener(this);
         btnUserAbout.setOnClickListener(this);
         btnUserRecommend.setOnClickListener(this);
         btnUserScore.setOnClickListener(this);
@@ -71,21 +70,19 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.toolbar_back:
+            case R.id.title_back:
                 finish();
                 break;
             case R.id.user_bind:
-                intent = new Intent();
                 intent.setClass(this, UserBindActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.user_setting:
                 break;
             case R.id.user_about:
                 break;
             case R.id.user_recommend:
                 break;
             case R.id.user_score:
+                AppUtils.goAppShop(context,"com.tencent.mm","");
                 break;
             case R.id.user_clear:
                 // 这里的属性可以一直设置，因为每次设置后返回的是一个builder对象

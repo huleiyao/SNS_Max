@@ -8,10 +8,20 @@
     <include layout="@layout/include_title" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_F6F8F9"
+        android:orientation="vertical">
+
+    <LinearLayout
         android:id="@+id/user_bind_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
+        android:background="@color/white"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"
         android:weightSum="1">
 
         <TextView
@@ -23,7 +33,7 @@
             android:paddingBottom="22dp"
             android:text="手机号"
             android:textColor="@color/color_151b26"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -33,20 +43,23 @@
             android:paddingBottom="22dp"
             android:text="15882633651"
             android:textColor="#646F79"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/update_phone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
             android:layout_weight="0.3"
             android:background="@drawable/shape_user_bind"
             android:gravity="center"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
             android:text="修改手机"
             android:textColor="#5E6CE7"
-            android:textSize="13sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -62,6 +75,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/white"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"
         android:weightSum="1">
 
         <TextView
@@ -73,7 +89,7 @@
             android:paddingBottom="22dp"
             android:text="微信号"
             android:textColor="@color/color_151b26"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -83,21 +99,24 @@
             android:paddingBottom="22dp"
             android:text="15882633651"
             android:textColor="#646F79"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/wechat_bind"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
             android:layout_weight="0.3"
             android:background="@drawable/shape_user_bind"
             android:gravity="center"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
             android:text="绑定"
             android:textColor="#5E6CE7"
-            android:textSize="13sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
-
+    </LinearLayout>
 </LinearLayout>

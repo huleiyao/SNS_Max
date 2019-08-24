@@ -9,7 +9,7 @@
     app:contentInsetStart="0dp">
 
     <RelativeLayout
-        android:id="@+id/toolbar_back"
+        android:id="@+id/title_back"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="left">
@@ -24,7 +24,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/toolbar_title"
+        android:id="@+id/title_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

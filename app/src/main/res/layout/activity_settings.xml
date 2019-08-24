@@ -10,202 +10,191 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp">
-
+        android:layout_height="match_parent"
+        android:background="@color/background_F6F8F9"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/user_bind"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/user_bind"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="账号与绑定"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="账号与绑定"
+                    android:textColor="@color/color_151b26"
+                    android:textSize="30sp" />
 
-        <LinearLayout
-            android:id="@+id/user_setting"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_ico_smalarrow" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="通用设置"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp">
-
-        <LinearLayout
-            android:id="@+id/user_about"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="关于SNSMax"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/user_recommend"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="把SNSMax推荐给朋友"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/user_score"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="给SNSMax评分"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp">
-
-        <LinearLayout
-            android:id="@+id/user_clear"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="清理缓存"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/user_cache"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:text="38.8M"
-                android:textColor="@color/color_b0b8bf"
-                android:textSize="26sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ico_smalarrow" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/user_about"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="护眼模式"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp">
 
-            <com.bytegem.snsmax.common.View.SwitchButton
-                android:id="@+id/user_eye"
-                android:layout_width="68dp"
-                android:layout_height="36dp"
-                android:layout_centerInParent="true"
-                app:circle2Bgmargin="3dp"
-                app:selectedBg="@color/color_5e6ce7"
-                app:switchState="close"
-                app:unselectedBg="@color/color_b0b8bf" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="关于SNSMax"
+                    android:textColor="@color/color_151b26"
+                    android:textSize="30sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_ico_smalarrow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/user_recommend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="把SNSMax推荐给朋友"
+                    android:textColor="@color/color_151b26"
+                    android:textSize="30sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_ico_smalarrow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/user_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="给SNSMax评分"
+                    android:textColor="@color/color_151b26"
+                    android:textSize="30sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_ico_smalarrow" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
+
+            <LinearLayout
+                android:id="@+id/user_clear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="清理缓存"
+                    android:textColor="@color/color_151b26"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/user_cache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="38.8M"
+                    android:textColor="@color/color_b0b8bf"
+                    android:textSize="26sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_ico_smalarrow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="护眼模式"
+                    android:textColor="@color/color_151b26"
+                    android:textSize="30sp" />
+
+                <com.bytegem.snsmax.common.View.SwitchButton
+                    android:id="@+id/user_eye"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_centerInParent="true"
+                    app:circle2Bgmargin="3dp"
+                    app:selectedBg="@color/color_5e6ce7"
+                    app:switchState="close"
+                    app:unselectedBg="@color/color_b0b8bf" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -216,8 +205,8 @@
         android:layout_marginTop="20dp"
         android:background="@color/white"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
         android:text="退出登录"
         android:textColor="@color/color_5e6ce7"
         android:textSize="30sp" />

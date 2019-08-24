@@ -15,24 +15,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.bytegem.snsmax.main.app.utils.Constant;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.di.component.DaggerOwnerComponent;
+import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
+import com.bytegem.snsmax.main.mvp.presenter.OwnerPresenter;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerFeedHistoryActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
-import com.google.zxing.activity.CaptureActivity;
+import com.bytegem.snsmax.zxing.android.CaptureActivity;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-
-import com.bytegem.snsmax.main.di.component.DaggerOwnerComponent;
-import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
-import com.bytegem.snsmax.main.mvp.presenter.OwnerPresenter;
-
-import com.bytegem.snsmax.R;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageCropActivity;
@@ -58,7 +56,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  */
 public class OwnerFragment extends BaseFragment<OwnerPresenter> implements OwnerContract.View, View.OnClickListener {
     private static OwnerFragment instance;
-
+    private Intent intent = new Intent();
     @BindView(R.id.user_name)
     TextView user_name;
     @BindView(R.id.user_content)
@@ -77,7 +75,6 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
             , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
             , R.id.owner_drafts, R.id.owner_share, R.id.help_or_feedback, R.id.owner_history, R.id.user_detail})
     public void onClick(View view) {
-        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.setting:
                 launchActivity(new Intent(getContext(), SettingsActivity.class));
@@ -105,8 +102,8 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                     return;
                 }
                 // 二维码扫码
-                intent = new Intent(getActivity(), CaptureActivity.class);
-                startActivityForResult(intent, Constant.REQ_QR_CODE);
+                intent = new Intent(getContext(),CaptureActivity.class);
+                startActivity(intent);
                 break;
             case R.id.user_detail:
                 launchActivity(new Intent(getContext(), OwnerHomeActivity.class).putExtra(OwnerHomeActivity.ISME, true));
@@ -119,6 +116,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 break;
             case R.id.owner_group:
                 showMessage("我的圈子");
+
                 break;
             case R.id.owner_favorites:
                 showMessage("我的收藏");
@@ -248,4 +246,5 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
         else
             GlideLoaderUtil.LoadCircleImage(mContext, Utils.checkUrl(userBean.getAvatar()), user_cover);
     }
+
 }

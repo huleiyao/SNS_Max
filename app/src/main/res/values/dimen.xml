@@ -5,4 +5,7 @@
     <dimen name="sp_20">20sp</dimen>
     <dimen name="sp_34">34sp</dimen>
     <dimen name="sp_40">40sp</dimen>
+    <dimen name="activity_horizontal_margin">32dp</dimen>
+    <dimen name="activity_vertical_margin">32dp</dimen>
+    <dimen name="toolBarHeight">96dp</dimen>
 </resources>
