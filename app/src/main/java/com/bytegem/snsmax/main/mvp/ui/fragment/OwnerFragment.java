@@ -27,6 +27,7 @@ import com.bytegem.snsmax.main.mvp.ui.activity.OwnerFeedHistoryActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.UserSettingActivity;
 import com.bytegem.snsmax.zxing.android.CaptureActivity;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
@@ -109,14 +110,14 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 launchActivity(new Intent(getContext(), OwnerHomeActivity.class).putExtra(OwnerHomeActivity.ISME, true));
                 break;
             case R.id.user_cover:
-                changeUserCoverBottomSheetDialog.show();
+                launchActivity(new Intent(getContext(), UserSettingActivity.class));
+//                changeUserCoverBottomSheetDialog.show();
                 break;
             case R.id.owner_history:
                 launchActivity(new Intent(getContext(), OwnerFeedHistoryActivity.class));
                 break;
             case R.id.owner_group:
                 showMessage("我的圈子");
-
                 break;
             case R.id.owner_favorites:
                 showMessage("我的收藏");

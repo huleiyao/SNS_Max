@@ -17,6 +17,7 @@ package com.jess.arms.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +39,7 @@ import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DefaultSpringUtils;
+import com.jess.arms.utils.NewStatusBarUtil;
 import com.jess.arms.utils.StatusBarUtil;
 import com.liaoinstan.springview.widget.SpringView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -106,7 +108,17 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         //设置虚拟键盘跟着屏幕自动
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        StatusBarUtil.setImmersiveStatusBar(this, true);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        StatusBarUtil.setImmersiveStatusBar(this, true);
+        if (NewStatusBarUtil.isMeizu()) {
+            NewStatusBarUtil.setMeizuStatusBar(window, true);
+            NewStatusBarUtil.setStatusBarTranslucent(this, true);
+        } else if (NewStatusBarUtil.isXiaomi()) {
+            NewStatusBarUtil.setXiaomiStatusBar(window, true);
+            NewStatusBarUtil.setStatusBarTranslucent(this, true);
+        } else {
+            NewStatusBarUtil.setStatusBarTranslucent(this, true);
+        }
 //        initSwipeBackFinish();
         super.onCreate(savedInstanceState);
         try {

@@ -2,13 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/default_background"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title_more_white" />
+    <include layout="@layout/include_title_user_setting" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="210dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background_F6F8F9">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingBottom="50dp"
         android:background="@color/white"
         android:gravity="center">
 
@@ -18,7 +28,7 @@
             android:layout_height="120dp">
 
             <ImageView
-                android:id="@+id/user_cover"
+                android:id="@+id/user_setting_cover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
@@ -35,18 +45,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:background="@color/white"
+        android:paddingLeft="64dp"
+        android:paddingRight="64dp"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/nickName_"
+            android:id="@+id/user_detail_nickName"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -56,14 +68,12 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/nickName"
-                android:layout_width="0dp"
+                android:id="@+id/user_nickName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="小丸子"
                 android:textColor="@color/color_646F79"
                 android:textSize="30sp" />
 
@@ -76,18 +86,16 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
             android:background="@color/color_DFE6E8" />
 
         <LinearLayout
-            android:id="@+id/userSex_"
+            android:id="@+id/user_detail_sex"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,19 +103,16 @@
                 android:text="性别"
                 android:textColor="@color/color_151b26"
                 android:textSize="30sp" />
-
             <TextView
-                android:id="@+id/userSex"
-                android:layout_width="0dp"
+                android:id="@+id/user_sex"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="选择性别"
-                android:textColor="@color/color_b0b8bf"
+                android:textColor="@color/color_646F79"
                 android:textSize="30sp" />
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,18 +122,17 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
             android:background="@color/color_DFE6E8" />
 
         <LinearLayout
-            android:id="@+id/location_"
+            android:id="@+id/user_detail_location"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp"
+           >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -138,14 +142,12 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/location"
-                android:layout_width="0dp"
+                android:id="@+id/user_location"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="北京市 昌平区"
                 android:textColor="@color/color_646F79"
                 android:textSize="30sp" />
 
@@ -158,18 +160,17 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
             android:background="@color/color_DFE6E8" />
 
         <LinearLayout
-            android:id="@+id/selectSchool_"
+            android:id="@+id/user_detail_school"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp"
+           >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -179,14 +180,13 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/selectSchool"
+                android:id="@+id/user_school"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
+
                 android:gravity="right"
-                android:text="选择学校"
                 android:textColor="@color/color_b0b8bf"
                 android:textSize="30sp" />
 
@@ -200,90 +200,64 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@color/white"
+        android:paddingLeft="64dp"
+        android:paddingRight="64dp"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/userPhone_"
+            android:id="@+id/user_detail_desc"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="手机号码"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/userPhone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="输入手机号"
-                android:textColor="@color/color_b0b8bf"
-                android:textSize="30sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:background="@color/color_DFE6E8" />
-
-        <LinearLayout
-            android:id="@+id/userDesc_"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
-
-            <TextView
-                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:text="简介"
                 android:textColor="@color/color_151b26"
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/userDesc"
-                android:layout_width="0dp"
+                android:id="@+id/user_desc"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="45dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="1"
-                android:text="你会不会忽然的出现 在街角的咖啡店..."
                 android:textColor="@color/color_646F79"
                 android:textSize="30sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_ico_smalarrow" />
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="64dp"
+        android:paddingRight="64dp"
         android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/industry_"
+            android:id="@+id/user_detail_industry"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp"
+           >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -293,14 +267,12 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/industry"
+                android:id="@+id/user_industry"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="IT/信息技术"
                 android:textColor="@color/color_646F79"
                 android:textSize="30sp" />
 
@@ -310,75 +282,6 @@
                 android:src="@drawable/ic_ico_smalarrow" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:background="@color/color_DFE6E8" />
-
-        <LinearLayout
-            android:id="@+id/unitPosition_"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="单位职务"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/unitPosition"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="腾讯前端工程师"
-                android:textColor="@color/color_646F79"
-                android:textSize="30sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:background="@color/color_DFE6E8" />
-
-        <LinearLayout
-            android:id="@+id/userWorkDesc_"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="详细描述"
-                android:textColor="@color/color_151b26"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/userWorkDesc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:maxLines="1"
-                android:text="前端工程师，ZUOLUOTV制作人，简书推..."
-                android:textColor="@color/color_646F79"
-                android:textSize="30sp" />
-        </LinearLayout>
     </LinearLayout>
+</LinearLayout>
 </LinearLayout>

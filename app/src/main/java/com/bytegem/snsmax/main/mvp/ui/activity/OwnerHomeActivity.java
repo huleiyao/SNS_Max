@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,25 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.di.component.DaggerOwnerHomeComponent;
+import com.bytegem.snsmax.main.mvp.contract.OwnerHomeContract;
+import com.bytegem.snsmax.main.mvp.presenter.OwnerHomePresenter;
 import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerFeedsFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerGroupsFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.OwnerRecordFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-
-import com.bytegem.snsmax.main.di.component.DaggerOwnerHomeComponent;
-import com.bytegem.snsmax.main.mvp.contract.OwnerHomeContract;
-import com.bytegem.snsmax.main.mvp.presenter.OwnerHomePresenter;
-
-import com.bytegem.snsmax.R;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
-
 
 import java.util.ArrayList;
 
