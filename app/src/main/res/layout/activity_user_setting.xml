@@ -52,7 +52,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/user_detail_nickName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -89,7 +88,6 @@
             android:background="@color/color_DFE6E8" />
 
         <LinearLayout
-            android:id="@+id/user_detail_sex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -125,7 +123,6 @@
             android:background="@color/color_DFE6E8" />
 
         <LinearLayout
-            android:id="@+id/user_detail_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -163,7 +160,6 @@
             android:background="@color/color_DFE6E8" />
 
         <LinearLayout
-            android:id="@+id/user_detail_school"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -207,7 +203,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/user_detail_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -250,14 +245,12 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/user_detail_industry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingTop="36dp"
-            android:paddingBottom="36dp"
-           >
+            android:paddingBottom="36dp">
 
             <TextView
                 android:layout_width="wrap_content"

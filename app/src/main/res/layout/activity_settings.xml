@@ -196,18 +196,19 @@
                     app:unselectedBg="@color/color_b0b8bf" />
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/user_sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            android:text="退出登录"
+            android:textColor="@color/color_5e6ce7"
+            android:textSize="30sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/user_sign_out"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:paddingTop="18dp"
-        android:paddingBottom="18dp"
-        android:text="退出登录"
-        android:textColor="@color/color_5e6ce7"
-        android:textSize="30sp" />
+
 </LinearLayout>

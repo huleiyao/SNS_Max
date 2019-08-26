@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
-import android.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +22,7 @@ import com.bytegem.snsmax.main.app.mvc.utils.GetJsonUtil;
 import com.bytegem.snsmax.main.di.component.DaggerUserSettingComponent;
 import com.bytegem.snsmax.main.mvp.contract.UserSettingContract;
 import com.bytegem.snsmax.main.mvp.presenter.UserSettingPresenter;
+import com.bytegem.snsmax.main.mvp.ui.dialog.UpdateDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jess.arms.base.BaseActivity;
@@ -31,10 +30,6 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.ui.ImageGridActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,32 +63,21 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     RelativeLayout btnBack;
     @BindView(R.id.change_user_cover)
     FrameLayout btnUserCover;
-    @BindView(R.id.user_detail_location)
-    LinearLayout btnArea;
     @BindView(R.id.user_location)
     TextView txtLocation;
-    @BindView(R.id.user_detail_nickName)
-    LinearLayout btnNickName;
     @BindView(R.id.user_nickName)
     TextView txtNickName;
-    @BindView(R.id.user_detail_sex)
-    LinearLayout btnSex;
     @BindView(R.id.user_sex)
-    TextView txtrSex;
-    @BindView(R.id.user_detail_school)
-    LinearLayout btnUserSchool;
+    TextView txtSex;
     @BindView(R.id.user_school)
-    TextView txtrSchool;
-    @BindView(R.id.user_detail_desc)
-    LinearLayout btnDesc;
+    TextView txtSchool;
     @BindView(R.id.user_desc)
     TextView txtDesc;
-    @BindView(R.id.user_detail_industry)
-    LinearLayout btnIndustry;
     @BindView(R.id.user_industry)
     TextView txtIndustry;
 
     BottomSheetDialog changeUserCoverBottomSheetDialog;
+
     private Context context;
     private Intent intent = new Intent();
     //  省
@@ -133,7 +117,12 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
         btnMore.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         btnUserCover.setOnClickListener(this);
-        btnArea.setOnClickListener(this);
+        txtNickName.setOnClickListener(this);
+        txtSex.setOnClickListener(this);
+        txtLocation.setOnClickListener(this);
+        txtSchool.setOnClickListener(this);
+        txtDesc.setOnClickListener(this);
+        txtIndustry.setOnClickListener(this);
     }
 
     @Override
@@ -188,13 +177,53 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
             case R.id.tv_cancel:
                 changeUserCoverBottomSheetDialog.dismiss();
                 break;
-            case R.id.user_detail_location:
+            case R.id.user_location:
                 parseData();
+                break;
+            case R.id.user_nickName:
+                UpdateDialog dialogNickName = new UpdateDialog(context, "昵称修改", new UpdateDialog.OnUpdateDialogListener() {
+                    @Override
+                    public void back(String name) {
+                        txtNickName.setText(name);
+                    }
+                });
+                dialogNickName.show();
+                break;
+            case R.id.user_sex:
+                //123
+                break;
+            case R.id.user_school:
+                UpdateDialog dialogSchool = new UpdateDialog(context, "学院修改", new UpdateDialog.OnUpdateDialogListener() {
+                    @Override
+                    public void back(String name) {
+                        txtSchool.setText(name);
+                    }
+                });
+                dialogSchool.show();
+                break;
+            case R.id.user_desc:
+                UpdateDialog dialogDesc = new UpdateDialog(context, "简介修改", new UpdateDialog.OnUpdateDialogListener() {
+                    @Override
+                    public void back(String name) {
+                        txtDesc.setText(name);
+                    }
+                });
+                dialogDesc.show();
+                break;
+            case R.id.user_industry:
+                UpdateDialog dialogIndustry = new UpdateDialog(context, "行业修改", new UpdateDialog.OnUpdateDialogListener() {
+                    @Override
+                    public void back(String name) {
+                        txtIndustry.setText(name);
+                    }
+                });
+                dialogIndustry.show();
                 break;
             default:
                 break;
         }
     }
+
 
     private void initCommitBottomSheetDialog() {
         changeUserCoverBottomSheetDialog = new BottomSheetDialog(context);
@@ -205,6 +234,36 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
         changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_pic).setOnClickListener(this);
         changeUserCoverBottomSheetDialog.findViewById(R.id.tv_cancel).setOnClickListener(this);
     }
+
+
+    private void parseData2() {
+        List<HashMap<String, Object>> aList = new ArrayList<>();
+        List<HashMap<String, Object>> cList = new ArrayList<>();
+        List<HashMap<String, Object>> pList = new ArrayList<>();
+        String jsonStr = new GetJsonUtil().getJson(this, "ChinaArea.json");//获取assets目录下的json文件数据
+        Map<String, Object> map = new GetJsonUtil().getMap(jsonStr);
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            if (entry.getKey().substring(2).equals("0000")) {
+                //省 名称
+                HashMap<String, Object> pMap = new LinkedHashMap<>();
+                pMap.put(entry.getKey(), entry.getValue());
+                pList.add(pMap);
+                continue;
+            }
+            if (entry.getKey().substring(4).equals("00")) {
+                HashMap<String, Object> cMap = new LinkedHashMap<>();
+                cMap.put(entry.getKey(), entry.getValue());
+                cList.add(cMap);
+                continue;
+            }
+            HashMap<String, Object> aMap = new LinkedHashMap<>();
+            aMap.put(entry.getKey(), entry.getValue());
+            aList.add(aMap);
+        }
+        String a = "循环结束";
+    }
+
 
     /**
      * 解析数据并组装成要的list
@@ -254,6 +313,10 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
+                String tx = options1Items.get(options1).name +" "+
+                        options2Items.get(options1).get(options2) +" "+
+                        options3Items.get(options1).get(options2).get(options3);
+                txtLocation.setText(tx);
             }
         })
 

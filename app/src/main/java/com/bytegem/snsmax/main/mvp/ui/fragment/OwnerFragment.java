@@ -103,7 +103,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                     return;
                 }
                 // 二维码扫码
-                intent = new Intent(getContext(),CaptureActivity.class);
+                intent = new Intent(getContext(), CaptureActivity.class);
                 startActivity(intent);
                 break;
             case R.id.user_detail:
@@ -111,7 +111,6 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 break;
             case R.id.user_cover:
                 launchActivity(new Intent(getContext(), UserSettingActivity.class));
-//                changeUserCoverBottomSheetDialog.show();
                 break;
             case R.id.owner_history:
                 launchActivity(new Intent(getContext(), OwnerFeedHistoryActivity.class));
@@ -136,19 +135,6 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 break;
             case R.id.help_or_feedback:
                 showMessage("帮助与反馈");
-                break;
-            case R.id.tv_take_photo:
-                changeUserCoverBottomSheetDialog.dismiss();
-                ImagePicker.getInstance().setCrop(true);
-                ImagePicker.getInstance().takePicture(getActivity(), ImagePicker.REQUEST_CODE_TAKE);
-                break;
-            case R.id.tv_take_pic:
-                changeUserCoverBottomSheetDialog.dismiss();
-                intent = new Intent(getContext(), ImageGridActivity.class);
-                startActivityForResult(intent, 801);
-                break;
-            case R.id.tv_cancel:
-                changeUserCoverBottomSheetDialog.dismiss();
                 break;
         }
     }
