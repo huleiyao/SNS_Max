@@ -3,6 +3,7 @@ package com.bytegem.snsmax.main.app.config;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.bean.user.MyCircleDTO;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -66,4 +67,9 @@ public interface UserService {
     @DELETE("/user/followings/{id}")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<NetDefaultBean> changeUserUnfollowState(@Header("Authorization") String authorization, @Path("id") int id);
+
+    //获取我的我的圈子
+    @GET("/user/groups")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<MyCircleDTO> getMyClicle(@Header("Authorization") String authorization);
 }

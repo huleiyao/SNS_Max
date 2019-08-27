@@ -3,9 +3,11 @@ package com.bytegem.snsmax.main.mvp.ui.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.di.component.DaggerOwnerComponent;
 import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
 import com.bytegem.snsmax.main.mvp.presenter.OwnerPresenter;
+import com.bytegem.snsmax.main.mvp.ui.activity.MyCircleActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerFeedHistoryActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
@@ -117,7 +120,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 launchActivity(new Intent(getContext(), OwnerFeedHistoryActivity.class));
                 break;
             case R.id.owner_group:
-                showMessage("我的圈子");
+                launchActivity(new Intent(getContext(), MyCircleActivity.class));
                 break;
             case R.id.owner_favorites:
                 showMessage("我的收藏");
@@ -196,7 +199,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     private void initCommitBottomSheetDialog() {
         changeUserCoverBottomSheetDialog = new BottomSheetDialog(getContext());
         changeUserCoverBottomSheetDialog.setContentView(R.layout.dialog_change_user_cover);
-        changeUserCoverBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+        changeUserCoverBottomSheetDialog.getDelegate().findViewById(R.id.design_bottom_sheet)
                 .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
         changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_photo).setOnClickListener(this);
         changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_pic).setOnClickListener(this);
@@ -235,6 +238,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     public void showUserData(UserBean userBean) {
         user_name.setText(userBean.getName());

@@ -116,7 +116,10 @@ ext {
             "swipebacklayout"          : "cn.bingoogolapple:bga-swipebacklayout:1.1.8@aar",
             "album"                    : "com.yanzhenjie:album:2.1.2",
             "glide-transformations"    : "jp.wasabeef:glide-transformations:3.3.0",
-            "bga-swipitem"             : "com.yanzhenjie:recyclerview-swipe:1.1.4"
+            "bga-swipitem"             : "com.yanzhenjie:recyclerview-swipe:1.1.4",
+
+            //utils
+            "util-code"                : "com.blankj:utilcode:1.19.0"
 
     ]
 }

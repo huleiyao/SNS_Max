@@ -97,4 +97,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('lib/core-3.3.3.jar')
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
+    //utils
+    // 基本操作
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    // 网络操作--有网络操作添加
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation rootProject.ext.dependencies["util-code"]
+
+    //outher
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+
 }

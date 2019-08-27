@@ -37,6 +37,8 @@ public class StartActivity extends BaseActivity {
         setContentView(R.layout.activity_start);
         if (Build.VERSION.SDK_INT >= 23) {
             initPermission();
+        } else {
+            jumpNextActivity();
         }
     }
 
@@ -80,22 +82,7 @@ public class StartActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, permissions, mRequestCode);
         } else {
             //说明权限都已经通过
-
-            new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    try {
-                        Thread.sleep(5000);//休眠3秒
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    intent.setClass(context, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }.start();
-
+            jumpNextActivity();
         }
     }
 
@@ -120,23 +107,7 @@ public class StartActivity extends BaseActivity {
             if (hasPermissionDismiss) {
                 showPermissionDialog();//跳转到系统设置权限页面，或者直接关闭页面，不让他继续访问
             } else {
-                //获取完权限进行下一步操作
-                //说明权限都已经通过
-                new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        try {
-                            Thread.sleep(5000);//休眠3秒
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        intent.setClass(context, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }.start();
-
+                jumpNextActivity();
             }
         }
 
@@ -176,5 +147,23 @@ public class StartActivity extends BaseActivity {
     //关闭对话框
     private void cancelPermissionDialog() {
         mPermissionDialog.cancel();
+    }
+
+    //跳转到下一级的Activity，提供给到下一级的入口
+    private void jumpNextActivity() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(5000);//休眠3秒
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                intent.setClass(context, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }.start();
     }
 }

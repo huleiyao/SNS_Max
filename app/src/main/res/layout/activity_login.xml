@@ -61,6 +61,7 @@
                 android:focusable="true"
                 android:gravity="left|center_vertical"
                 android:hint="输入手机号码"
+                android:text="15882633651"
                 android:inputType="phone"
                 android:maxLength="11"
                 android:maxLines="1"

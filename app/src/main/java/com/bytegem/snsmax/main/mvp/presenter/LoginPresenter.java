@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
@@ -92,9 +93,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .retryWhen(new RetryWithDelay(3, 1))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    mRootView.hideLoading();
-                })
+                .doFinally(() -> mRootView.hideLoading())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LoginData>(mErrorHandler) {
                     @Override
@@ -104,6 +103,12 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                             MApplication.token_type = data.getToken_type();
                             mRootView.toHome();
                         }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        ToastUtils.showShort("登录异常:"+t);
                     }
                 });
     }

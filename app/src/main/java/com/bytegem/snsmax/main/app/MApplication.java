@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.location.TencentMapLocationBean;
+import com.facebook.stetho.Stetho;
 import com.jess.arms.base.BaseApplication;
 import com.lzy.imagepicker.GlideImageLoader;
 import com.lzy.imagepicker.ImagePicker;
@@ -58,6 +59,7 @@ public class MApplication extends BaseApplication {
         initVideoPlayer();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        Stetho.initializeWithDefaults(this);
     }
 
     public void initVideoPlayer() {
