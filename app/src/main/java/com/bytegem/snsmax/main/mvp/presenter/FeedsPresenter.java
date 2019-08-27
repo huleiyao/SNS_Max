@@ -13,6 +13,7 @@ import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroupFeeds;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
+import com.bytegem.snsmax.main.app.utils.FeedsInfoUtils;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.TopicDetailActivity;
@@ -22,6 +23,7 @@ import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
 import com.bytegem.snsmax.main.mvp.ui.listener.ImageAdapterGetFeed;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -192,6 +194,7 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
                             break;
                         case "video":
                             mRootView.launchActivity(new Intent(mApplication, VideoPlayerActivity.class).putExtra("feed", feedBean));
+                            FeedsInfoUtils.saveUserInfo((FeedBean) adapter.getItem(position), new Gson());
                             break;
                     }
                 }
@@ -237,15 +240,20 @@ public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsCont
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (adapter instanceof FeedsAdapter)
+        if (adapter instanceof FeedsAdapter) {
             mRootView.launchActivity(new Intent(mApplication, FeedDetailsActivity.class).putExtra("data", (FeedBean) adapter.getItem(position)));
-        else if (adapter instanceof ImageAdapter || adapter instanceof ImageAdapter2)
+            FeedsInfoUtils.saveUserInfo((FeedBean) adapter.getItem(position), new Gson());
+        } else if (adapter instanceof ImageAdapter || adapter instanceof ImageAdapter2) {
             mRootView.launchActivity(new Intent(mApplication, WatchImageActivity.class)
                     .putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, (ArrayList<String>) adapter.getData())
                     .putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position)
                     .putExtra(ImagePicker.EXTRA_FROM_ITEMS, true)
                     .putExtra("feed", ((ImageAdapterGetFeed) adapter).getFeed())
             );
+            FeedsInfoUtils.saveUserInfo((FeedBean) adapter.getItem(position), new Gson());
+        }
+        String strJson = FeedsInfoUtils.getFeedInfo();
+
     }
 
     @Override

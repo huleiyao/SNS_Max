@@ -146,6 +146,7 @@ public class FeedDetailsActivity extends BaseActivity<FeedDetailsPresenter> impl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.post_detail_title_follow_the_user://关注动态发起人
+                break;
             case R.id.post_detail_follow_the_user://关注动态发起人
                 mPresenter.changeUserFollowState(feedBean.getUser().getId());
                 break;
