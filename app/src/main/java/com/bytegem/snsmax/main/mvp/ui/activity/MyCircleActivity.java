@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.user.MyCircleDTO;
 import com.bytegem.snsmax.main.mvp.ui.adapter.MyCircleListAdapter;
@@ -109,7 +110,9 @@ public class MyCircleActivity extends BaseActivity<MyCirclePresenter> implements
     @Override
     public void updateMyCircle(MyCircleDTO data) {
         if (adapter == null) {
-            adapter = MyCircleListAdapter.createAdapter(rvList,data.data);
+            adapter = MyCircleListAdapter.createAdapter(rvList,data.data,(clickPos, clickItem) -> {
+                ToastUtils.showShort("点击数据。请处理");
+            });
         }
     }
 

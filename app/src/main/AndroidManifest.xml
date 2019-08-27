@@ -267,13 +267,20 @@
 		<meta-data
 			android:name="com.bytegem.snsmax.main.app.GlobalConfiguration"
 			android:value="ConfigModule" />
-		<meta-data
+		<!--<meta-data
 			android:name="design_width_in_dp"
 			android:value="750" />
 		
 		<meta-data
 			android:name="design_height_in_dp"
-			android:value="1334" />
+			android:value="1334" />-->
+		
+		<meta-data
+			android:name="design_width_in_dp"
+			android:value="720" />
+		<meta-data
+			android:name="design_height_in_dp"
+			android:value="1080" />
 		
 		<receiver
 			android:name=".main.app.receiver.JPushReceiver"
@@ -295,24 +302,7 @@
 				<action android:name="cn.jiguang.user.service.action" />
 			</intent-filter>
 		</service>
-		
-		<meta-data
-			android:name="TencentMapSDK"
-			android:value="3NEBZ-W7UCP-FIBD4-VM2FU-DKBPF-7GBHD" />
-		<meta-data
-			android:name="com.google.android.gms.version"
-			android:value="4030500" />
-		<meta-data
-			android:name="com.bytegem.snsmax.main.app.GlobalConfiguration"
-			android:value="ConfigModule" />
-		<meta-data
-			android:name="design_width_in_dp"
-			android:value="750" />
-		
-		<meta-data
-			android:name="design_height_in_dp"
-			android:value="1334" />
-		
+
 		<receiver
 			android:name=".main.app.receiver.JPushReceiver"
 			android:enabled="true"

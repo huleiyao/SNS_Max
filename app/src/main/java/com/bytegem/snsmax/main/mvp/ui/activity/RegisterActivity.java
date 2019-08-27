@@ -132,8 +132,8 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     public void toHome() {
         getSharedPreferences("user", Context.MODE_PRIVATE)
                 .edit()
-                .putString("token", MApplication.token)
-                .putString("token_type", MApplication.token_type)
+                .putString("token", MApplication.getInstance().getToken())
+                .putString("token_type", MApplication.getInstance().getToken_type())
                 .commit();
         launchActivity(new Intent(this, HomeActivity.class));
         killMyself();

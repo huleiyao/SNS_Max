@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +18,9 @@ import android.widget.Toast;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.blankj.utilcode.util.ConvertUtils;
+import com.blankj.utilcode.util.ResourceUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.mvc.bean.AreaBean;
@@ -319,23 +324,24 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
 
     private void showPickerView() {// 弹出选择器
 
-        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                String tx = options1Items.get(options1).name + " " +
-                        options2Items.get(options1).get(options2) + " " +
-                        options3Items.get(options1).get(options2).get(options3);
-                txtLocation.setText(tx);
-            }
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, (options1, options2, options3, v) -> {
+            //返回的分别是三个级别的选中位置
+            String tx = options1Items.get(options1).name + " " +
+                    options2Items.get(options1).get(options2) + " " +
+                    options3Items.get(options1).get(options2).get(options3);
+            txtLocation.setText(tx);
         })
 
                 .setTitleText("城市选择")
                 .setDividerColor(Color.BLACK)
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
-                .setContentTextSize(20)
+                .setContentTextSize(ConvertUtils.dp2px(20))
                 .build();
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
+        Window wind = pvOptions.getDialog().getWindow();
+        WindowManager.LayoutParams lp = wind.getAttributes();
+        lp.height = (int) (ScreenUtils.getScreenWidth() * 0.3);
+        wind.setAttributes(lp);
     }
 }

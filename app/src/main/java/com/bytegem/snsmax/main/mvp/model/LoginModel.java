@@ -5,6 +5,7 @@ import android.app.Application;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.config.UserService;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;

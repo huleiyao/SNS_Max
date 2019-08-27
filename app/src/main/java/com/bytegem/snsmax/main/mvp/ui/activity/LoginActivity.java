@@ -88,9 +88,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case R.id.login_wechat_login:
                 SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-                MApplication.token = sharedPreferences.getString("token", null);
-                MApplication.token_type = sharedPreferences.getString("token_type", null);
-                if (MApplication.token == null || MApplication.token_type == null)
+                MApplication.getInstance().setToken(sharedPreferences.getString("token", null));
+                MApplication.getInstance().setTokenType(sharedPreferences.getString("token_type", null));
+                if (MApplication.getInstance().getToken() == null || MApplication.getInstance().getToken_type() == null)
                     showMessage("没登陆过，需要先登录一次");
                 else
                     toHome();
@@ -102,8 +102,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void toHome() {
         getSharedPreferences("user", Context.MODE_PRIVATE)
                 .edit()
-                .putString("token", MApplication.token)
-                .putString("token_type", MApplication.token_type)
+                .putString("token", MApplication.getInstance().getToken())
+                .putString("token_type", MApplication.getInstance().getToken_type())
                 .commit();
         launchActivity(new Intent(this, HomeActivity.class));
         killMyself();
