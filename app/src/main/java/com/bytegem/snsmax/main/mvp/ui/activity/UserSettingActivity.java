@@ -339,9 +339,9 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
                 .build();
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
-        Window wind = pvOptions.getDialog().getWindow();
-        WindowManager.LayoutParams lp = wind.getAttributes();
-        lp.height = (int) (ScreenUtils.getScreenWidth() * 0.3);
-        wind.setAttributes(lp);
+//        Window wind = pvOptions.getDialog().getWindow();
+//        WindowManager.LayoutParams lp = wind.getAttributes();
+//        lp.height = (int) (ScreenUtils.getScreenWidth() * 0.3);
+//        wind.setAttributes(lp);
     }
 }
