@@ -7,8 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -16,26 +14,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.di.component.DaggerAddressSelectComponent;
+import com.bytegem.snsmax.main.mvp.contract.AddressSelectContract;
+import com.bytegem.snsmax.main.mvp.presenter.AddressSelectPresenter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.AddressAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-
-import com.bytegem.snsmax.main.di.component.DaggerAddressSelectComponent;
-import com.bytegem.snsmax.main.mvp.contract.AddressSelectContract;
-import com.bytegem.snsmax.main.mvp.presenter.AddressSelectPresenter;
-
-import com.bytegem.snsmax.R;
 import com.liaoinstan.springview.widget.SpringView;
-
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
-import butterknife.OnTextChanged;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
