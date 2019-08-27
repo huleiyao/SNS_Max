@@ -17,8 +17,10 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.mvc.bean.AreaBean;
 import com.bytegem.snsmax.main.app.mvc.utils.GetJsonUtil;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.main.di.component.DaggerUserSettingComponent;
 import com.bytegem.snsmax.main.mvp.contract.UserSettingContract;
 import com.bytegem.snsmax.main.mvp.presenter.UserSettingPresenter;
@@ -86,6 +88,7 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     //  区
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+    private DATAUser userInfo;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -105,6 +108,13 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        userInfo = UserInfoUtils.getUserInfo(mPresenter.getGson());
+        if (userInfo != null && userInfo.getData() != null) {
+            txtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
+            String sex = mPresenter.isNull(userInfo.getData().getSex()) ? "--" : userInfo.getData().getSex();
+            txtSex.setText("--".equals(sex) ? sex : "man".equals(sex) ? "男" : "女");
+            txtLocation.setText(mPresenter.isNull(userInfo.getData().getLocation()) ? "--" : userInfo.getData().getLocation());
+        }
         initCommitBottomSheetDialog();
         txtTitle.setText("编辑个人资料");
         btnMore.setText("保存");
@@ -313,8 +323,8 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
-                String tx = options1Items.get(options1).name +" "+
-                        options2Items.get(options1).get(options2) +" "+
+                String tx = options1Items.get(options1).name + " " +
+                        options2Items.get(options1).get(options2) + " " +
                         options3Items.get(options1).get(options2).get(options3);
                 txtLocation.setText(tx);
             }

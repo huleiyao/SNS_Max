@@ -1,8 +1,11 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
+import android.content.Context;
 
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -51,6 +54,10 @@ public class OwnerHomePresenter extends BasePresenter<OwnerHomeContract.Model, O
     public void getUserData(boolean isMe, int id) {
         mRootView.showLoading();
         mModel.getUserData(isMe, id)
+                .doOnNext((it) -> {
+                    //如果获取用户信息成功。那么保存到本地中
+                    UserInfoUtils.saveUserInfo(it,mModel.getGson());
+                })
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 1))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .subscribeOn(AndroidSchedulers.mainThread())

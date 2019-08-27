@@ -54,6 +54,11 @@ public class OwnerModel extends BaseModel implements OwnerContract.Model {
     }
 
     @Override
+    public Gson getGson() {
+        return mGson;
+    }
+
+    @Override
     public Observable<DATAUser> getUserData() {
         return mRepositoryManager
                 .obtainRetrofitService(UserService.class)

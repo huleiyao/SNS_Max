@@ -9,6 +9,7 @@ import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
@@ -62,6 +63,10 @@ public class OwnerPresenter extends BasePresenter<OwnerContract.Model, OwnerCont
     public void getUserData() {
         mRootView.showLoading();
         mModel.getUserData()
+                .doOnNext((it) -> {
+                    //如果获取用户信息成功。那么保存到本地中
+                    UserInfoUtils.saveUserInfo(it,mModel.getGson());
+                })
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 1))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .subscribeOn(AndroidSchedulers.mainThread())

@@ -5,6 +5,7 @@ import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
+import com.google.gson.Gson;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 import com.lzy.imagepicker.bean.ImageItem;
@@ -34,6 +35,8 @@ public interface OwnerContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
+        Gson getGson();
+
         Observable<DATAUser> getUserData();
 
         Observable<MBaseBean> updataCover(FileSignBean fileSignBean, ImageItem imageItem);

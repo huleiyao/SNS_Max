@@ -38,6 +38,11 @@ public class UserSettingModel extends BaseModel implements UserSettingContract.M
     }
 
     @Override
+    public Gson getGson(){
+        return mGson;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         this.mGson = null;

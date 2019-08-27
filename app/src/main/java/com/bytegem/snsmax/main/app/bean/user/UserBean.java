@@ -12,6 +12,7 @@ public class UserBean extends MBaseBean {
     private int followings_count;//关注的人
     private String name;
     private String sex;//man/women/unknown
+    private String location;
     private String created_at;
 
     private String phone_number;
@@ -94,6 +95,14 @@ public class UserBean extends MBaseBean {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getCreated_at() {

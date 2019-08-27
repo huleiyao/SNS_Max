@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
 
+import com.google.gson.Gson;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -40,6 +41,17 @@ public class UserSettingPresenter extends BasePresenter<UserSettingContract.Mode
     @Inject
     public UserSettingPresenter(UserSettingContract.Model model, UserSettingContract.View rootView) {
         super(model, rootView);
+    }
+
+    public Gson getGson(){
+        return mModel.getGson();
+    }
+
+    public boolean isNull(String str){
+        if(str == null || "".equals(str) || "unknown".equals(str)){
+            return true;
+        }
+        return false;
     }
 
     @Override

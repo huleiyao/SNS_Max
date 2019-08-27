@@ -44,7 +44,7 @@ public class MApplication extends BaseApplication {
 
     public static MApplication getInstance() {
         if (instance == null) {
-            instance = new MApplication();
+            throw new NullPointerException("Application 还未初始化");
         }
         return instance;
     }
@@ -52,6 +52,7 @@ public class MApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         RetrofitUrlManager.getInstance().putDomain(FILE_UPDATA_DOMAIN_NAME, FILE_UPDATA_DOMAIN);
         initUMeng();
         initImagePicker();

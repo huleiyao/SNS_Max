@@ -74,7 +74,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 mPresenter.getCode(phone_);
                 break;
             case R.id.login:
-                LoadingDialog dialog = new LoadingDialog(this,"正在加载...");
+                LoadingDialog dialog = new LoadingDialog(this, "正在加载...");
                 dialog.show();
                 if (phone_ != null && phone_.isEmpty()) {
                     login_error.setText("请输入手机号码");

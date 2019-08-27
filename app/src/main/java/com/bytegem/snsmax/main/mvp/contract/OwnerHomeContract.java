@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.mvp.contract;
 
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.google.gson.Gson;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
@@ -29,5 +30,6 @@ public interface OwnerHomeContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<DATAUser> getUserData(boolean isMe, int id);
+        public Gson getGson();
     }
 }

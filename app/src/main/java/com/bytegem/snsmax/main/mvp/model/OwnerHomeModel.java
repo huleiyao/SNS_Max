@@ -54,6 +54,11 @@ public class OwnerHomeModel extends BaseModel implements OwnerHomeContract.Model
     }
 
     @Override
+    public Gson getGson() {
+        return mGson;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         this.mGson = null;
