@@ -24,19 +24,35 @@ import java.util.List;
  */
 public class MyCircleListAdapter extends BaseQuickAdapter<MyCircleDTO.MyCircleDataItem, BaseViewHolder> {
 
+
+    /**
+     * 圈子的点击操作
+     */
+    public interface OnItemCircleClick{
+        /**
+         * 点击操作
+         * @param clickPos
+         * @param clickItem
+         */
+        void itemClick(int clickPos,MyCircleDTO.MyCircleDataItem clickItem);
+    }
+
     /**
      * 创建适配器
      *
      * @param data
      * @return
      */
-    public static MyCircleListAdapter createAdapter(RecyclerView rv, List<MyCircleDTO.MyCircleDataItem> data) {
+    public static MyCircleListAdapter createAdapter(RecyclerView rv, List<MyCircleDTO.MyCircleDataItem> data,OnItemCircleClick onclick) {
         MyCircleListAdapter adapter = new MyCircleListAdapter(R.layout.my_circle_item, data);
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         adapter.setEmptyView(LayoutInflater.from(rv.getContext()).inflate(R.layout.include_empty_data, rv, false));
         rv.setAdapter(adapter);
+        adapter.onclick = onclick;
         return adapter;
     }
+
+    private OnItemCircleClick onclick;
 
     public MyCircleListAdapter(int layoutResId, @Nullable List<MyCircleDTO.MyCircleDataItem> data) {
         super(layoutResId, data);
@@ -45,6 +61,9 @@ public class MyCircleListAdapter extends BaseQuickAdapter<MyCircleDTO.MyCircleDa
     @Override
     protected void convert(BaseViewHolder helper, MyCircleDTO.MyCircleDataItem item) {
         bindData(helper, item);
+        helper.itemView.setOnClickListener((view)->{
+            onclick.itemClick(helper.getAdapterPosition(),item);
+        });
     }
 
     private void bindData(BaseViewHolder helper, MyCircleDTO.MyCircleDataItem item) {

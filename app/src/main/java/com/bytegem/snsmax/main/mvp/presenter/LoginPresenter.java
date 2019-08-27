@@ -99,8 +99,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     @Override
                     public void onNext(LoginData data) {
                         if (data != null && !data.getAccess_token().isEmpty()) {
-                            MApplication.token = data.getAccess_token();
-                            MApplication.token_type = data.getToken_type();
+                            MApplication.getInstance().setToken(data.getAccess_token());
+                            MApplication.getInstance().setTokenType(data.getToken_type());
                             mRootView.toHome();
                         }
                     }

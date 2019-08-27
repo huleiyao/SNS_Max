@@ -4,8 +4,12 @@ import android.content.Context;
 
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.location.TencentMapLocationBean;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.facebook.stetho.Stetho;
+import com.google.gson.Gson;
 import com.jess.arms.base.BaseApplication;
+import com.jess.arms.integration.IRepositoryManager;
+import com.jess.arms.integration.RepositoryManager;
 import com.lzy.imagepicker.GlideImageLoader;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.MediaLoader;
@@ -15,6 +19,8 @@ import com.yanzhenjie.album.AlbumConfig;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import cn.ittiger.player.Config;
 import cn.ittiger.player.PlayerManager;
@@ -33,8 +39,8 @@ public class MApplication extends BaseApplication {
 
     private static MApplication instance;
     private static WeakReference<Context> contexts;
-    public static String token_type = "";
-    public static String token = "";
+    private static String token_type = "";
+    private static String token = "";
     public static LocationBean location = new LocationBean();
     public static TencentMapLocationBean selectLocation;
 
@@ -60,11 +66,41 @@ public class MApplication extends BaseApplication {
         initVideoPlayer();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        initMvcHttpConfig();
         Stetho.initializeWithDefaults(this);
     }
 
-    public void initVideoPlayer() {
+    /**
+     * 设置Token的分类
+     */
+    public void setTokenType(String token_type){
+        MApplication.token_type = token_type;
+    }
 
+    /**
+     * 获取token
+     * @return
+     */
+    public String getToken(){
+        return token;
+    }
+
+    /**
+     * 设置Token的
+     */
+    public void setToken(String token){
+        MApplication.token = token;
+    }
+
+    /**
+     * 获取token类型
+     * @return
+     */
+    public String getToken_type(){
+        return token_type;
+    }
+
+    public void initVideoPlayer() {
         //该配置最好在Application中实现
         PlayerManager.loadConfig(
                 new Config.Builder(this)
@@ -74,6 +110,11 @@ public class MApplication extends BaseApplication {
 //                        .cacheProxy(HttpProxyCacheServer)//自定义缓存配置，不设置则采用默认的缓存配置
                         .build()
         );
+    }
+
+    private void initMvcHttpConfig(){
+        //配置http。在非当前框架下使用
+        HttpMvcHelper.initConfig();
     }
 
     public void initImagePicker() {

@@ -13,6 +13,8 @@ import com.google.gson.Gson;
  */
 public class UserInfoUtils {
 
+    private static DATAUser currentUser;
+
     /**
      * 保存用户信息
      *
@@ -23,6 +25,7 @@ public class UserInfoUtils {
         if (user.getData() == null) {
             return;
         }
+        currentUser = null;
         //如果获取用户信息成功。那么保存到本地中
         getSharedPreferences()
                 .edit()
@@ -36,6 +39,9 @@ public class UserInfoUtils {
      * @param gson
      */
     public static DATAUser getUserInfo(Gson gson) {
+        if(currentUser != null){
+            return currentUser;
+        }
         //如果获取用户信息成功。那么保存到本地中
         String userinfo = getSharedPreferences()
                 .getString("user_info", "");
