@@ -28,13 +28,14 @@ public class MyCircleListAdapter extends BaseQuickAdapter<MyCircleDTO.MyCircleDa
     /**
      * 圈子的点击操作
      */
-    public interface OnItemCircleClick{
+    public interface OnItemCircleClick {
         /**
          * 点击操作
+         *
          * @param clickPos
          * @param clickItem
          */
-        void itemClick(int clickPos,MyCircleDTO.MyCircleDataItem clickItem);
+        void itemClick(int clickPos, MyCircleDTO.MyCircleDataItem clickItem);
     }
 
     /**
@@ -43,7 +44,7 @@ public class MyCircleListAdapter extends BaseQuickAdapter<MyCircleDTO.MyCircleDa
      * @param data
      * @return
      */
-    public static MyCircleListAdapter createAdapter(RecyclerView rv, List<MyCircleDTO.MyCircleDataItem> data,OnItemCircleClick onclick) {
+    public static MyCircleListAdapter createAdapter(RecyclerView rv, List<MyCircleDTO.MyCircleDataItem> data, OnItemCircleClick onclick) {
         MyCircleListAdapter adapter = new MyCircleListAdapter(R.layout.my_circle_item, data);
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         adapter.setEmptyView(LayoutInflater.from(rv.getContext()).inflate(R.layout.include_empty_data, rv, false));
@@ -61,20 +62,22 @@ public class MyCircleListAdapter extends BaseQuickAdapter<MyCircleDTO.MyCircleDa
     @Override
     protected void convert(BaseViewHolder helper, MyCircleDTO.MyCircleDataItem item) {
         bindData(helper, item);
-        helper.itemView.setOnClickListener((view)->{
-            onclick.itemClick(helper.getAdapterPosition(),item);
+        helper.itemView.setOnClickListener((view) -> {
+            onclick.itemClick(helper.getAdapterPosition(), item);
         });
     }
 
     private void bindData(BaseViewHolder helper, MyCircleDTO.MyCircleDataItem item) {
-        if(helper.getAdapterPosition() == 0){
+        if (helper.getAdapterPosition() == 0) {
             helper.getView(R.id.mcircle_item_line).setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             helper.getView(R.id.mcircle_item_line).setVisibility(View.VISIBLE);
         }
-        GlideLoaderUtil.LoadRoundImage(helper.itemView.getContext(), Utils.checkUrl(
-                getImageIconUrl(item)
-        ), helper.getView(R.id.mcircle_item_icon));
+        GlideLoaderUtil.LoadRoundImage(
+                helper.itemView.getContext(), Utils.checkUrl(getImageIconUrl(item)),
+                helper.getView(R.id.mcircle_item_icon),
+                30
+        );
         helper.setText(R.id.mcircle_item_title, item.name == null ? "" : item.name);
         helper.setText(R.id.mcircle_item_title_flg, item.id == item.creator.id ? "博主" : "管理员");
         helper.setText(R.id.mcircle_item_description, item.desc == null ? "" : item.desc);
@@ -92,26 +95,28 @@ public class MyCircleListAdapter extends BaseQuickAdapter<MyCircleDTO.MyCircleDa
         //人气
         String count = "";
         if (item.feeds_count < 1000) {
-            count = item.feeds_count+"";
-        }else{
+            count = item.feeds_count + "";
+            sb.append(count);
+        } else {
             DecimalFormat df = new DecimalFormat("#.0");
             double counD = item.feeds_count / 1.0;
             count = df.format(counD);
+            sb.append(count + " k");
         }
-        sb.append(count + " k");
         sb.append("</font>");
         sb.append("\u3000人气\u3000|\u3000");
         //成员
         sb.append("<font color=\"#5E6CE7\">");
         String number = "";
         if (item.members_count < 1000) {
-            number = item.members_count+"";
-        }else{
+            number = item.members_count + "";
+            sb.append(number);
+        } else {
             DecimalFormat df = new DecimalFormat("#.0");
             double counD = item.members_count / 1.0;
             number = df.format(counD);
+            sb.append(number + " k");
         }
-        sb.append(number + " k");
         sb.append("</font>");
         sb.append("\u3000成员");
         contentTextView.setText(Html.fromHtml(sb.toString()));
