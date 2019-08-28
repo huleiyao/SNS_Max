@@ -30,4 +30,5 @@ public interface Api {
     String FILE_UPDATA_DOMAIN_NAME = "file-updata";
     String FILE_UPDATA_DOMAIN = "https://bytegem-1251005678.cos.ap-chengdu.myqcloud.com";
     String FILE_LOOK_DOMAIN = "https://bytegem-1251005678.image.myqcloud.com";
+    String SHARE_LOOK_DOMAIN ="https://h5.snsmax.bytegem.net";
 }

@@ -13,22 +13,32 @@ import android.widget.Toast;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.View.SwitchButton;
+import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.mvc.UserBindActivity;
 import com.bytegem.snsmax.main.app.mvc.utils.AppUtils;
 import com.bytegem.snsmax.main.app.mvc.utils.DataCleanManager;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
 
 import java.io.File;
 import java.math.BigDecimal;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 public class SettingsActivity extends BaseActivity implements View.OnClickListener {
 
-    private TextView barTitle, txtUserCache;
+    private TextView barTitle, txtUserCache, btnSignOut;
     private RelativeLayout barBack;
     private LinearLayout btnUserBind, btnUserAbout, btnUserRecommend, btnUserScore, btnUserClear;
     private Intent intent = new Intent();
     private Context context;
     private SwitchButton btnEye;
+
 
     @Override
     public int getLayoutId() {
@@ -47,6 +57,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         btnUserScore = findViewById(R.id.user_score);
         btnUserClear = findViewById(R.id.user_clear);
         btnEye = findViewById(R.id.user_eye);
+        btnSignOut = findViewById(R.id.user_sign_out);
         barTitle.setText("设置");
         try {
             initEX();
@@ -64,6 +75,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         btnUserScore.setOnClickListener(this);
         btnUserClear.setOnClickListener(this);
         btnEye.setOnClickListener(this);
+        btnSignOut.setOnClickListener(this);
     }
 
     @Override
@@ -81,7 +93,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             case R.id.user_recommend:
                 break;
             case R.id.user_score:
-                AppUtils.goAppShop(context,"com.tencent.mm","");
+                AppUtils.goAppShop(context, "com.tencent.mm", "");
                 break;
             case R.id.user_clear:
                 // 这里的属性可以一直设置，因为每次设置后返回的是一个builder对象
@@ -106,8 +118,22 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                 // 显示对话框
                 alertDialog.show();
                 break;
-            case R.id.user_eye:
-
+            case R.id.user_sign_out:
+                HttpMvcHelper
+                        .obtainRetrofitService(UserService.class)
+                        .signOut(HttpMvcHelper.getTokenOrType())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(suc -> {
+                            NetDefaultBean a = suc;
+                            Intent intent = new Intent();
+                            intent.setClass(context, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }, err -> {
+                            Toast.makeText(context, "退出登录失败!", Toast.LENGTH_SHORT).show();
+                        });
                 break;
             default:
                 break;

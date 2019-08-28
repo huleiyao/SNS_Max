@@ -7,6 +7,7 @@ import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.mvp.ui.dialog.loadingDialog.ShapeLoadingDialog;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -47,13 +48,14 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     @Inject
     AppManager mAppManager;
 
+    ShapeLoadingDialog loadingDialog;
+
     @Inject
     public LoginPresenter(LoginContract.Model model, LoginContract.View rootView) {
         super(model, rootView);
     }
 
     public void getCode(String phoneNumber) {
-        mRootView.showLoading();
         mModel.getCode(M.getMapString(
                 "phone_number"
                 , phoneNumber

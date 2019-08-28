@@ -84,7 +84,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/update_phone"
+                android:id="@+id/update_phone_code"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"

@@ -10,7 +10,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bytegem.snsmax.main.app.Api;
+import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.zxing.encode.CodeCreator;
+import com.google.gson.Gson;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -43,7 +47,7 @@ public class OwnerQRCodeActivity extends BaseActivity<OwnerQRCodePresenter> impl
 
     private ImageView imgQrcode;
     Bitmap bitmap = null;
-
+    private DATAUser dataUser;
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerOwnerQRCodeComponent //如找不到该类,请编译一下项目
@@ -62,7 +66,11 @@ public class OwnerQRCodeActivity extends BaseActivity<OwnerQRCodePresenter> impl
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         imgQrcode = findViewById(R.id.qrcode);
-        setBitmap("https://byte-gem.com/users/1");
+        if (dataUser.getData().getId()!=0){
+            setBitmap(Api.SHARE_LOOK_DOMAIN+"/users/"+dataUser.getData().getId());
+        }else {
+            Toast.makeText(this,"请登录",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setBitmap(String contentEtString){

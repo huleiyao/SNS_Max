@@ -143,10 +143,10 @@ public class FeedsFragment extends BaseFragment<FeedsPresenter> implements Feeds
             address.setVisibility(View.GONE);
             HomeBannerView homeBannerView = new HomeBannerView(getContext());
             ArrayList<String> list = new ArrayList<>();
-            list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3393469149,4171153724&fm=26&gp=0.jpg");
-            list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560254065616&di=b83592403fdff36401fd21144b30e8fc&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F110123%2F292-11012313544655.jpg");
-            list.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3650575962,3895995272&fm=11&gp=0.jpg");
-            list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560254004596&di=9fb27d55f52bbe73ac4cf4643cdabb1f&imgtype=0&src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz%2F3ofw5loYQ3LOsoX9gacMNhcchYX0nG6dVMvhBqZEdj4bvlBUVFnictHVicOCc7Pr1dP3CI1B1P3D5L4zjDJUEgxQ%2F0.jpg");
+            list.add("https://img.51miz.com/Element/00/59/09/60/73f61abe_E590960_d62b7177.jpg!/quality/90/unsharp/true/compress/true/format/jpg/fh/630");
+            list.add("https://img.51miz.com/Element/00/59/33/95/b432a37c_E593395_c31bd364.jpg!/quality/90/unsharp/true/compress/true/format/jpg/fh/630");
+            list.add("https://img.51miz.com/Element/00/59/33/30/632a7837_E593330_408dd1bd.jpg!/quality/90/unsharp/true/compress/true/format/jpg/fh/630");
+            list.add("https://img.51miz.com/Element/00/59/51/04/bf708b6a_E595104_b0011444.jpg!/quality/90/unsharp/true/compress/true/format/jpg/fh/630");
             homeBannerView.showBanner(list);
             adapter.setHeaderView(homeBannerView.getView());
         } else if (type == 1)
