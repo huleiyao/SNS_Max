@@ -51,6 +51,14 @@ public class UserInfoUtils {
         return gson.fromJson(userinfo, DATAUser.class);
     }
 
+    public static  String getJsonUserData(DATAUser dataUser,Gson gson){
+        String str = "";
+        if (dataUser != null) {
+            str =  gson.toJson(dataUser);
+        }
+        return str;
+    }
+
     //获取存储对象
     private static SharedPreferences getSharedPreferences() {
         return MApplication.getInstance().getSharedPreferences("user", Context.MODE_PRIVATE);

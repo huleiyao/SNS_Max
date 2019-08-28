@@ -250,47 +250,47 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         ArmsUtils.startActivity(intent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ImagePicker.REQUEST_CODE_CROP && data != null && data.getExtras() != null) {
-            ImagePicker.getInstance().setCrop(false);
-            ArrayList<ImageItem> images = ImagePicker.getInstance().getSelectedImages();
-            if (images != null && images.size() > 0) {
-                ImageItem imageItem = images.get(0);
-                imageItem.mimeType = getMimeTypeFromUrl(imageItem.path);
-                imageItem.size = getFileSize(new File(imageItem.path));
-                OwnerFragment.newInstance().updataCover(imageItem);
-            }
-        } else {
-            //如果是裁剪，因为裁剪指定了存储的Uri，所以返回的data一定为null
-            if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE_TAKE) {
-                //发送广播通知图片增加了
-                ImagePicker.galleryAddPic(this, ImagePicker.getInstance().getTakeImageFile());
-                String path = ImagePicker.getInstance().getTakeImageFile().getAbsolutePath();
-                ImageItem imageItem = new ImageItem();
-                imageItem.path = path;
-                imageItem.mimeType = getMimeTypeFromUrl(path);
-                imageItem.size = getFileSize(new File(path));
-                ImagePicker.getInstance().clearSelectedImages();
-                ImagePicker.getInstance().addSelectedImageItem(0, imageItem, true);
-
-                Intent intent = new Intent(this, ImageCropActivity.class);
-                startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
-            } else {//添加图片
-                if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-                    ArrayList<ImageItem> imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                    if (imageItems != null && imageItems.size() > 0) {
-                        ImagePicker.getInstance().clearSelectedImages();
-                        ImagePicker.getInstance().addSelectedImageItem(0, imageItems.get(0), true);
-
-                        Intent intent = new Intent(this, ImageCropActivity.class);
-                        startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
-                    }
-                }
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == ImagePicker.REQUEST_CODE_CROP && data != null && data.getExtras() != null) {
+//            ImagePicker.getInstance().setCrop(false);
+//            ArrayList<ImageItem> images = ImagePicker.getInstance().getSelectedImages();
+//            if (images != null && images.size() > 0) {
+//                ImageItem imageItem = images.get(0);
+//                imageItem.mimeType = getMimeTypeFromUrl(imageItem.path);
+//                imageItem.size = getFileSize(new File(imageItem.path));
+//                OwnerFragment.newInstance().updataCover(imageItem);
+//            }
+//        } else {
+//            //如果是裁剪，因为裁剪指定了存储的Uri，所以返回的data一定为null
+//            if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE_TAKE) {
+//                //发送广播通知图片增加了
+//                ImagePicker.galleryAddPic(this, ImagePicker.getInstance().getTakeImageFile());
+//                String path = ImagePicker.getInstance().getTakeImageFile().getAbsolutePath();
+//                ImageItem imageItem = new ImageItem();
+//                imageItem.path = path;
+//                imageItem.mimeType = getMimeTypeFromUrl(path);
+//                imageItem.size = getFileSize(new File(path));
+//                ImagePicker.getInstance().clearSelectedImages();
+//                ImagePicker.getInstance().addSelectedImageItem(0, imageItem, true);
+//
+//                Intent intent = new Intent(this, ImageCropActivity.class);
+//                startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
+//            } else {//添加图片
+//                if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+//                    ArrayList<ImageItem> imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+//                    if (imageItems != null && imageItems.size() > 0) {
+//                        ImagePicker.getInstance().clearSelectedImages();
+//                        ImagePicker.getInstance().addSelectedImageItem(0, imageItems.get(0), true);
+//
+//                        Intent intent = new Intent(this, ImageCropActivity.class);
+//                        startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void killMyself() {

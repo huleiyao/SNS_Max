@@ -142,14 +142,6 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ImagePicker.REQUEST_CODE_TAKE) {
-            Intent intent = new Intent(getContext(), ImageCropActivity.class);
-            startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
-        }
-    }
 
     public static OwnerFragment newInstance() {
         if (instance == null)

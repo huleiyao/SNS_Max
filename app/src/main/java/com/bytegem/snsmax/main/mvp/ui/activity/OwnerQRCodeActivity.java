@@ -69,7 +69,10 @@ public class OwnerQRCodeActivity extends BaseActivity<OwnerQRCodePresenter> impl
         if (dataUser.getData().getId()!=0){
             setBitmap(Api.SHARE_LOOK_DOMAIN+"/users/"+dataUser.getData().getId());
         }else {
-            Toast.makeText(this,"请登录",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"请先登录",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.setClass(getApplication(),LoginActivity.class);
+            startActivity(intent);
         }
     }
 

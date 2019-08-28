@@ -4,25 +4,48 @@ import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.group.GroupMemberBean;
 
 public class UserBean extends MBaseBean {
-    private String avatar;
     private int id;
+    private String phone_number;
+    private String name;
+    private String avatar;
+    private String bil;
+    private String location;
+    private String sex;//man/women/unknown
+    private String trade;
+    private String school;
     private int exp;
+    private String created_at;
     private int likes_count;
     private int followers_count;//粉丝
     private int followings_count;//关注的人
-    private String name;
-    private String sex;//man/women/unknown
-    private String location;
-    private String created_at;
-
-    private String phone_number;
 
     private GroupMemberBean group_member;//圈子内用户身份信息
 
     public UserBean() {
-//        setContent("毒鸡汤掌门人");
-//        setName("一碗鲜美的鸡汤");
-//        setCover("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560157380928&di=a5fcba2094b5d96612a2a77b4873115e&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F9b671d17b52639d35e7c76c23f79fbabebe769d43140-xjB5Tw_fw658");
+    }
+
+    public String getBil() {
+        return bil;
+    }
+
+    public void setBil(String bil) {
+        this.bil = bil;
+    }
+
+    public String getTrade() {
+        return trade;
+    }
+
+    public void setTrade(String trade) {
+        this.trade = trade;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
     }
 
     public String getName() {

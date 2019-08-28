@@ -47,7 +47,7 @@ public interface UserService {
     //更新用户信息
     @PATCH("/user")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<NetDefaultBean> updataUserData(@Header("Authorization") String authorization, @Body RequestBody requestBody);
+    Observable<NetDefaultBean> updateUserData(@Header("Authorization") String authorization, @Body RequestBody requestBody);
 
     //获取当前登录用户资料
     @GET("/user")

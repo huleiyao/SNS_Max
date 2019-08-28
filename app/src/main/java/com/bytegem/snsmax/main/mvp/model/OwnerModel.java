@@ -6,22 +6,19 @@ import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
-import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.config.UpdataImageService;
 import com.bytegem.snsmax.main.app.config.UserService;
+import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
 import com.google.gson.Gson;
+import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
-
-import com.jess.arms.di.scope.FragmentScope;
-
-import javax.inject.Inject;
-
-import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
 import com.lzy.imagepicker.bean.ImageItem;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import okhttp3.MediaType;
@@ -102,7 +99,7 @@ public class OwnerModel extends BaseModel implements OwnerContract.Model {
     public Observable<NetDefaultBean> updataUser(String jsonData) {
         return mRepositoryManager
                 .obtainRetrofitService(UserService.class)
-                .updataUserData(MApplication.getTokenOrType(), RequestBody.create(mediaType, jsonData));
+                .updateUserData(MApplication.getTokenOrType(), RequestBody.create(mediaType, jsonData));
     }
 
     @Override

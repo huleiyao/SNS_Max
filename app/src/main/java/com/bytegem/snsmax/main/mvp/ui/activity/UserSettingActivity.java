@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,10 +23,17 @@ import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.mvc.bean.AreaBean;
 import com.bytegem.snsmax.main.app.mvc.utils.GetJsonUtil;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.di.component.DaggerUserSettingComponent;
 import com.bytegem.snsmax.main.mvp.contract.UserSettingContract;
 import com.bytegem.snsmax.main.mvp.presenter.UserSettingPresenter;
@@ -36,6 +44,7 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.ui.ImageCropActivity;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 
 import java.util.ArrayList;
@@ -45,7 +54,12 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
+import static com.bytegem.snsmax.main.app.MApplication.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -70,6 +84,8 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     RelativeLayout btnBack;
     @BindView(R.id.change_user_cover)
     FrameLayout btnUserCover;
+    @BindView(R.id.user_setting_cover)
+    ImageView imCover;
     @BindView(R.id.user_location)
     TextView txtLocation;
     @BindView(R.id.user_nickName)
@@ -113,20 +129,13 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        userInfo = UserInfoUtils.getUserInfo(mPresenter.getGson());
-        if (userInfo != null && userInfo.getData() != null) {
-            txtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
-            String sex = mPresenter.isNull(userInfo.getData().getSex()) ? "--" : userInfo.getData().getSex();
-            txtSex.setText("--".equals(sex) ? sex : "man".equals(sex) ? "男" : "女");
-            txtLocation.setText(mPresenter.isNull(userInfo.getData().getLocation()) ? "--" : userInfo.getData().getLocation());
-        }
+        setUserDetails();
         initCommitBottomSheetDialog();
         txtTitle.setText("编辑个人资料");
         btnMore.setText("保存");
         btnMore.setTextColor(getResources().getColor(R.color.color_5e6ce7));
         setListener();
     }
-
 
     private void setListener() {
         btnMore.setOnClickListener(this);
@@ -138,6 +147,32 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
         txtSchool.setOnClickListener(this);
         txtDesc.setOnClickListener(this);
         txtIndustry.setOnClickListener(this);
+    }
+
+    private  void saveUserDetails(){
+        userInfo.getData().setName(txtNickName.getText().toString());
+        userInfo.getData().setSex(txtSex.getText().toString());
+        userInfo.getData().setLocation(txtLocation.getText().toString());
+        userInfo.getData().setSchool(txtSchool.getText().toString());
+        userInfo.getData().setBil(txtDesc.getText().toString());
+        userInfo.getData().setTrade(txtIndustry.getText().toString());
+    }
+    private  void setUserDetails(){
+        userInfo = UserInfoUtils.getUserInfo(mPresenter.getGson());
+        if (userInfo != null && userInfo.getData() != null) {
+            txtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
+            String sex = mPresenter.isNull(userInfo.getData().getSex()) ? "--" : userInfo.getData().getSex();
+            txtSex.setText("--".equals(sex) ? sex : "man".equals(sex) ? "男" : "女");
+            txtLocation.setText(mPresenter.isNull(userInfo.getData().getLocation()) ? "--" : userInfo.getData().getLocation());
+            txtSchool.setText(mPresenter.isNull(userInfo.getData().getSchool()) ? "--" : userInfo.getData().getSchool());
+            txtDesc.setText(mPresenter.isNull(userInfo.getData().getBil()) ? "--" : userInfo.getData().getBil());
+            txtIndustry.setText(mPresenter.isNull(userInfo.getData().getTrade()) ? "--" : userInfo.getData().getTrade());
+        }
+        if (userInfo.getData().getAvatar() == null || userInfo.getData().getAvatar().isEmpty()) {
+            GlideLoaderUtil.LoadCircleImage(this, R.drawable.ic_deskicon, imCover);
+        } else {
+            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(userInfo.getData().getAvatar()), imCover);
+        }
     }
 
     @Override
@@ -175,6 +210,19 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
                 break;
             case R.id.user_setting_more:
                 Toast.makeText(getApplication(), "保存", Toast.LENGTH_SHORT).show();
+                //把修改的值丢到Model 里面转成JSON 丢服务器保存
+                saveUserDetails();
+               String userJson = UserInfoUtils.getJsonUserData(userInfo,new Gson());
+                HttpMvcHelper
+                        .obtainRetrofitService(UserService.class)
+                        .updateUserData(MApplication.getTokenOrType(),RequestBody.create(MediaType.parse("application/json; charset=utf-8"),userJson))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(suc -> {
+                            NetDefaultBean a  = suc;
+                        }, err -> {
+
+                        });
                 break;
             case R.id.change_user_cover:
                 changeUserCoverBottomSheetDialog.show();
@@ -236,6 +284,17 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
                 break;
             default:
                 break;
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ImagePicker.REQUEST_CODE_TAKE) {
+            Intent intent = new Intent(getContext(), ImageCropActivity.class);
+            startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
+
         }
     }
 
@@ -323,7 +382,6 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     }
 
     private void showPickerView() {// 弹出选择器
-
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, (options1, options2, options3, v) -> {
             //返回的分别是三个级别的选中位置
             String tx = options1Items.get(options1).name + " " +
@@ -339,9 +397,5 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
                 .build();
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
-//        Window wind = pvOptions.getDialog().getWindow();
-//        WindowManager.LayoutParams lp = wind.getAttributes();
-//        lp.height = (int) (ScreenUtils.getScreenWidth() * 0.3);
-//        wind.setAttributes(lp);
     }
 }
