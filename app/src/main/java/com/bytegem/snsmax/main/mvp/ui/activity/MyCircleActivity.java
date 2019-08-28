@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.user.MyCircleDTO;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.mvp.ui.adapter.MyCircleListAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.base.BaseActivity;
@@ -111,7 +112,10 @@ public class MyCircleActivity extends BaseActivity<MyCirclePresenter> implements
     public void updateMyCircle(MyCircleDTO data) {
         if (adapter == null) {
             adapter = MyCircleListAdapter.createAdapter(rvList,data.data,(clickPos, clickItem) -> {
-                ToastUtils.showShort("点击数据。请处理");
+                launchActivity(
+                        new Intent(this,MyCircleDetailsActivityActivity.class)
+                                .putExtra(MyCircleDetailsActivityActivity.ITEM_CLICK_KEY, HttpMvcHelper.getGson().toJson(clickItem))
+                );
             });
         }
     }

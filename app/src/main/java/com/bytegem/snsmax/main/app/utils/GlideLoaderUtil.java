@@ -10,9 +10,11 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -25,6 +27,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.bytegem.snsmax.R;
 
 import jp.wasabeef.glide.transformations.MaskTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
@@ -108,6 +111,29 @@ public class GlideLoaderUtil {
                         .error(R.drawable.ic_deskicon)
                         .dontAnimate())
                 .transition(new DrawableTransitionOptions().crossFade(800))
+                .into(imageView);
+
+    }
+
+    /**
+     * 圆角30图片,此修改是为了兼容圆角控件第一次无法显示圆角问题,修改源参考:{@link GlideLoaderUtil#LoadRoundImage(Context, Object, ImageView)}
+     * 注：图片默认圆角 30dp
+     * @param context   上下文
+     * @param url       图片链接
+     * @param imageView 目标view
+     * @param roundDP 圆角的dp。注意单位是dp
+     */
+    public static void LoadRoundImage(Context context, Object url, ImageView imageView,int roundDP) {
+        Glide.with(context)
+                .load(url)
+                .apply(new RequestOptions()
+                        .transform(new GlideRoundTransform(context, 6))
+                        .centerInside()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.mipmap.grid_camera)
+                        .error(R.drawable.ic_deskicon)
+                        .transform(new RoundedCornersTransformation(ConvertUtils.dp2px(roundDP),0))
+                        .dontAnimate())
                 .into(imageView);
 
     }
