@@ -4,6 +4,7 @@ import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.bean.user.MyCircleDTO;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -72,4 +73,9 @@ public interface UserService {
     @GET("/user/groups")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<MyCircleDTO> getMyClicle(@Header("Authorization") String authorization);
+
+    //退出登录
+    @GET("/auth/logout")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<NetDefaultBean> signOut(@Header("Authorization") String authorization);
 }
