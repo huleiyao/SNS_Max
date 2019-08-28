@@ -11,11 +11,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.mvp.ui.dialog.LoadingDialog;
+import com.bytegem.snsmax.main.mvp.ui.dialog.loadingDialog.ShapeLoadingDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -55,7 +54,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @BindView(R.id.login_code)
     EditText login_code;
     boolean isStartTimer = false;
-
     @OnClick({R.id.to_register, R.id.login_get_code, R.id.login, R.id.login_wechat_login})
     void onClick(View view) {
         String phone_ = login_phone_number.getText().toString();
@@ -74,8 +72,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 mPresenter.getCode(phone_);
                 break;
             case R.id.login:
-                LoadingDialog dialog = new LoadingDialog(this, "正在加载...");
-                dialog.show();
                 if (phone_ != null && phone_.isEmpty()) {
                     login_error.setText("请输入手机号码");
                     return;

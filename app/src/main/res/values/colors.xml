@@ -37,4 +37,10 @@
     <color name="scanLineColor">#ffffff</color>
     <color name="defaultColor">#ffffff</color>
 
+    <!--加载框-->
+    <color name="triangle">#aa72d572</color>
+    <color name="view_bg">#00000000</color>
+    <color name="rect">#aae84e40</color>
+    <color name="circle">#aa738ffe</color>
+
 </resources>
