@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.bean.user.UserBean;
 import com.google.gson.Gson;
 
 /**
@@ -51,7 +52,7 @@ public class UserInfoUtils {
         return gson.fromJson(userinfo, DATAUser.class);
     }
 
-    public static  String getJsonUserData(DATAUser dataUser,Gson gson){
+    public static  String getJsonUserData(UserBean dataUser, Gson gson){
         String str = "";
         if (dataUser != null) {
             str =  gson.toJson(dataUser);

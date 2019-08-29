@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,9 +54,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -98,7 +103,8 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     TextView txtDesc;
     @BindView(R.id.user_industry)
     TextView txtIndustry;
-
+    @Inject
+    RxErrorHandler mErrorHandler;
     BottomSheetDialog changeUserCoverBottomSheetDialog;
 
     private Context context;
@@ -149,23 +155,30 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
         txtIndustry.setOnClickListener(this);
     }
 
-    private  void saveUserDetails(){
+    private void saveUserDetails() {
         userInfo.getData().setName(txtNickName.getText().toString());
-        userInfo.getData().setSex(txtSex.getText().toString());
+        if (txtSex.getText().toString().equals("男")) {
+            userInfo.getData().setSex("man");
+        } else if (txtSex.getText().toString().equals("女")) {
+            userInfo.getData().setSex("woman");
+        } else {
+            userInfo.getData().setSex("unknown");
+        }
         userInfo.getData().setLocation(txtLocation.getText().toString());
         userInfo.getData().setSchool(txtSchool.getText().toString());
-        userInfo.getData().setBil(txtDesc.getText().toString());
+        userInfo.getData().setBio(txtDesc.getText().toString());
         userInfo.getData().setTrade(txtIndustry.getText().toString());
     }
-    private  void setUserDetails(){
+
+    private void setUserDetails() {
         userInfo = UserInfoUtils.getUserInfo(mPresenter.getGson());
         if (userInfo != null && userInfo.getData() != null) {
             txtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
             String sex = mPresenter.isNull(userInfo.getData().getSex()) ? "--" : userInfo.getData().getSex();
-            txtSex.setText("--".equals(sex) ? sex : "man".equals(sex) ? "男" : "女");
+            txtSex.setText("保密".equals(sex) ? sex : "man".equals(sex) ? "男" : "女");
             txtLocation.setText(mPresenter.isNull(userInfo.getData().getLocation()) ? "--" : userInfo.getData().getLocation());
             txtSchool.setText(mPresenter.isNull(userInfo.getData().getSchool()) ? "--" : userInfo.getData().getSchool());
-            txtDesc.setText(mPresenter.isNull(userInfo.getData().getBil()) ? "--" : userInfo.getData().getBil());
+            txtDesc.setText(mPresenter.isNull(userInfo.getData().getBio()) ? "--" : userInfo.getData().getBio());
             txtIndustry.setText(mPresenter.isNull(userInfo.getData().getTrade()) ? "--" : userInfo.getData().getTrade());
         }
         if (userInfo.getData().getAvatar() == null || userInfo.getData().getAvatar().isEmpty()) {
@@ -212,17 +225,21 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
                 Toast.makeText(getApplication(), "保存", Toast.LENGTH_SHORT).show();
                 //把修改的值丢到Model 里面转成JSON 丢服务器保存
                 saveUserDetails();
-               String userJson = UserInfoUtils.getJsonUserData(userInfo,new Gson());
+                String userJson = UserInfoUtils.getJsonUserData(userInfo.getData(), new Gson());
                 HttpMvcHelper
                         .obtainRetrofitService(UserService.class)
-                        .updateUserData(MApplication.getTokenOrType(),RequestBody.create(MediaType.parse("application/json; charset=utf-8"),userJson))
+                        .updateUserData(MApplication.getTokenOrType(), RequestBody.create(
+                                MediaType.parse("application/json; charset=utf-8"),
+                                userJson))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(suc -> {
-                            NetDefaultBean a  = suc;
-                        }, err -> {
-
+                        .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
+                            @Override
+                            public void onNext(NetDefaultBean netDefaultBean) {
+                            }
                         });
+                UserInfoUtils.saveUserInfo(userInfo, new Gson());
+                finish();
                 break;
             case R.id.change_user_cover:
                 changeUserCoverBottomSheetDialog.show();
