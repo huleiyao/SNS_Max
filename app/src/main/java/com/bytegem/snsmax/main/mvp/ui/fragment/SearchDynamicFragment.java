@@ -6,34 +6,34 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.TypedValue;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
-import com.bytegem.snsmax.common.bean.FragmentBean;
-import com.bytegem.snsmax.main.mvp.presenter.SearchActivityPresenter;
-import com.bytegem.snsmax.main.mvp.ui.activity.SearchActivity;
-import com.jess.arms.base.BaseFragment;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.mvp.IView;
-import com.jess.arms.utils.ArmsUtils;
-
-import com.bytegem.snsmax.main.di.component.DaggerHomeFindComponent;
-import com.bytegem.snsmax.main.mvp.contract.HomeFindContract;
-import com.bytegem.snsmax.main.mvp.presenter.HomeFindPresenter;
 
 import com.bytegem.snsmax.R;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.di.component.DaggerSearchDynamicComponent;
+import com.bytegem.snsmax.main.mvp.contract.SearchActivityContract;
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupHeadersAdapter;
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.view.HomeFindTopGroupView;
+import com.jess.arms.base.BaseFragment;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+
+import com.bytegem.snsmax.main.mvp.contract.SearchDynamicContract;
+import com.bytegem.snsmax.main.mvp.presenter.SearchDynamicPresenter;
+
+import com.liaoinstan.springview.widget.SpringView;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
-import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -42,7 +42,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 06/05/2019 16:17
+ * Created by MVPArmsTemplate on 08/29/2019 16:12
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -50,35 +50,27 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class HomeFindFragment extends BaseFragment<HomeFindPresenter> implements HomeFindContract.View {
-    @BindView(R.id.tabs)
-    SmartTabLayout tabs;
-    @BindView(R.id.projectPager)
-    ViewPager viewPager;
-    @BindView(R.id.home_search)
-    ImageView homeSearch;
-    private static HomeFindFragment instance;
+public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> implements SearchDynamicContract.View {
 
-    public static HomeFindFragment newInstance() {
-        if (instance == null)
-            instance = new HomeFindFragment();
-        return instance;
-    }
+    @Inject
+    GroupsAdapter adapter;
+    @Inject
+    GroupHeadersAdapter headerListAdapter;
+    static GroupsFragment instance;
+    HomeFindTopGroupView header;
+    @BindView(R.id.springview)
+    SpringView springView;
+    @BindView(R.id.recycle_view)
+    RecyclerView recyclerView;
 
-    @OnClick({R.id.home_search})
-    void click(View v){
-        switch (v.getId()){
-            case R.id.home_search:{
-                //跳转到动态搜索
-                SearchActivity.goToSearch((IView) getActivity(),SearchActivityPresenter.SearchType.dynamic);
-                break;
-            }
-        }
+    public static SearchDynamicFragment newInstance() {
+        SearchDynamicFragment fragment = new SearchDynamicFragment();
+        return fragment;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerHomeFindComponent //如找不到该类,请编译一下项目
+        DaggerSearchDynamicComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -88,57 +80,47 @@ public class HomeFindFragment extends BaseFragment<HomeFindPresenter> implements
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home_find, container, false);
+        return inflater.inflate(R.layout.fragment_community_group_list, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        ArrayList<FragmentBean> fragmentList = new ArrayList<>();
-        fragmentList.add(new FragmentBean("圈子", GroupsFragment.newInstance()));
-        fragmentList.add(new FragmentBean("热议", GroupHotMessageFragment.newInstance()));
-        showFragment(fragmentList);
+        initList();
     }
 
-    public void showFragment(ArrayList<FragmentBean> fragmenList) {
-        viewPager.setAdapter(new VPFragmentAdapter(getChildFragmentManager(), fragmenList));
-        viewPager.setOffscreenPageLimit(fragmenList.size() - 1);
-//        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-//        tabs.setupWithViewPager(viewPager);
-        tabs.setViewPager(viewPager);
-        try {
-            changeTextSize(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    private void initList() {
+        header = new HomeFindTopGroupView(getContext());
+        header.initList(headerListAdapter);
+//        if (header != null && header.getView() != null)
+        adapter.setHeaderView(header.getView());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        springView.setType(SpringView.Type.FOLLOW);
+        springView.setListener(new SpringView.OnFreshListener() {
             @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
+            public void onRefresh() {
+                queryData();
             }
 
             @Override
-            public void onPageSelected(int i) {
-                if (i == defaultPosition) return;
-                changeTextSize(false);
-                defaultPosition = i;
-                changeTextSize(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
+            public void onLoadmore() {
+//                loadData(false);
             }
         });
-    }
-
-    int defaultPosition = 0;
-
-    private void changeTextSize(boolean isSelect) {
-        View view = tabs.getTabAt(defaultPosition).findViewById(R.id.custom_text);
-        if (view != null)
-            if (view instanceof TextView) {
-                ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(isSelect ? R.dimen.sp_40 : R.dimen.sp_34));
-            }
+        adapter.setOnItemClickListener(mPresenter);
+        adapter.setListener(mPresenter);
+        ArrayList<MBaseBean> list = new ArrayList<>();
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        headerListAdapter.setNewData(list);
+        queryData();
     }
 
     /**
@@ -179,12 +161,19 @@ public class HomeFindFragment extends BaseFragment<HomeFindPresenter> implements
      */
     @Override
     public void setData(@Nullable Object data) {
-
+        //如果需要更新数据。将自己传入即可
+        if (data instanceof SearchActivityContract.SearchDataSourcess) {
+            queryData();
+        }
     }
 
     @Override
     public void showLoading() {
 
+    }
+
+    public void onFinishFreshAndLoad() {
+        springView.onFinishFreshAndLoad();
     }
 
     @Override
@@ -206,6 +195,18 @@ public class HomeFindFragment extends BaseFragment<HomeFindPresenter> implements
 
     @Override
     public void killMyself() {
+        if (getActivity() != null) {
+            getActivity().finish();
+        }
+    }
 
+    //查询数据
+    private void queryData() {
+        if (mPresenter != null && getActivity() instanceof SearchActivityContract.SearchDataSourcess) {
+            String queyStr = ((SearchActivityContract.SearchDataSourcess) getActivity()).getQueryKey();
+            if (queyStr == null || "".equals(queyStr)) {
+                mPresenter.getList();
+            }
+        }
     }
 }
