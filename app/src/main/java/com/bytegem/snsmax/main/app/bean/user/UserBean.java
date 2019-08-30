@@ -8,7 +8,7 @@ public class UserBean extends MBaseBean {
     private String phone_number;
     private String name;
     private String avatar;
-    private String bil;
+    private String bio;
     private String location;
     private String sex;//man/women/unknown
     private String trade;
@@ -24,12 +24,12 @@ public class UserBean extends MBaseBean {
     public UserBean() {
     }
 
-    public String getBil() {
-        return bil;
+    public String getBio() {
+        return bio;
     }
 
-    public void setBil(String bil) {
-        this.bil = bil;
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public String getTrade() {
