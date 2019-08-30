@@ -8,6 +8,7 @@ import com.bytegem.snsmax.main.app.bean.discusses.LISTDiscusses;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroupFeeds;
 import com.bytegem.snsmax.main.app.bean.user.LISTUser;
+import com.bytegem.snsmax.main.app.bean.user.SearchDTO;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -49,6 +50,29 @@ public interface GroupService {
     @GET("/groups/{id}/feeds")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<LISTGroupFeeds> getGroupFeedList(@Header("Authorization") String authorization, @Path("id") int groupId, @Query("after") int feedId);
+
+    /**
+     * 搜索页面
+     *
+     * @param authorization
+     * @param type          users	用户
+     *                      groups	圈子
+     *                      feeds	动态
+     *                      discusses	讨论
+     * @param keywords
+     * @param after
+     * @param tagetTypeClass 目标类型的class
+     * @return
+     */
+    @GET("/search")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    <T> Observable<SearchDTO<T>> search(
+            @Header("Authorization") String authorization,
+            @Query("type") String type,
+            @Query("keywords") String keywords,
+            @Query("after") String after,
+            Class<T> tagetTypeClass
+    );
 
     //搜索圈子
     @GET("/search/groups")

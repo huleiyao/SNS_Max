@@ -59,7 +59,8 @@ import static com.bytegem.snsmax.main.app.MApplication.location;
  * ================================================
  */
 @FragmentScope
-public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsContract.View> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, TagTextView.TopicListener {
+public class FeedsPresenter extends BasePresenter<FeedsContract.Model, FeedsContract.View>
+        implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, TagTextView.TopicListener {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject

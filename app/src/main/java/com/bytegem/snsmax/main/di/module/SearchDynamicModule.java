@@ -6,6 +6,7 @@ import dagger.Provides;
 
 import com.bytegem.snsmax.main.mvp.contract.SearchDynamicContract;
 import com.bytegem.snsmax.main.mvp.model.SearchDynamicModel;
+import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupHeadersAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.GroupsAdapter;
 import com.jess.arms.di.scope.FragmentScope;
@@ -31,13 +32,7 @@ public abstract class SearchDynamicModule {
 
     @FragmentScope
     @Provides
-    static GroupsAdapter provideScearchGroupListAdapter() {
-        return new GroupsAdapter();
-    }
-
-    @FragmentScope
-    @Provides
-    static GroupHeadersAdapter provideScearchGroupHeaderListAdapter() {
-        return new GroupHeadersAdapter();
+    static FeedsAdapter providScearchPostListAdapter() {
+        return new FeedsAdapter();
     }
 }
