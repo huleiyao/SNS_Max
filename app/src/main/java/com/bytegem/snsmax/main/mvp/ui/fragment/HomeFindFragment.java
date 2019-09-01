@@ -70,7 +70,7 @@ public class HomeFindFragment extends BaseFragment<HomeFindPresenter> implements
         switch (v.getId()){
             case R.id.home_search:{
                 //跳转到动态搜索
-                SearchActivity.goToSearch((IView) getActivity(),SearchActivityPresenter.SearchType.dynamic);
+                SearchActivity.goToSearch((IView) getActivity(),SearchActivityPresenter.SearchType.circle);
                 break;
             }
         }

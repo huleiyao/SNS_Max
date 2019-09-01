@@ -22,6 +22,7 @@ import com.jess.arms.utils.ArmsUtils;
 import com.bytegem.snsmax.main.di.component.DaggerSearchUserComponent;
 import com.bytegem.snsmax.main.mvp.contract.SearchUserContract;
 import com.bytegem.snsmax.main.mvp.presenter.SearchUserPresenter;
+import com.liaoinstan.springview.widget.SpringView;
 
 import butterknife.BindView;
 
@@ -45,6 +46,8 @@ public class SearchUserFragment extends BaseFragment<SearchUserPresenter> implem
 
     @BindView(R.id.recycle_view)
     RecyclerView rView;
+    @BindView(R.id.springview)
+    SpringView springview;
 
     public static SearchUserFragment newInstance() {
         SearchUserFragment fragment = new SearchUserFragment();
@@ -69,11 +72,23 @@ public class SearchUserFragment extends BaseFragment<SearchUserPresenter> implem
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         mPresenter.createAdapter(rView);
+        springview.setType(SpringView.Type.FOLLOW);
+        springview.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                queryData();
+            }
+
+            @Override
+            public void onLoadmore() {
+                onFinishFreshAndLoad();
+            }
+        });
         queryData();
     }
 
     @Override
-    public void bindListUserData(SearchDTO search) {
+    public void bindListUserData(SearchDTO<SearchDTO.SearchUserItem> search) {
 
     }
 
@@ -128,7 +143,11 @@ public class SearchUserFragment extends BaseFragment<SearchUserPresenter> implem
 
     @Override
     public void hideLoading() {
+        onFinishFreshAndLoad();
+    }
 
+    public void onFinishFreshAndLoad() {
+        springview.onFinishFreshAndLoad();
     }
 
     @Override
@@ -153,8 +172,11 @@ public class SearchUserFragment extends BaseFragment<SearchUserPresenter> implem
         if (mPresenter != null && getActivity() instanceof SearchActivityContract.SearchDataSourcess) {
             String queyStr = ((SearchActivityContract.SearchDataSourcess) getActivity()).getQueryKey();
             if (queyStr == null || "".equals(queyStr)) {
-                mPresenter.queryUser(queyStr);
+                onFinishFreshAndLoad();
+                return;
             }
+            springview.startLayoutAnimation();
+            mPresenter.queryUser(queyStr);
         }
     }
 }

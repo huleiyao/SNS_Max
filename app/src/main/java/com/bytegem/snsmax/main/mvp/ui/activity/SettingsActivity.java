@@ -20,6 +20,7 @@ import com.bytegem.snsmax.main.app.mvc.UserBindActivity;
 import com.bytegem.snsmax.main.app.mvc.utils.AppUtils;
 import com.bytegem.snsmax.main.app.mvc.utils.DataCleanManager;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
 
 import java.io.File;
@@ -126,6 +127,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(suc -> {
                             NetDefaultBean a = suc;
+                            UserInfoUtils.setTokenAndType("","");
                             Intent intent = new Intent();
                             intent.setClass(context, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

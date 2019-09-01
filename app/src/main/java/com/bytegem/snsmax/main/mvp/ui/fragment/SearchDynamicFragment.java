@@ -85,6 +85,7 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
         if (adapter == null) adapter = new FeedsAdapter();
         adapter.setListener(mPresenter, mPresenter, mPresenter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
+        adapter.setEmptyView(LayoutInflater.from(getContext()).inflate(R.layout.include_empty_data, recyclerView, false));
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         adapter.setOnItemClickListener(mPresenter);
@@ -93,15 +94,15 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                queryData(false);
+                queryData();
             }
 
             @Override
             public void onLoadmore() {
-                queryData(true);
+                onFinishFreshAndLoad();
             }
         });
-        queryData(false);
+        queryData();
     }
 
     /**
@@ -144,7 +145,7 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
     public void setData(@Nullable Object data) {
         //如果需要更新数据。将自己传入即可
         if (data instanceof SearchActivityContract.SearchDataSourcess) {
-            queryData(false);
+            queryData();
         }
     }
 
@@ -194,12 +195,14 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
     }
 
     //查询数据,[isLoadMore]是否加载更多
-    private void queryData(boolean isLoadMore) {
+    private void queryData() {
         if (mPresenter != null && getActivity() instanceof SearchActivityContract.SearchDataSourcess) {
             String queyStr = ((SearchActivityContract.SearchDataSourcess) getActivity()).getQueryKey();
             if (queyStr == null || "".equals(queyStr)) {
-                mPresenter.getList(isLoadMore);
+                onFinishFreshAndLoad();
+                return ;
             }
+            mPresenter.getList(queyStr);
         }
     }
 }

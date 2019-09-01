@@ -71,9 +71,6 @@ public class SearchDynamicPresenter extends BasePresenter<SearchDynamicContract.
     @Inject
     FeedsAdapter adapter;
 
-    private int per_page = 15;
-    private int page = 1;
-
     @Inject
     public SearchDynamicPresenter(SearchDynamicContract.Model model, SearchDynamicContract.View rootView) {
         super(model, rootView);
@@ -88,22 +85,11 @@ public class SearchDynamicPresenter extends BasePresenter<SearchDynamicContract.
         this.mApplication = null;
     }
 
-    public void getList(boolean isLoadMore) {
-        if (isLoadMore) {
-            page++;
-        } else {
-            mRootView.showLoading();
-            page = 1;
-        }
+    public void getList(String key) {
         if (MApplication.location == null)
             MApplication.location = new LocationBean();
         //获取动态列表
-        mModel.getFeedList(
-                MApplication.location.getLatitude() + "",
-                MApplication.location.getLongitude() + "",
-                per_page + "",
-                page + ""
-        )
+        mModel.getFeedList(key, "0")
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,8 +105,7 @@ public class SearchDynamicPresenter extends BasePresenter<SearchDynamicContract.
                             for (FeedBean feedBean : feedBeans)
                                 if (feedBean.getMedia() != null)
                                     feedBean.getMedia().initContent();
-                        if (isLoadMore) adapter.addData(feedBeans);
-                        else adapter.setNewData(feedBeans);
+                        adapter.setNewData(feedBeans);
                         mRootView.onFinishFreshAndLoad();
                     }
                 });

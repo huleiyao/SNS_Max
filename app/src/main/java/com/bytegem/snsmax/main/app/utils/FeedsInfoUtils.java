@@ -44,6 +44,28 @@ public class FeedsInfoUtils {
         return null;
     }
 
+    /**
+     * 返还添加的集合
+     *
+     * @return
+     */
+    public static ArrayList<FeedBean> getFeedInfoBeans() {
+        String feedInfo = getFeedInfo();
+        ArrayList<FeedBean> feedBeans = new ArrayList<>();
+        if(feedInfo == null || "".equals(feedInfo)){
+            return feedBeans;
+        }
+        try {
+            FeedBean[] fbs = new Gson().fromJson(feedInfo,FeedBean[].class);
+            for (FeedBean fb : fbs) {
+                feedBeans.add(fb);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return feedBeans;
+    }
+
 
     //获取存储对象
     private static SharedPreferences getSharedPreferences() {

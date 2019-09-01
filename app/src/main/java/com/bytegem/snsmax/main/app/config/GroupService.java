@@ -52,26 +52,71 @@ public interface GroupService {
     Observable<LISTGroupFeeds> getGroupFeedList(@Header("Authorization") String authorization, @Path("id") int groupId, @Query("after") int feedId);
 
     /**
-     * 搜索页面
-     *
+     * 搜索用户接口
      * @param authorization
      * @param type          users	用户
-     *                      groups	圈子
-     *                      feeds	动态
-     *                      discusses	讨论
      * @param keywords
      * @param after
-     * @param tagetTypeClass 目标类型的class
      * @return
      */
     @GET("/search")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    <T> Observable<SearchDTO<T>> search(
+    Observable<SearchDTO<SearchDTO.SearchUserItem>> searchUsers(
             @Header("Authorization") String authorization,
             @Query("type") String type,
             @Query("keywords") String keywords,
-            @Query("after") String after,
-            Class<T> tagetTypeClass
+            @Query("after") String after
+    );
+
+    /**
+     * 搜索圈子接口
+     * @param authorization
+     * @param type          groups	圈子
+     * @param keywords
+     * @param after
+     * @return
+     */
+    @GET("/search")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<SearchDTO<SearchDTO.SearchCircelItem>> searchCircel(
+            @Header("Authorization") String authorization,
+            @Query("type") String type,
+            @Query("keywords") String keywords,
+            @Query("after") String after
+    );
+
+    /**
+     * 搜索圈子接口
+     * @param authorization
+     * @param type          feeds	动态
+     * @param keywords
+     * @param after
+     * @return
+     */
+    @GET("/search")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LISTFeeds> searchFeeds(
+            @Header("Authorization") String authorization,
+            @Query("type") String type,
+            @Query("keywords") String keywords,
+            @Query("after") String after
+    );
+
+    /**
+     * 搜索讨论接口
+     * @param authorization
+     * @param type          discusses	讨论
+     * @param keywords
+     * @param after
+     * @return
+     */
+    @GET("/search")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<SearchDTO<SearchDTO.SearchDiscussesItem>> searchDiscusses(
+            @Header("Authorization") String authorization,
+            @Query("type") String type,
+            @Query("keywords") String keywords,
+            @Query("after") String after
     );
 
     //搜索圈子

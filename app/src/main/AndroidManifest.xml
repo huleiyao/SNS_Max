@@ -58,7 +58,7 @@
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:hardwareAccelerated="true"
 			android:theme="@style/AppThemeHasActionBar.NoBar"
-			android:windowSoftInputMode="stateAlwaysHidden" />
+			android:windowSoftInputMode="stateAlwaysHidden|stateAlwaysVisible|adjustPan" />
 		
 		<!-- 我的圈子 -->
 		<activity
@@ -296,7 +296,7 @@
 			android:value="720" />
 		<meta-data
 			android:name="design_height_in_dp"
-			android:value="1080" />
+			android:value="1280" />
 		
 		<receiver
 			android:name=".main.app.receiver.JPushReceiver"

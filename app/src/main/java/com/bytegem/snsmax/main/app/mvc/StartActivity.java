@@ -2,6 +2,7 @@ package com.bytegem.snsmax.main.app.mvc;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +14,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.main.app.config.UserService;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
+import com.bytegem.snsmax.main.mvp.ui.activity.HomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.LoginActivity;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class StartActivity extends BaseActivity {
 
@@ -150,20 +162,46 @@ public class StartActivity extends BaseActivity {
     }
 
     //跳转到下一级的Activity，提供给到下一级的入口
+    @SuppressLint("CheckResult")
     private void jumpNextActivity() {
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    Thread.sleep(5000);//休眠3秒
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        if (UserInfoUtils.isLogin()) {
+            //更新token
+            HttpMvcHelper
+                    .obtainRetrofitService(UserService.class)
+                    .tokenRefresh(UserInfoUtils.getTokenAndType())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(succ -> {
+                        if(succ != null){
+                            UserInfoUtils.setTokenAndType(succ.getAccess_token(),succ.getToken_type());
+                            jumpActivity(HomeActivity.class);
+                        }else{
+                            ToastUtils.showShort("刷新身份认证失败,请重新登录!");
+                            jumpActivity(LoginActivity.class);
+                        }
+                    }, error -> {
+                        ToastUtils.showShort("刷新身份认证失败,请重新登录!");
+                        jumpActivity(LoginActivity.class);
+                    });
+        } else {
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    try {
+                        Thread.sleep(5000);//休眠3秒
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    jumpActivity(LoginActivity.class);
                 }
-                intent.setClass(context, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }.start();
+            }.start();
+        }
+    }
+
+    private void jumpActivity(Class<?> czz) {
+        intent.setClass(context, czz);
+        startActivity(intent);
+        finish();
     }
 }

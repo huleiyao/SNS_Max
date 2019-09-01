@@ -6,6 +6,7 @@ import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -99,6 +100,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                         if (data != null && !data.getAccess_token().isEmpty()) {
                             MApplication.getInstance().setToken(data.getAccess_token());
                             MApplication.getInstance().setTokenType(data.getToken_type());
+                            UserInfoUtils.setTokenAndType(data.getAccess_token(),data.getToken_type());
                             mRootView.toHome();
                         }
                     }

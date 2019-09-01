@@ -2,19 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
+	android:layout_height="wrap_content"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical">
 	
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal">
+		android:orientation="horizontal"
+		android:layout_margin="30dp">
 		
 		<com.makeramen.roundedimageview.RoundedImageView
 			android:id="@+id/search_user_cover"
-			android:layout_width="72dp"
-			android:layout_height="72dp"
+			android:layout_width="109dp"
+			android:layout_height="109dp"
 			android:layout_gravity="center_vertical"
 			android:src="@mipmap/iccon"
 			app:riv_oval="true"/>
@@ -23,7 +24,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
-			android:layout_marginLeft="15dp"
+			android:layout_marginLeft="30dp"
 			android:layout_weight="1"
 			android:orientation="vertical">
 			
@@ -34,29 +35,29 @@
 				android:maxLines="1"
 				android:text="name"
 				android:textColor="@color/color_151b26"
-				android:textSize="26sp" />
+				android:textSize="30sp" />
 			
 			<TextView
 				android:id="@+id/search_user_content"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="5dp"
+				android:layout_marginTop="24dp"
 				android:maxLines="1"
 				android:text="阿里巴巴联合创始人"
 				android:textColor="@color/color_b0b8bf"
-				android:textSize="20sp" />
+				android:textSize="29sp" />
 		</LinearLayout>
 		<!-- 关注 -->
 		<TextView
 			android:id="@+id/search_user_attention"
-			android:layout_width="130dp"
-			android:layout_height="48dp"
+			android:layout_width="125dp"
+			android:layout_height="60dp"
 			android:layout_gravity="center"
 			android:layout_marginLeft="10dp"
-			android:background="@drawable/shape_follow_bg"
+			android:background="@drawable/shape_search_user_attention_bg"
 			android:gravity="center"
 			android:text="+ 关注"
 			android:textColor="@color/color_5e6ce7"
-			android:textSize="26sp" />
+			android:textSize="25sp" />
 	</LinearLayout>
 </LinearLayout>

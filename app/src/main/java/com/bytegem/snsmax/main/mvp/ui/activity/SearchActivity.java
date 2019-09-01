@@ -6,25 +6,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
-import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.mvp.ui.fragment.GroupHotMessageFragment;
-import com.bytegem.snsmax.main.mvp.ui.fragment.GroupsFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.SearchCircelFragment;
+import com.bytegem.snsmax.main.mvp.ui.fragment.SearchDiscussFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.SearchDynamicFragment;
 import com.bytegem.snsmax.main.mvp.ui.fragment.SearchUserFragment;
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.utils.ArmsUtils;
@@ -75,10 +77,13 @@ public class SearchActivity extends BaseActivity<SearchActivityPresenter> implem
     SmartTabLayout tabs;
     @BindView(R.id.search_query_text)
     EditText queryText;
+    @BindView(R.id.search_history_layout)
+    ConstraintLayout searchHistory;
 
     //初始化进入的类型,默认是 "用户" 类型
     private int enterType;
     int defaultPosition = 0;
+    ArrayList<FragmentBean> fragmentList = new ArrayList<>();
 
     @OnClick({R.id.search_query_cancel})
     void click(View view) {
@@ -109,14 +114,41 @@ public class SearchActivity extends BaseActivity<SearchActivityPresenter> implem
         enterType = getIntent().getIntExtra(ENTER_TYPE, SearchActivityPresenter.SearchType.user.type);
         defaultPosition = enterType;
         buildTabsData();
-        queryText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                // 此处为得到焦点时的处理内容
-            } else {
+        queryText.setOnClickListener(v->{
+            searchHistory.setVisibility(View.VISIBLE);
+        });
+        queryText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                //搜索,通知當前選中的Fragment进行搜索
+                for (FragmentBean fragmentBean : fragmentList) {
+                    ((BaseFragment)fragmentBean.getFragment()).setData(this);
+                }
+                searchHistory.setVisibility(View.GONE);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                return true;
             }
+            return false;
         });
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(searchHistory.getVisibility() == View.VISIBLE){
+                searchHistory.setVisibility(View.GONE);
+            }
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(searchHistory.getVisibility() == View.VISIBLE){
+            searchHistory.setVisibility(View.GONE);
+        }else{
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -153,9 +185,10 @@ public class SearchActivity extends BaseActivity<SearchActivityPresenter> implem
 
     //构建Tabs数据和对应的Fragment
     private void buildTabsData() {
-        ArrayList<FragmentBean> fragmentList = new ArrayList<>();
         fragmentList.add(new FragmentBean("用户", SearchUserFragment.newInstance()));
         fragmentList.add(new FragmentBean("动态", SearchDynamicFragment.newInstance()));
+        fragmentList.add(new FragmentBean("圈子", SearchCircelFragment.newInstance()));
+        fragmentList.add(new FragmentBean("讨论", SearchDiscussFragment.newInstance()));
         vPager.setAdapter(new VPFragmentAdapter(getSupportFragmentManager(), fragmentList));
         vPager.setOffscreenPageLimit(fragmentList.size() - 1);
 //        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -191,16 +224,23 @@ public class SearchActivity extends BaseActivity<SearchActivityPresenter> implem
         View view = tabs.getTabAt(defaultPosition).findViewById(R.id.custom_text);
         if (view != null)
             if (view instanceof TextView) {
-                ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(isSelect ? R.dimen.sp_40 : R.dimen.sp_34));
+                ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(isSelect ? R.dimen.sp_34 : R.dimen.sp_34));
             }
     }
 
     //取消搜索
     private void cancelQuery() {
+        if(searchHistory.getVisibility() == View.VISIBLE){
+            searchHistory.setVisibility(View.GONE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+            return;
+        }
         queryText.setText(""); //清空搜索内容
         queryText.clearFocus();
         queryText.setCursorVisible(false);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        finish();
     }
 }

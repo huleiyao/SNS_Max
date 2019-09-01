@@ -5,6 +5,7 @@ import android.app.Application;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
 import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
+import com.bytegem.snsmax.main.app.bean.user.SearchDTO;
 import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.app.config.GroupService;
 import com.google.gson.Gson;
@@ -52,9 +53,9 @@ public class SearchDynamicModel extends BaseModel implements SearchDynamicContra
     }
 
     @Override
-    public Observable<LISTFeeds> getFeedList(String latitude, String longitude, String per_page, String page) {
+    public Observable<LISTFeeds> getFeedList(String keydows, String after) {
         return mRepositoryManager
-                .obtainRetrofitService(CommunityService.class)
-                .getList(MApplication.getTokenOrType(), latitude, longitude, per_page, page);
+                .obtainRetrofitService(GroupService.class)
+                .searchFeeds(MApplication.getTokenOrType(),"feeds",keydows,after);
     }
 }

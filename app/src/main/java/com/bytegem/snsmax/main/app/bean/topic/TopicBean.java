@@ -9,7 +9,6 @@ public class TopicBean extends MBaseBean {
     private String avatar;
     private String bg;
     private String created_at;
-
     public int getId() {
         return id;
     }
