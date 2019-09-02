@@ -45,7 +45,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="64dp"
@@ -76,10 +76,6 @@
                     android:textColor="@color/color_646F79"
                     android:textSize="30sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_ico_smalarrow" />
             </LinearLayout>
 
             <View
@@ -88,6 +84,7 @@
                 android:background="@color/color_DFE6E8" />
 
             <LinearLayout
+                android:id="@+id/user_setting_sex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -125,6 +122,7 @@
                 android:background="@color/color_DFE6E8" />
 
             <LinearLayout
+                android:id="@+id/user_setting_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -161,6 +159,7 @@
                 android:background="@color/color_DFE6E8" />
 
             <LinearLayout
+                android:id="@+id/user_setting_school"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -181,7 +180,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:layout_weight="1"
-
                     android:gravity="right"
                     android:textColor="@color/color_b0b8bf"
                     android:textSize="30sp" />
@@ -194,9 +192,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/user_setting_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="64dp"
@@ -237,9 +236,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/user_setting_industry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="64dp"

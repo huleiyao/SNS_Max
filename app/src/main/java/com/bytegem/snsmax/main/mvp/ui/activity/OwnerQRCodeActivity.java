@@ -7,12 +7,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.Api;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
+import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.zxing.encode.CodeCreator;
 import com.google.gson.Gson;
 import com.jess.arms.base.BaseActivity;
@@ -45,9 +48,17 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  */
 public class OwnerQRCodeActivity extends BaseActivity<OwnerQRCodePresenter> implements OwnerQRCodeContract.View {
 
-    private ImageView imgQrcode;
+    @BindView(R.id.owner_qrcode_qrcode)
+    ImageView imgQrcode;
+    @BindView(R.id.owner_qrcode_name)
+    TextView txtName;
+    @BindView(R.id.owner_qrcode_location)
+    TextView txtLocation;
+    @BindView(R.id.owner_qrcode_avatar)
+    ImageView imgAvatar;
     Bitmap bitmap = null;
     private DATAUser dataUser;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerOwnerQRCodeComponent //如找不到该类,请编译一下项目
@@ -65,19 +76,23 @@ public class OwnerQRCodeActivity extends BaseActivity<OwnerQRCodePresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        imgQrcode = findViewById(R.id.qrcode);
-        if (dataUser.getData().getId()!=0){
-            setBitmap(Api.SHARE_LOOK_DOMAIN+"/users/"+dataUser.getData().getId());
-        }else {
-            Toast.makeText(this,"请先登录",Toast.LENGTH_SHORT).show();
+        setTitle("我的二维码");
+        dataUser = UserInfoUtils.getUserInfo(new Gson());
+        if (dataUser != null && dataUser.getData().getId() != 0) {
+            txtName.setText(dataUser.getData().getName());
+            txtLocation.setText(dataUser.getData().getLocation());
+            GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(dataUser.getData().getAvatar()), imgAvatar);
+            setBitmap(Api.SHARE_LOOK_DOMAIN + "/users/" + dataUser.getData().getId());
+        } else {
+            Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
-            intent.setClass(getApplication(),LoginActivity.class);
+            intent.setClass(getApplication(), LoginActivity.class);
             startActivity(intent);
         }
     }
 
-    private void setBitmap(String contentEtString){
-        if (TextUtils.isEmpty(contentEtString)){
+    private void setBitmap(String contentEtString) {
+        if (TextUtils.isEmpty(contentEtString)) {
             Toast.makeText(this, "请输入要生成二维码图片的字符串", Toast.LENGTH_SHORT).show();
             return;
         }

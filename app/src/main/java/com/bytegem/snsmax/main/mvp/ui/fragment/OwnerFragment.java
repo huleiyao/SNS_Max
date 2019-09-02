@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +37,6 @@ import com.jess.arms.utils.ArmsUtils;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageCropActivity;
-import com.lzy.imagepicker.ui.ImageGridActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -73,7 +71,6 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     TextView user_fans_count;
     @BindView(R.id.user_cover)
     ImageView user_cover;
-    BottomSheetDialog changeUserCoverBottomSheetDialog;
 
     @OnClick({R.id.setting, R.id.owner_qrcode, R.id.scan, R.id.user_cover
             , R.id.owner_group, R.id.owner_favorites, R.id.community_honor, R.id.owner_treasure
@@ -167,22 +164,8 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         mPresenter.getUserData();
-        initCommitBottomSheetDialog();
     }
 
-    public void updataCover(ImageItem imageItem) {
-        mPresenter.getSign("image", imageItem);
-    }
-
-    private void initCommitBottomSheetDialog() {
-        changeUserCoverBottomSheetDialog = new BottomSheetDialog(getContext());
-        changeUserCoverBottomSheetDialog.setContentView(R.layout.dialog_change_user_cover);
-        changeUserCoverBottomSheetDialog.getDelegate().findViewById(R.id.design_bottom_sheet)
-                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
-        changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_photo).setOnClickListener(this);
-        changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_pic).setOnClickListener(this);
-        changeUserCoverBottomSheetDialog.findViewById(R.id.tv_cancel).setOnClickListener(this);
-    }
 
     @Override
     public void setData(@Nullable Object data) {

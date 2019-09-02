@@ -32,7 +32,8 @@
             android:gravity="center"
             android:text="保存"
             android:textColor="@color/color_151b26"
-            android:textSize="32dp" />
+            android:textSize="32dp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <RelativeLayout
