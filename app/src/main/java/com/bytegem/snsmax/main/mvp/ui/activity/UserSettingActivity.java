@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,10 +21,14 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.mvc.bean.AreaBean;
 import com.bytegem.snsmax.main.app.mvc.utils.GetJsonUtil;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.di.component.DaggerUserSettingComponent;
@@ -41,7 +48,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -80,7 +91,7 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     @BindView(R.id.user_setting_industry)
     LinearLayout btnIndustry;
     @BindView(R.id.user_nickName)
-    TextView txtNickName;
+    EditText edtNickName;
     @BindView(R.id.user_location)
     TextView txtLocation;
     @BindView(R.id.user_sex)
@@ -95,7 +106,7 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     RxErrorHandler mErrorHandler;
     BottomSheetDialog changeUserCoverBottomSheetDialog;
     BottomSheetDialog changeUserSexBottomSheetDialog;
-
+    private String strNickName = "";
     private Context context;
     private Intent intent = new Intent();
     //  省
@@ -125,6 +136,7 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        userInfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
         setUserDetails();
         initCommitBottomSheetCoverDialog();
         initCommitBottomSheetUserDialog();
@@ -132,6 +144,29 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
         btnMore.setText("保存");
         btnMore.setTextColor(getResources().getColor(R.color.color_5e6ce7));
         setListener();
+        edtNickName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER) {
+                    edtNickName.clearFocus();
+                    strNickName = edtNickName.getText().toString().trim();
+                    HttpMvcHelper.obtainRetrofitService(UserService.class)
+                            .updateUserData(MApplication.getTokenOrType(), RequestBody.create(
+                                    MediaType.parse("application/json; charset=utf-8"),
+                                    M.getMapString("name", strNickName)))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(suc -> {
+                            }, err -> {
+                                if (err.toString().contains("Null is not a valid element")) {
+                                    userInfo.getData().setName(edtNickName.getText().toString());
+                                }
+                            });
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void setListener() {
@@ -145,25 +180,10 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
         btnIndustry.setOnClickListener(this);
     }
 
-    private void saveUserDetails() {
-        userInfo.getData().setName(txtNickName.getText().toString());
-        if (txtSex.getText().toString().equals("男")) {
-            userInfo.getData().setSex("man");
-        } else if (txtSex.getText().toString().equals("女")) {
-            userInfo.getData().setSex("woman");
-        } else {
-            userInfo.getData().setSex("unknown");
-        }
-        userInfo.getData().setLocation(txtLocation.getText().toString());
-        userInfo.getData().setSchool(txtSchool.getText().toString());
-        userInfo.getData().setBio(txtDesc.getText().toString());
-        userInfo.getData().setTrade(txtIndustry.getText().toString());
-    }
 
     private void setUserDetails() {
-        userInfo = UserInfoUtils.getUserInfo(mPresenter.getGson());
         if (userInfo != null && userInfo.getData() != null) {
-            txtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
+            edtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
             String sex = mPresenter.isNull(userInfo.getData().getSex()) || userInfo.getData().getSex().equals("unknown") ? "保密" : userInfo.getData().getSex();
             txtSex.setText("保密".equals(sex) ? sex : "man".equals(sex) ? "男" : "女");
             txtLocation.setText(mPresenter.isNull(userInfo.getData().getLocation()) ? "--" : userInfo.getData().getLocation());
@@ -211,25 +231,6 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
             case R.id.user_setting_back:
                 finish();
                 break;
-            case R.id.user_setting_more:
-                //把修改的值丢到Model 里面转成JSON 丢服务器保存
-//                saveUserDetails();
-//                String userJson = UserInfoUtils.getJsonUserData(userInfo.getData(), new Gson());
-//                HttpMvcHelper
-//                        .obtainRetrofitService(UserService.class)
-//                        .updateUserData(MApplication.getTokenOrType(), RequestBody.create(
-//                                MediaType.parse("application/json; charset=utf-8"),
-//                                userJson))
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
-//                            @Override
-//                            public void onNext(NetDefaultBean netDefaultBean) {
-//                            }
-//                        });
-//                UserInfoUtils.saveUserInfo(userInfo, new Gson());
-//                finish();
-                break;
             case R.id.change_user_cover:
                 changeUserCoverBottomSheetDialog.show();
                 break;
@@ -255,14 +256,17 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
             case R.id.tv_take_man:
                 changeUserSexBottomSheetDialog.dismiss();
                 txtSex.setText("男");
+                userInfo.getData().setSex("man");
                 break;
             case R.id.tv_take_woman:
                 changeUserSexBottomSheetDialog.dismiss();
                 txtSex.setText("女");
+                userInfo.getData().setSex("woman");
                 break;
             case R.id.tv_secret:
                 changeUserSexBottomSheetDialog.dismiss();
                 txtSex.setText("保密");
+                userInfo.getData().setSex("unknown");
                 break;
             case R.id.user_setting_school:
                 strType = "学院编辑";
@@ -371,8 +375,8 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
                     options2Items.get(options1).get(options2) + " " +
                     options3Items.get(options1).get(options2).get(options3);
             txtLocation.setText(tx);
+            userInfo.getData().setLocation(txtLocation.getText().toString());
         })
-
                 .setTitleText("城市选择")
                 .setDividerColor(Color.BLACK)
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色

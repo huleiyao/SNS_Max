@@ -25,7 +25,7 @@ import okhttp3.RequestBody;
 
 public class UserUpdateActivity extends BaseActivity implements View.OnClickListener {
 
-    private DATAUser userInfo = UserInfoUtils.getUserInfo(new Gson());
+    private DATAUser userInfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
     private RelativeLayout btnBack;
     private TextView txtTitle;
     private Button btnUpdate;

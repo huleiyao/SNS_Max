@@ -87,7 +87,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     // 申请权限
                     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.CAMERA)) {
-                        Toast.makeText(getContext(), "请至权限中心打开本应用的相机访问权限", Toast.LENGTH_SHORT).show();
+                        ArmsUtils.snackbarText("请至权限中心打开本应用的相机访问权限");
                     }
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, Constant.REQ_PERM_CAMERA);
                     return;
@@ -97,7 +97,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                     // 申请权限
                     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission
                             .WRITE_EXTERNAL_STORAGE)) {
-                        Toast.makeText(getActivity(), "请至权限中心打开本应用的文件读写权限", Toast.LENGTH_SHORT).show();
+                        ArmsUtils.snackbarText("请至权限中心打开本应用的文件读写权限");
                     }
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.REQ_PERM_EXTERNAL_STORAGE);
                     return;
@@ -206,7 +206,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
         user_zan_count.setText(userBean.getLikes_count() + "");
         user_follow_count.setText(userBean.getFollowers_count() + "");
         user_fans_count.setText(userBean.getFollowings_count() + "");
-//        user_content.setText(userBean.get());
+        user_content.setText(userBean.getBio());
         if (userBean.getAvatar() == null || userBean.getAvatar().isEmpty())
             GlideLoaderUtil.LoadCircleImage(mContext, R.drawable.ic_deskicon, user_cover);
         else

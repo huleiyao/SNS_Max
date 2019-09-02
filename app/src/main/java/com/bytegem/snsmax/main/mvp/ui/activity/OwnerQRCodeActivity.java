@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.Api;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.zxing.encode.CodeCreator;
@@ -77,14 +78,14 @@ public class OwnerQRCodeActivity extends BaseActivity<OwnerQRCodePresenter> impl
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         setTitle("我的二维码");
-        dataUser = UserInfoUtils.getUserInfo(new Gson());
+        dataUser = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
         if (dataUser != null && dataUser.getData().getId() != 0) {
             txtName.setText(dataUser.getData().getName());
             txtLocation.setText(dataUser.getData().getLocation());
             GlideLoaderUtil.LoadCircleImage(this, Utils.checkUrl(dataUser.getData().getAvatar()), imgAvatar);
             setBitmap(Api.SHARE_LOOK_DOMAIN + "/users/" + dataUser.getData().getId());
         } else {
-            Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
+            ArmsUtils.snackbarText("请先登录");
             Intent intent = new Intent();
             intent.setClass(getApplication(), LoginActivity.class);
             startActivity(intent);
@@ -93,7 +94,7 @@ public class OwnerQRCodeActivity extends BaseActivity<OwnerQRCodePresenter> impl
 
     private void setBitmap(String contentEtString) {
         if (TextUtils.isEmpty(contentEtString)) {
-            Toast.makeText(this, "请输入要生成二维码图片的字符串", Toast.LENGTH_SHORT).show();
+            ArmsUtils.snackbarText("请输入要生成二维码图片");
             return;
         }
         bitmap = CodeCreator.createQRCode(contentEtString, 400, 400, null);

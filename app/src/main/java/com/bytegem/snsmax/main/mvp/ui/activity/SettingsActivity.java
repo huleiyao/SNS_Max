@@ -22,6 +22,7 @@ import com.bytegem.snsmax.main.app.mvc.utils.DataCleanManager;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -108,7 +109,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                             public void onClick(DialogInterface dialog, int which) {
 
                                 DataCleanManager.cleanApplicationData(context);
-                                Toast.makeText(context, "清除成功", Toast.LENGTH_SHORT).show();
+                                ArmsUtils.snackbarText("清除成功");
                                 txtUserCache.setText("0.0MB");
                             }
                         }).
@@ -127,14 +128,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(suc -> {
                             NetDefaultBean a = suc;
-                            UserInfoUtils.setTokenAndType("","");
+                            UserInfoUtils.setTokenAndType("", "");
                             Intent intent = new Intent();
                             intent.setClass(context, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             finish();
                         }, err -> {
-                            Toast.makeText(context, "退出登录失败!", Toast.LENGTH_SHORT).show();
+                            ArmsUtils.snackbarText("退出登录失败");
                         });
                 break;
             default:
