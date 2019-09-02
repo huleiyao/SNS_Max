@@ -2,12 +2,9 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
-import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
 import com.bytegem.snsmax.main.app.bean.user.SearchDTO;
-import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.app.config.GroupService;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -16,7 +13,7 @@ import com.jess.arms.di.scope.FragmentScope;
 
 import javax.inject.Inject;
 
-import com.bytegem.snsmax.main.mvp.contract.SearchDynamicContract;
+import com.bytegem.snsmax.main.mvp.contract.SearchCircelContract;
 
 import io.reactivex.Observable;
 
@@ -25,7 +22,7 @@ import io.reactivex.Observable;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 08/29/2019 16:12
+ * Created by MVPArmsTemplate on 08/31/2019 11:05
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -34,15 +31,27 @@ import io.reactivex.Observable;
  * ================================================
  */
 @FragmentScope
-public class SearchDynamicModel extends BaseModel implements SearchDynamicContract.Model {
+public class SearchCircelModel extends BaseModel implements SearchCircelContract.Model {
     @Inject
     Gson mGson;
     @Inject
     Application mApplication;
 
     @Inject
-    public SearchDynamicModel(IRepositoryManager repositoryManager) {
+    public SearchCircelModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
+    }
+
+    @Override
+    public Observable<SearchDTO<SearchDTO.SearchCircelItem>> queryCircel(String keydows, String after) {
+        return mRepositoryManager
+                .obtainRetrofitService(GroupService.class)
+                .searchCircel(
+                        HttpMvcHelper.getTokenOrType(),
+                        "groups",
+                        keydows,
+                        after
+                );
     }
 
     @Override
@@ -50,12 +59,5 @@ public class SearchDynamicModel extends BaseModel implements SearchDynamicContra
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
-    }
-
-    @Override
-    public Observable<LISTFeeds> getFeedList(String keydows, String after) {
-        return mRepositoryManager
-                .obtainRetrofitService(GroupService.class)
-                .searchFeeds(MApplication.getTokenOrType(),"feeds",keydows,after);
     }
 }

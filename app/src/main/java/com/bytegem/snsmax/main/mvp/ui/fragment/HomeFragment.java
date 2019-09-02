@@ -15,8 +15,11 @@ import android.widget.TextView;
 
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
+import com.bytegem.snsmax.main.mvp.presenter.SearchActivityPresenter;
+import com.bytegem.snsmax.main.mvp.ui.activity.SearchActivity;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.mvp.IView;
 import com.jess.arms.utils.ArmsUtils;
 
 import com.bytegem.snsmax.main.di.component.DaggerHomeComponent;
@@ -29,6 +32,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -58,6 +62,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         if (instance == null)
             instance = new HomeFragment();
         return instance;
+    }
+
+    @OnClick({R.id.home_search})
+    void click(View v){
+        switch (v.getId()){
+            case R.id.home_search:{
+                //跳转到动态搜索
+                SearchActivity.goToSearch((IView) getActivity(), SearchActivityPresenter.SearchType.dynamic);
+                break;
+            }
+        }
     }
 
     @Override

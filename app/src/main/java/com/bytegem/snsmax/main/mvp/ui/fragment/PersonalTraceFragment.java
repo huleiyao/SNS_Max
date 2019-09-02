@@ -15,18 +15,15 @@ import android.view.ViewGroup;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
-import com.bytegem.snsmax.main.di.component.DaggerSearchDynamicComponent;
-import com.bytegem.snsmax.main.mvp.contract.SearchActivityContract;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytegem.snsmax.main.mvp.contract.SearchDynamicContract;
-import com.bytegem.snsmax.main.mvp.presenter.SearchDynamicPresenter;
-
+import com.bytegem.snsmax.main.di.component.DaggerPersonalTraceComponent;
+import com.bytegem.snsmax.main.mvp.contract.PersonalTraceContract;
+import com.bytegem.snsmax.main.mvp.presenter.PersonalTracePresenter;
 import com.liaoinstan.springview.widget.SpringView;
-
 
 import javax.inject.Inject;
 
@@ -38,8 +35,9 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 /**
  * ================================================
  * Description:
+ * 我的痕迹，也就是 "迹记"
  * <p>
- * Created by MVPArmsTemplate on 08/29/2019 16:12
+ * Created by MVPArmsTemplate on 09/01/2019 19:50
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -47,7 +45,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> implements SearchDynamicContract.View {
+public class PersonalTraceFragment extends BaseFragment<PersonalTracePresenter> implements PersonalTraceContract.View {
 
     @Inject
     FeedsAdapter adapter;
@@ -56,14 +54,14 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
     @BindView(R.id.recycle_view)
     RecyclerView recyclerView;
 
-    public static SearchDynamicFragment newInstance() {
-        SearchDynamicFragment fragment = new SearchDynamicFragment();
+    public static PersonalTraceFragment newInstance() {
+        PersonalTraceFragment fragment = new PersonalTraceFragment();
         return fragment;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerSearchDynamicComponent //如找不到该类,请编译一下项目
+        DaggerPersonalTraceComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -73,15 +71,11 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search_dynamic_post_list, container, false);
+        return inflater.inflate(R.layout.fragment_personal_trace, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        initList();
-    }
-
-    private void initList() {
         if (adapter == null) adapter = new FeedsAdapter();
         adapter.setListener(mPresenter, mPresenter, mPresenter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
@@ -143,10 +137,11 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
      */
     @Override
     public void setData(@Nullable Object data) {
-        //如果需要更新数据。将自己传入即可
-        if (data instanceof SearchActivityContract.SearchDataSourcess) {
-            queryData();
-        }
+
+    }
+
+    public void onFinishFreshAndLoad() {
+        springView.onFinishFreshAndLoad();
     }
 
     @Override
@@ -164,10 +159,6 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
     @Override
     public void showLoading() {
 
-    }
-
-    public void onFinishFreshAndLoad() {
-        springView.onFinishFreshAndLoad();
     }
 
     @Override
@@ -196,13 +187,6 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
 
     //查询数据,[isLoadMore]是否加载更多
     private void queryData() {
-        if (mPresenter != null && getActivity() instanceof SearchActivityContract.SearchDataSourcess) {
-            String queyStr = ((SearchActivityContract.SearchDataSourcess) getActivity()).getQueryKey();
-            if (queyStr == null || "".equals(queyStr)) {
-                onFinishFreshAndLoad();
-                return ;
-            }
-            mPresenter.getList(queyStr);
-        }
+        mPresenter.getList();
     }
 }

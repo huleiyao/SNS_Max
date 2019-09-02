@@ -18,6 +18,7 @@ public class UserBean extends MBaseBean {
     private int likes_count;
     private int followers_count;//粉丝
     private int followings_count;//关注的人
+    private boolean has_following = false;//是否关注
 
     private GroupMemberBean group_member;//圈子内用户身份信息
 
@@ -142,5 +143,13 @@ public class UserBean extends MBaseBean {
 
     public void setGroup_member(GroupMemberBean group_member) {
         this.group_member = group_member;
+    }
+
+    public boolean getHas_following() {
+        return has_following;
+    }
+
+    public void setHas_following(boolean has_following) {
+        this.has_following = has_following;
     }
 }

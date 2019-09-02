@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bytegem.snsmax.main.mvp.ui.fragment.PersonalTraceFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -16,6 +20,8 @@ import com.bytegem.snsmax.main.mvp.presenter.OwnerFeedHistoryPresenter;
 
 import com.bytegem.snsmax.R;
 
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -34,6 +40,11 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  */
 public class OwnerFeedHistoryActivity extends BaseActivity<OwnerFeedHistoryPresenter> implements OwnerFeedHistoryContract.View {
 
+    private Fragment fragment;
+
+    @BindView(R.id.title_title)
+    TextView title;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerOwnerFeedHistoryComponent //如找不到该类,请编译一下项目
@@ -51,7 +62,11 @@ public class OwnerFeedHistoryActivity extends BaseActivity<OwnerFeedHistoryPrese
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        setTitle("我的迹记");
+        title.setText("我的迹记");
+        fragment = PersonalTraceFragment.newInstance();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.owner_feed_fragment, fragment)
+                .commit();
     }
 
     MaterialDialog materialDialog;

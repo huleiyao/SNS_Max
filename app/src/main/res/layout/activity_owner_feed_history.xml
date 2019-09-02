@@ -5,5 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title" />
+    <include
+        android:id="@+id/owner_feed_title_layout"
+        layout="@layout/include_title" />
+    <RelativeLayout
+        android:id="@+id/owner_feed_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

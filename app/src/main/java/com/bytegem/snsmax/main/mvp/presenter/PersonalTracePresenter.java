@@ -8,19 +8,15 @@ import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
-import com.bytegem.snsmax.main.app.bean.group.GroupBean;
-import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.topic.TopicBean;
 import com.bytegem.snsmax.main.app.utils.FeedsInfoUtils;
 import com.bytegem.snsmax.main.app.widget.TagTextView;
 import com.bytegem.snsmax.main.mvp.ui.activity.FeedDetailsActivity;
-import com.bytegem.snsmax.main.mvp.ui.activity.GroupDetailsActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.TopicDetailActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.VideoPlayerActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.WatchImageActivity;
 import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
-import com.bytegem.snsmax.main.mvp.ui.adapter.GroupsAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImageAdapter2;
 import com.bytegem.snsmax.main.mvp.ui.listener.ImageAdapterGetFeed;
@@ -31,6 +27,7 @@ import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -38,7 +35,7 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import javax.inject.Inject;
 
-import com.bytegem.snsmax.main.mvp.contract.SearchDynamicContract;
+import com.bytegem.snsmax.main.mvp.contract.PersonalTraceContract;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.lzy.imagepicker.ImagePicker;
 
@@ -48,8 +45,9 @@ import java.util.ArrayList;
 /**
  * ================================================
  * Description:
+ * 我的痕迹，也就是 "迹记"
  * <p>
- * Created by MVPArmsTemplate on 08/29/2019 16:12
+ * Created by MVPArmsTemplate on 09/01/2019 19:50
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -58,7 +56,7 @@ import java.util.ArrayList;
  * ================================================
  */
 @FragmentScope
-public class SearchDynamicPresenter extends BasePresenter<SearchDynamicContract.Model, SearchDynamicContract.View>
+public class PersonalTracePresenter extends BasePresenter<PersonalTraceContract.Model, PersonalTraceContract.View>
         implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener, TagTextView.TopicListener {
     @Inject
     RxErrorHandler mErrorHandler;
@@ -71,25 +69,17 @@ public class SearchDynamicPresenter extends BasePresenter<SearchDynamicContract.
     @Inject
     FeedsAdapter adapter;
 
+
     @Inject
-    public SearchDynamicPresenter(SearchDynamicContract.Model model, SearchDynamicContract.View rootView) {
+    public PersonalTracePresenter(PersonalTraceContract.Model model, PersonalTraceContract.View rootView) {
         super(model, rootView);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mErrorHandler = null;
-        this.mAppManager = null;
-        this.mImageLoader = null;
-        this.mApplication = null;
-    }
-
-    public void getList(String key) {
+    public void getList() {
         if (MApplication.location == null)
             MApplication.location = new LocationBean();
         //获取动态列表
-        mModel.getFeedList(key, "0")
+        Observable.fromCallable(this::getSpFeeds)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -192,5 +182,21 @@ public class SearchDynamicPresenter extends BasePresenter<SearchDynamicContract.
     @Override
     public void topicListener(TopicBean topicBean) {
         mRootView.launchActivity(new Intent(mApplication, TopicDetailActivity.class).putExtra("topic", topicBean));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mErrorHandler = null;
+        this.mAppManager = null;
+        this.mImageLoader = null;
+        this.mApplication = null;
+    }
+
+    //获取本地的相关sp
+    private LISTFeeds getSpFeeds(){
+        LISTFeeds listFeeds = new LISTFeeds();
+        listFeeds.setData(FeedsInfoUtils.getFeedInfoBeans());
+        return listFeeds;
     }
 }

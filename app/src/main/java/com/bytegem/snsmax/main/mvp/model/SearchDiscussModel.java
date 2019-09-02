@@ -2,12 +2,9 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
-import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
-import com.bytegem.snsmax.main.app.bean.group.LISTGroup;
 import com.bytegem.snsmax.main.app.bean.user.SearchDTO;
-import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.app.config.GroupService;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -16,7 +13,7 @@ import com.jess.arms.di.scope.FragmentScope;
 
 import javax.inject.Inject;
 
-import com.bytegem.snsmax.main.mvp.contract.SearchDynamicContract;
+import com.bytegem.snsmax.main.mvp.contract.SearchDiscussContract;
 
 import io.reactivex.Observable;
 
@@ -25,7 +22,7 @@ import io.reactivex.Observable;
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 08/29/2019 16:12
+ * Created by MVPArmsTemplate on 08/31/2019 10:57
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -34,15 +31,22 @@ import io.reactivex.Observable;
  * ================================================
  */
 @FragmentScope
-public class SearchDynamicModel extends BaseModel implements SearchDynamicContract.Model {
+public class SearchDiscussModel extends BaseModel implements SearchDiscussContract.Model {
     @Inject
     Gson mGson;
     @Inject
     Application mApplication;
 
     @Inject
-    public SearchDynamicModel(IRepositoryManager repositoryManager) {
+    public SearchDiscussModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
+    }
+
+    @Override
+    public Observable<SearchDTO<SearchDTO.SearchDiscussesItem>> queryDiscuss(String key, String s) {
+        return mRepositoryManager
+                .obtainRetrofitService(GroupService.class)
+                .searchDiscusses(HttpMvcHelper.getTokenOrType(), "discusses", key, s);
     }
 
     @Override
@@ -50,12 +54,5 @@ public class SearchDynamicModel extends BaseModel implements SearchDynamicContra
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
-    }
-
-    @Override
-    public Observable<LISTFeeds> getFeedList(String keydows, String after) {
-        return mRepositoryManager
-                .obtainRetrofitService(GroupService.class)
-                .searchFeeds(MApplication.getTokenOrType(),"feeds",keydows,after);
     }
 }

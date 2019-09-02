@@ -2,8 +2,11 @@ package com.bytegem.snsmax.main.mvp.model;
 
 import android.app.Application;
 
+import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.SearchDTO;
 import com.bytegem.snsmax.main.app.config.GroupService;
+import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
@@ -51,13 +54,26 @@ public class SearchUserModel extends BaseModel implements SearchUserContract.Mod
 
     @Override
     public Observable<SearchDTO<SearchDTO.SearchUserItem>> queryUser(String keydows, String after) {
-        return mRepositoryManager.obtainCacheService(GroupService.class)
-                .search(
+        return mRepositoryManager
+                .obtainRetrofitService(GroupService.class)
+                .searchUsers(
                         HttpMvcHelper.getTokenOrType(),
                         "users",
                         keydows,
-                        after,
-                        SearchDTO.SearchUserItem.class
+                        after
                 );
+    }
+
+    @Override
+    public Observable<NetDefaultBean> changeUserFollowState(int id, boolean isFollow) {
+        if (isFollow) {
+            return mRepositoryManager
+                    .obtainRetrofitService(UserService.class)
+                    .changeUserUnfollowState(MApplication.getTokenOrType(), id);
+        }else {
+            return mRepositoryManager
+                    .obtainRetrofitService(UserService.class)
+                    .changeUserFollowState(MApplication.getTokenOrType(), id);
+        }
     }
 }

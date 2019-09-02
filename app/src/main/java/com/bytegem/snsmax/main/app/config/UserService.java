@@ -29,6 +29,11 @@ public interface UserService {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<LoginData> login(@Body RequestBody requestBody);
 
+    //刷新token
+    @GET("/auth/refresh")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LoginData> tokenRefresh(@Header("Authorization") String authorization);
+
     //注册
     @POST("/auth/register")
     @Headers({"Content-Type:application/json", "Accept:application/json"})

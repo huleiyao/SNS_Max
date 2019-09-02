@@ -40,7 +40,7 @@ public class UserInfoUtils {
      * @param gson
      */
     public static DATAUser getUserInfo(Gson gson) {
-        if(currentUser != null){
+        if (currentUser != null) {
             return currentUser;
         }
         //如果获取用户信息成功。那么保存到本地中
@@ -52,10 +52,68 @@ public class UserInfoUtils {
         return gson.fromJson(userinfo, DATAUser.class);
     }
 
-    public static  String getJsonUserData(UserBean dataUser, Gson gson){
+    /**
+     * 保存token和类型到本地
+     *
+     * @param token
+     * @param tokenType
+     */
+    public static void setTokenAndType(String token, String tokenType) {
+        SharedPreferences.Editor et = getSharedPreferences()
+                .edit();
+        if (token != null && !token.isEmpty()) {
+            et.putString("token", token);
+            MApplication.getInstance().setToken(token);
+        }
+        if (tokenType != null && !tokenType.isEmpty()) {
+            et.putString("token_type", tokenType);
+            MApplication.getInstance().setTokenType(tokenType);
+        }
+        et.apply();
+    }
+
+    /**
+     * 读取本地的token和类型
+     */
+    public static String getTokenAndType() {
+        SharedPreferences sp = getSharedPreferences();
+        String token = sp.getString("token", "");
+        String tokenType = sp.getString("token_type", "");
+        return tokenType + " " + token;
+    }
+
+    /**
+     * 读取本地的token
+     */
+    public static String getToken() {
+        SharedPreferences sp = getSharedPreferences();
+        String token = sp.getString("token", "");
+        return token;
+    }
+
+    /**
+     * 读取本地的token类型
+     */
+    public static String getTokenType() {
+        SharedPreferences sp = getSharedPreferences();
+        String token = sp.getString("token_type", "");
+        return token;
+    }
+
+    /**
+     * 检查是否已经登录了。T是，F不是有效登录
+     */
+    public static boolean isLogin() {
+        SharedPreferences sp = getSharedPreferences();
+        String token = sp.getString("token", "");
+        String tokenType = sp.getString("token_type", "");
+        return token != null && !"".equals(token) && tokenType != null && !"".equals(tokenType);
+    }
+
+    public static String getJsonUserData(UserBean dataUser, Gson gson) {
         String str = "";
         if (dataUser != null) {
-            str =  gson.toJson(dataUser);
+            str = gson.toJson(dataUser);
         }
         return str;
     }

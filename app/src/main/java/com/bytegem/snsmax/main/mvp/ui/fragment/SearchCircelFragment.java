@@ -6,40 +6,35 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bytegem.snsmax.R;
-import com.bytegem.snsmax.main.app.bean.feed.FeedBean;
-import com.bytegem.snsmax.main.di.component.DaggerSearchDynamicComponent;
+import com.bytegem.snsmax.main.app.bean.group.GroupBean;
+import com.bytegem.snsmax.main.app.bean.user.SearchDTO;
 import com.bytegem.snsmax.main.mvp.contract.SearchActivityContract;
-import com.bytegem.snsmax.main.mvp.ui.adapter.FeedsAdapter;
+import com.bytegem.snsmax.main.mvp.ui.activity.GroupDetailsActivity;
+import com.bytegem.snsmax.main.mvp.ui.adapter.GroupsAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
-import com.bytegem.snsmax.main.mvp.contract.SearchDynamicContract;
-import com.bytegem.snsmax.main.mvp.presenter.SearchDynamicPresenter;
-
+import com.bytegem.snsmax.main.di.component.DaggerSearchCircelComponent;
+import com.bytegem.snsmax.main.mvp.contract.SearchCircelContract;
+import com.bytegem.snsmax.main.mvp.presenter.SearchCircelPresenter;
 import com.liaoinstan.springview.widget.SpringView;
-
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
 /**
  * ================================================
  * Description:
  * <p>
- * Created by MVPArmsTemplate on 08/29/2019 16:12
+ * Created by MVPArmsTemplate on 08/31/2019 11:05
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
@@ -47,23 +42,21 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> implements SearchDynamicContract.View {
+public class SearchCircelFragment extends BaseFragment<SearchCircelPresenter> implements SearchCircelContract.View {
 
-    @Inject
-    FeedsAdapter adapter;
-    @BindView(R.id.springview)
-    SpringView springView;
     @BindView(R.id.recycle_view)
-    RecyclerView recyclerView;
+    RecyclerView rView;
+    @BindView(R.id.springview)
+    SpringView springview;
 
-    public static SearchDynamicFragment newInstance() {
-        SearchDynamicFragment fragment = new SearchDynamicFragment();
+    public static SearchCircelFragment newInstance() {
+        SearchCircelFragment fragment = new SearchCircelFragment();
         return fragment;
     }
 
     @Override
     public void setupFragmentComponent(@NonNull AppComponent appComponent) {
-        DaggerSearchDynamicComponent //如找不到该类,请编译一下项目
+        DaggerSearchCircelComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -73,25 +66,14 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
 
     @Override
     public View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search_dynamic_post_list, container, false);
+        return inflater.inflate(R.layout.fragment_search_circel, container, false);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        initList();
-    }
-
-    private void initList() {
-        if (adapter == null) adapter = new FeedsAdapter();
-        adapter.setListener(mPresenter, mPresenter, mPresenter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));// 布局管理器
-        adapter.setEmptyView(LayoutInflater.from(getContext()).inflate(R.layout.include_empty_data, recyclerView, false));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter.setOnItemClickListener(mPresenter);
-        adapter.setOnItemChildClickListener(mPresenter);
-        springView.setType(SpringView.Type.FOLLOW);
-        springView.setListener(new SpringView.OnFreshListener() {
+        mPresenter.createAdapter(rView);
+        springview.setType(SpringView.Type.FOLLOW);
+        springview.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
                 queryData();
@@ -103,6 +85,30 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
             }
         });
         queryData();
+    }
+
+    @Override
+    public void bindListData(SearchDTO<SearchDTO.SearchCircelItem> search) {
+
+    }
+
+    @Override
+    public void circelClick(int clickPos, SearchDTO.SearchCircelItem clickItem) {
+        GroupBean group = new GroupBean();
+        group.setAvatar(clickItem.avatar);
+        group.setId(clickItem.id);
+        group.setName(clickItem.name);
+        group.setPopularity(clickItem.popularity);
+        group.setCreated_at(clickItem.created_at);
+        group.setDesc(clickItem.desc);
+        group.setIs_private(clickItem.is_private);
+        group.setSpeak(clickItem.speak);
+        group.setMembers_count(clickItem.members_count);
+        group.setUpdated_at(clickItem.updated_at);
+        launchActivity(
+                new Intent(getActivity(), GroupDetailsActivity.class)
+                        .putExtra("group", group)
+        );
     }
 
     /**
@@ -150,29 +156,17 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
     }
 
     @Override
-    public void toComment(FeedBean feedBean) {
-//        this.feedBean = feedBean;
-//        commitBottomSheetDialog.show();
-    }
-
-    @Override
-    public void showMore(FeedBean feedBean) {
-//        this.feedBean = feedBean;
-//        bottomSheetDialog.show();
-    }
-
-    @Override
     public void showLoading() {
 
     }
 
     public void onFinishFreshAndLoad() {
-        springView.onFinishFreshAndLoad();
+        springview.onFinishFreshAndLoad();
     }
 
     @Override
     public void hideLoading() {
-
+        onFinishFreshAndLoad();
     }
 
     @Override
@@ -189,20 +183,19 @@ public class SearchDynamicFragment extends BaseFragment<SearchDynamicPresenter> 
 
     @Override
     public void killMyself() {
-        if (getActivity() != null) {
-            getActivity().finish();
-        }
+
     }
 
-    //查询数据,[isLoadMore]是否加载更多
+    //查询数据
     private void queryData() {
         if (mPresenter != null && getActivity() instanceof SearchActivityContract.SearchDataSourcess) {
             String queyStr = ((SearchActivityContract.SearchDataSourcess) getActivity()).getQueryKey();
             if (queyStr == null || "".equals(queyStr)) {
                 onFinishFreshAndLoad();
-                return ;
+                return;
             }
-            mPresenter.getList(queyStr);
+            springview.startLayoutAnimation();
+            mPresenter.queryCircel(queyStr);
         }
     }
 }
