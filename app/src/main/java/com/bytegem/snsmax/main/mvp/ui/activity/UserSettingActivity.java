@@ -4,29 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.blankj.utilcode.util.ConvertUtils;
-import com.blankj.utilcode.util.ResourceUtils;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
-import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.mvc.bean.AreaBean;
@@ -38,21 +34,16 @@ import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.di.component.DaggerUserSettingComponent;
 import com.bytegem.snsmax.main.mvp.contract.UserSettingContract;
 import com.bytegem.snsmax.main.mvp.presenter.UserSettingPresenter;
-import com.bytegem.snsmax.main.mvp.ui.dialog.UpdateDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.ui.ImageCropActivity;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -60,11 +51,9 @@ import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-import static com.bytegem.snsmax.main.app.MApplication.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -91,10 +80,20 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     FrameLayout btnUserCover;
     @BindView(R.id.user_setting_cover)
     ImageView imCover;
+    @BindView(R.id.user_setting_sex)
+    LinearLayout btnSex;
+    @BindView(R.id.user_setting_location)
+    LinearLayout btnLocation;
+    @BindView(R.id.user_setting_school)
+    LinearLayout btnSchool;
+    @BindView(R.id.user_setting_desc)
+    LinearLayout btnDesc;
+    @BindView(R.id.user_setting_industry)
+    LinearLayout btnIndustry;
+    @BindView(R.id.user_nickName)
+    EditText edtNickName;
     @BindView(R.id.user_location)
     TextView txtLocation;
-    @BindView(R.id.user_nickName)
-    TextView txtNickName;
     @BindView(R.id.user_sex)
     TextView txtSex;
     @BindView(R.id.user_school)
@@ -106,7 +105,8 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     @Inject
     RxErrorHandler mErrorHandler;
     BottomSheetDialog changeUserCoverBottomSheetDialog;
-
+    BottomSheetDialog changeUserSexBottomSheetDialog;
+    private String strNickName = "";
     private Context context;
     private Intent intent = new Intent();
     //  省
@@ -116,6 +116,7 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
     //  区
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
     private DATAUser userInfo;
+    private String strType = null;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -135,46 +136,55 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        userInfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
         setUserDetails();
-        initCommitBottomSheetDialog();
+        initCommitBottomSheetCoverDialog();
+        initCommitBottomSheetUserDialog();
         txtTitle.setText("编辑个人资料");
         btnMore.setText("保存");
         btnMore.setTextColor(getResources().getColor(R.color.color_5e6ce7));
         setListener();
+        edtNickName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER) {
+                    edtNickName.clearFocus();
+                    strNickName = edtNickName.getText().toString().trim();
+                    HttpMvcHelper.obtainRetrofitService(UserService.class)
+                            .updateUserData(MApplication.getTokenOrType(), RequestBody.create(
+                                    MediaType.parse("application/json; charset=utf-8"),
+                                    M.getMapString("name", strNickName)))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(suc -> {
+                            }, err -> {
+                                if (err.toString().contains("Null is not a valid element")) {
+                                    userInfo.getData().setName(edtNickName.getText().toString());
+                                }
+                            });
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void setListener() {
         btnMore.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         btnUserCover.setOnClickListener(this);
-        txtNickName.setOnClickListener(this);
-        txtSex.setOnClickListener(this);
-        txtLocation.setOnClickListener(this);
-        txtSchool.setOnClickListener(this);
-        txtDesc.setOnClickListener(this);
-        txtIndustry.setOnClickListener(this);
+        btnSex.setOnClickListener(this);
+        btnLocation.setOnClickListener(this);
+        btnSchool.setOnClickListener(this);
+        btnDesc.setOnClickListener(this);
+        btnIndustry.setOnClickListener(this);
     }
 
-    private void saveUserDetails() {
-        userInfo.getData().setName(txtNickName.getText().toString());
-        if (txtSex.getText().toString().equals("男")) {
-            userInfo.getData().setSex("man");
-        } else if (txtSex.getText().toString().equals("女")) {
-            userInfo.getData().setSex("woman");
-        } else {
-            userInfo.getData().setSex("unknown");
-        }
-        userInfo.getData().setLocation(txtLocation.getText().toString());
-        userInfo.getData().setSchool(txtSchool.getText().toString());
-        userInfo.getData().setBio(txtDesc.getText().toString());
-        userInfo.getData().setTrade(txtIndustry.getText().toString());
-    }
 
     private void setUserDetails() {
-        userInfo = UserInfoUtils.getUserInfo(mPresenter.getGson());
         if (userInfo != null && userInfo.getData() != null) {
-            txtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
-            String sex = mPresenter.isNull(userInfo.getData().getSex()) ? "--" : userInfo.getData().getSex();
+            edtNickName.setText(mPresenter.isNull(userInfo.getData().getName()) ? "--" : userInfo.getData().getName());
+            String sex = mPresenter.isNull(userInfo.getData().getSex()) || userInfo.getData().getSex().equals("unknown") ? "保密" : userInfo.getData().getSex();
             txtSex.setText("保密".equals(sex) ? sex : "man".equals(sex) ? "男" : "女");
             txtLocation.setText(mPresenter.isNull(userInfo.getData().getLocation()) ? "--" : userInfo.getData().getLocation());
             txtSchool.setText(mPresenter.isNull(userInfo.getData().getSchool()) ? "--" : userInfo.getData().getSchool());
@@ -221,26 +231,6 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
             case R.id.user_setting_back:
                 finish();
                 break;
-            case R.id.user_setting_more:
-                Toast.makeText(getApplication(), "保存", Toast.LENGTH_SHORT).show();
-                //把修改的值丢到Model 里面转成JSON 丢服务器保存
-                saveUserDetails();
-                String userJson = UserInfoUtils.getJsonUserData(userInfo.getData(), new Gson());
-                HttpMvcHelper
-                        .obtainRetrofitService(UserService.class)
-                        .updateUserData(MApplication.getTokenOrType(), RequestBody.create(
-                                MediaType.parse("application/json; charset=utf-8"),
-                                userJson))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new ErrorHandleSubscriber<NetDefaultBean>(mErrorHandler) {
-                            @Override
-                            public void onNext(NetDefaultBean netDefaultBean) {
-                            }
-                        });
-                UserInfoUtils.saveUserInfo(userInfo, new Gson());
-                finish();
-                break;
             case R.id.change_user_cover:
                 changeUserCoverBottomSheetDialog.show();
                 break;
@@ -257,66 +247,65 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
             case R.id.tv_cancel:
                 changeUserCoverBottomSheetDialog.dismiss();
                 break;
-            case R.id.user_location:
+            case R.id.user_setting_location:
                 parseData();
                 break;
-            case R.id.user_nickName:
-                UpdateDialog dialogNickName = new UpdateDialog(context, "昵称修改", new UpdateDialog.OnUpdateDialogListener() {
-                    @Override
-                    public void back(String name) {
-                        txtNickName.setText(name);
-                    }
-                });
-                dialogNickName.show();
+            case R.id.user_setting_sex:
+                changeUserSexBottomSheetDialog.show();
                 break;
-            case R.id.user_sex:
-                //123
+            case R.id.tv_take_man:
+                changeUserSexBottomSheetDialog.dismiss();
+                txtSex.setText("男");
+                userInfo.getData().setSex("man");
                 break;
-            case R.id.user_school:
-                UpdateDialog dialogSchool = new UpdateDialog(context, "学院修改", new UpdateDialog.OnUpdateDialogListener() {
-                    @Override
-                    public void back(String name) {
-                        txtSchool.setText(name);
-                    }
-                });
-                dialogSchool.show();
+            case R.id.tv_take_woman:
+                changeUserSexBottomSheetDialog.dismiss();
+                txtSex.setText("女");
+                userInfo.getData().setSex("woman");
                 break;
-            case R.id.user_desc:
-                UpdateDialog dialogDesc = new UpdateDialog(context, "简介修改", new UpdateDialog.OnUpdateDialogListener() {
-                    @Override
-                    public void back(String name) {
-                        txtDesc.setText(name);
-                    }
-                });
-                dialogDesc.show();
+            case R.id.tv_secret:
+                changeUserSexBottomSheetDialog.dismiss();
+                txtSex.setText("保密");
+                userInfo.getData().setSex("unknown");
                 break;
-            case R.id.user_industry:
-                UpdateDialog dialogIndustry = new UpdateDialog(context, "行业修改", new UpdateDialog.OnUpdateDialogListener() {
-                    @Override
-                    public void back(String name) {
-                        txtIndustry.setText(name);
-                    }
-                });
-                dialogIndustry.show();
+            case R.id.user_setting_school:
+                strType = "学院编辑";
+                intent.setClass(context, UserUpdateActivity.class);
+                intent.putExtra("strType", strType);
+                startActivity(intent);
+                break;
+            case R.id.user_setting_desc:
+                strType = "简介编辑";
+                intent.setClass(context, UserUpdateActivity.class);
+                intent.putExtra("strType", strType);
+                startActivity(intent);
+                break;
+            case R.id.user_setting_industry:
+                strType = "行业编辑";
+                intent.setClass(context, UserUpdateActivity.class);
+                intent.putExtra("strType", strType);
+                startActivity(intent);
                 break;
             default:
                 break;
         }
     }
 
-
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ImagePicker.REQUEST_CODE_TAKE) {
-            Intent intent = new Intent(getContext(), ImageCropActivity.class);
-            startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
-
-        }
+    protected void onResume() {
+        super.onResume();
+        setUserDetails();
     }
 
-
-    private void initCommitBottomSheetDialog() {
+    //    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == ImagePicker.REQUEST_CODE_TAKE) {
+//            Intent intent = new Intent(getContext(), ImageCropActivity.class);
+//            startActivityForResult(intent, ImagePicker.REQUEST_CODE_CROP);  //单选需要裁剪，进入裁剪界面
+//        }
+//    }
+    private void initCommitBottomSheetCoverDialog() {
         changeUserCoverBottomSheetDialog = new BottomSheetDialog(context);
         changeUserCoverBottomSheetDialog.setContentView(R.layout.dialog_change_user_cover);
         changeUserCoverBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
@@ -324,37 +313,18 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
         changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_photo).setOnClickListener(this);
         changeUserCoverBottomSheetDialog.findViewById(R.id.tv_take_pic).setOnClickListener(this);
         changeUserCoverBottomSheetDialog.findViewById(R.id.tv_cancel).setOnClickListener(this);
+
     }
 
-
-    private void parseData2() {
-        List<HashMap<String, Object>> aList = new ArrayList<>();
-        List<HashMap<String, Object>> cList = new ArrayList<>();
-        List<HashMap<String, Object>> pList = new ArrayList<>();
-        String jsonStr = new GetJsonUtil().getJson(this, "ChinaArea.json");//获取assets目录下的json文件数据
-        Map<String, Object> map = new GetJsonUtil().getMap(jsonStr);
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-            if (entry.getKey().substring(2).equals("0000")) {
-                //省 名称
-                HashMap<String, Object> pMap = new LinkedHashMap<>();
-                pMap.put(entry.getKey(), entry.getValue());
-                pList.add(pMap);
-                continue;
-            }
-            if (entry.getKey().substring(4).equals("00")) {
-                HashMap<String, Object> cMap = new LinkedHashMap<>();
-                cMap.put(entry.getKey(), entry.getValue());
-                cList.add(cMap);
-                continue;
-            }
-            HashMap<String, Object> aMap = new LinkedHashMap<>();
-            aMap.put(entry.getKey(), entry.getValue());
-            aList.add(aMap);
-        }
-        String a = "循环结束";
+    private void initCommitBottomSheetUserDialog() {
+        changeUserSexBottomSheetDialog = new BottomSheetDialog(context);
+        changeUserSexBottomSheetDialog.setContentView(R.layout.dialog_change_user_sex);
+        changeUserSexBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                .setBackgroundColor(getResources().getColor(R.color.albumTransparent));
+        changeUserSexBottomSheetDialog.findViewById(R.id.tv_take_man).setOnClickListener(this);
+        changeUserSexBottomSheetDialog.findViewById(R.id.tv_take_woman).setOnClickListener(this);
+        changeUserSexBottomSheetDialog.findViewById(R.id.tv_secret).setOnClickListener(this);
     }
-
 
     /**
      * 解析数据并组装成要的list
@@ -405,8 +375,8 @@ public class UserSettingActivity extends BaseActivity<UserSettingPresenter> impl
                     options2Items.get(options1).get(options2) + " " +
                     options3Items.get(options1).get(options2).get(options3);
             txtLocation.setText(tx);
+            userInfo.getData().setLocation(txtLocation.getText().toString());
         })
-
                 .setTitleText("城市选择")
                 .setDividerColor(Color.BLACK)
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <EditText
+        android:id="@+id/edt_user_update"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/white"
+        android:gravity="top|left"
+        android:hint="请输入修改内容"
+        android:paddingLeft="30dp"
+        android:paddingTop="36dp"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btn_user_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/shape_login_next_background"
+        android:gravity="center"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:text="完成"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+</LinearLayout>

@@ -59,13 +59,21 @@
 			android:hardwareAccelerated="true"
 			android:theme="@style/AppThemeHasActionBar.NoBar"
 			android:windowSoftInputMode="stateAlwaysHidden" />
+
+		<!--修改资料-->
+		<activity
+			android:name=".main.mvp.ui.activity.UserUpdateActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
 		<!-- 搜索页面 -->
 		<activity
 			android:name=".main.mvp.ui.activity.SearchActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:hardwareAccelerated="true"
 			android:theme="@style/AppThemeHasActionBar.NoBar"
-			android:windowSoftInputMode="stateAlwaysHidden|stateAlwaysVisible|adjustPan" />
+			android:windowSoftInputMode="stateAlwaysHidden" />
 		
 		<!-- 我的圈子 -->
 		<activity
@@ -303,7 +311,7 @@
 			android:value="720" />
 		<meta-data
 			android:name="design_height_in_dp"
-			android:value="1280" />
+			android:value="1080" />
 		
 		<receiver
 			android:name=".main.app.receiver.JPushReceiver"

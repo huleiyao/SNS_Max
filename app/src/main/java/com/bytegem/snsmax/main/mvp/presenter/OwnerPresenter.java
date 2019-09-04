@@ -4,32 +4,28 @@ import android.app.Application;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.common.utils.M;
-import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
-import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
-import com.bytegem.snsmax.main.app.utils.Utils;
-import com.jess.arms.integration.AppManager;
+import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
 import com.jess.arms.di.scope.FragmentScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxLifecycleUtils;
+import com.lzy.imagepicker.bean.ImageItem;
+
+import java.io.EOFException;
+import java.io.File;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-
-import javax.inject.Inject;
-
-import com.bytegem.snsmax.main.mvp.contract.OwnerContract;
-import com.jess.arms.utils.RxLifecycleUtils;
-import com.lzy.imagepicker.bean.ImageItem;
-
-import java.io.EOFException;
-import java.io.File;
 
 
 /**
