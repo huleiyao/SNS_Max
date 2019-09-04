@@ -14,7 +14,7 @@
         android:minHeight="160dp"
         android:orientation="vertical">
 
-        <EditText
+        <android.support.text.emoji.widget.EmojiTextView
             android:id="@+id/reply_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,6 +24,7 @@
             android:paddingBottom="30dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
+            android:maxLines="3"
             android:textColor="@color/color_151b26"
             android:textColorHint="@color/color_b0b8bf"
             android:textSize="28dp" />

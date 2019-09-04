@@ -52,6 +52,13 @@
 		tools:ignore="GoogleAppIndexingWarning"
 		tools:replace="theme,label,icon">
 		
+		<!-- 聊天界面 -->
+		<activity
+			android:name=".main.app.mvc.chat.ChatActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
 		<!-- 搜索页面 -->
 		<activity
 			android:name=".main.mvp.ui.activity.SearchActivity"
