@@ -2,9 +2,10 @@ package com.bytegem.snsmax.main.mvp.presenter;
 
 import android.app.Application;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.bytegem.snsmax.main.mvp.ui.activity.ChatActivity;
+import com.bytegem.snsmax.main.app.mvc.chat.ChatActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
@@ -62,6 +63,7 @@ public class MessageListPresenter extends BasePresenter<MessageListContract.Mode
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        mRootView.launchActivity(new Intent(mApplication, ChatActivity.class));
+//        mRootView.launchActivity(new Intent(mApplication, ChatActivity.class));
+        ((Fragment)mRootView).getActivity().startActivity(new Intent(mApplication, ChatActivity.class));
     }
 }

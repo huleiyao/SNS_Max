@@ -1,6 +1,8 @@
 package com.bytegem.snsmax.main.app;
 
 import android.content.Context;
+import android.support.text.emoji.EmojiCompat;
+import android.support.text.emoji.bundled.BundledEmojiCompatConfig;
 
 import com.bytegem.snsmax.main.app.bean.location.LocationBean;
 import com.bytegem.snsmax.main.app.bean.location.TencentMapLocationBean;
@@ -67,6 +69,7 @@ public class MApplication extends BaseApplication {
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         initMvcHttpConfig();
+        initEmojiConfig();
         Stetho.initializeWithDefaults(this);
     }
 
@@ -115,6 +118,11 @@ public class MApplication extends BaseApplication {
     private void initMvcHttpConfig(){
         //配置http。在非当前框架下使用
         HttpMvcHelper.initConfig();
+    }
+
+    private void initEmojiConfig(){
+        EmojiCompat.Config config = new BundledEmojiCompatConfig(this);
+        EmojiCompat.init(config);
     }
 
     public void initImagePicker() {

@@ -42,5 +42,8 @@
     <color name="view_bg">#00000000</color>
     <color name="rect">#aae84e40</color>
     <color name="circle">#aa738ffe</color>
+    
+    <!-- 语音 -->
+    <color name="colorRedBg">#fa5148</color>
 
 </resources>

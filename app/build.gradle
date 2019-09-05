@@ -56,10 +56,7 @@ android {
 }
 
 dependencies {
-    implementation project(':arms')
-    implementation project(':common')
-    implementation project(':tencentlocation')
-    implementation project(':shvideolibrary')
+    implementation project(':chat')
     implementation rootProject.ext.dependencies["androideventbus"]
     implementation rootProject.ext.dependencies["cardview-v7"]
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
@@ -106,5 +103,6 @@ dependencies {
 
     //outher
     implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation "com.android.support:support-emoji-bundled:28.0.0"
 
 }

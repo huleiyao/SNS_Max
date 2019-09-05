@@ -1,358 +1,358 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.bytegem.snsmax">
+	xmlns:tools="http://schemas.android.com/tools"
+	package="com.bytegem.snsmax">
+	
+	<!-- 腾讯定位 sdk 要求的权限  (开始) -->
+	<!-- 通过GPS得到精确位置 -->
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<!-- 通过网络得到粗略位置 -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<!-- Android Q新增权限，允许应用在后台发起定位，如应用target为Q，请添加此权限 -->
+	<!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> -->
+	<!-- 访问网络. 某些位置信息需要从网络服务器获取 -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<!-- 访问WiFi状态. 需要WiFi信息用于网络定位 -->
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<!-- 修改WiFi状态. 发起WiFi扫描, 需要WiFi信息用于网络定位 -->
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<!-- 访问网络状态, 检测网络的可用性. 需要网络运营商相关信息用于网络定位 -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<!-- 访问网络的变化, 需要某些信息用于网络定位 -->
+	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+	<!-- 访问手机当前状态, 需要device id用于网络定位 -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<!-- 支持A-GPS辅助定位 -->
+	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+	<!-- 腾讯定位 sdk 要求的权限 (结束) -->
+	
+	
+	<!-- Demo中使用了腾讯地图 sdk, 腾讯地图 sdk 还要求的以下权限 -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.READ_PHONE_SINTERNETWIFI_STATE" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+	
+	<!-- 非必须权限, 用于 notification 振动 -->
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<!-- 非必须权限, 用于 log 日志, target Q可移除 -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	
+	
+	<application
+		android:name=".main.app.MApplication"
+		android:allowBackup="true"
+		android:icon="@mipmap/iccon"
+		android:label="@string/app_name"
+		android:networkSecurityConfig="@xml/network_security_config"
+		android:resizeableActivity="true"
+		android:roundIcon="@mipmap/iccon"
+		android:supportsRtl="true"
+		android:theme="@style/AppThemeHasActionBar"
+		tools:ignore="GoogleAppIndexingWarning"
+		tools:replace="theme,label,icon">
+		
+		<!-- 聊天界面 -->
+		<activity
+			android:name=".main.app.mvc.chat.ChatActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
 
-    <!-- 腾讯定位 sdk 要求的权限  (开始) -->
-    <!-- 通过GPS得到精确位置 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 通过网络得到粗略位置 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- Android Q新增权限，允许应用在后台发起定位，如应用target为Q，请添加此权限 -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> -->
-    <!-- 访问网络. 某些位置信息需要从网络服务器获取 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 访问WiFi状态. 需要WiFi信息用于网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 修改WiFi状态. 发起WiFi扫描, 需要WiFi信息用于网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- 访问网络状态, 检测网络的可用性. 需要网络运营商相关信息用于网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 访问网络的变化, 需要某些信息用于网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <!-- 访问手机当前状态, 需要device id用于网络定位 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 支持A-GPS辅助定位 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!-- 腾讯定位 sdk 要求的权限 (结束) -->
-
-
-    <!-- Demo中使用了腾讯地图 sdk, 腾讯地图 sdk 还要求的以下权限 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_PHONE_SINTERNETWIFI_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-
-    <!-- 非必须权限, 用于 notification 振动 -->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- 非必须权限, 用于 log 日志, target Q可移除 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
-    <application
-        android:name=".main.app.MApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/iccon"
-        android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:resizeableActivity="true"
-        android:roundIcon="@mipmap/iccon"
-        android:supportsRtl="true"
-        android:theme="@style/AppThemeHasActionBar"
-        tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="theme,label,icon">
-
-        <!--帮助反馈-->
-        <activity
-            android:name=".main.mvp.ui.activity.ProposalActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <!--修改资料-->
-        <activity
-            android:name=".main.mvp.ui.activity.UserUpdateActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <!-- 搜索页面 -->
-        <activity
-            android:name=".main.mvp.ui.activity.SearchActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <!-- 我的圈子 -->
-        <activity
-            android:name=".main.mvp.ui.activity.MyCircleActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <!-- 我的圈子详情 -->
-        <activity
-            android:name=".main.mvp.ui.activity.MyCircleDetailsActivityActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <activity
-            android:name=".main.mvp.ui.activity.HomeActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <!-- 替换原生极光推送接收器 -->
-        <activity
-            android:name=".main.mvp.ui.activity.SettingsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <!-- 腾讯地图配置 -->
-        <activity
-            android:name=".main.mvp.ui.activity.OwnerQRCodeActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <!--
-             ATTENTION: This was auto-generated to add Google Play services to your project for
-                 App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-                -->
-        <activity
-            android:name=".main.mvp.ui.activity.AddressSelectActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <!-- Arms 配置 -->
-        <activity
-            android:name=".main.app.mvc.StartActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".main.mvp.ui.activity.LoginActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.RegisterActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <activity
-            android:name=".main.mvp.ui.activity.GroupCreatedActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.CreatNewsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="false"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name=".main.mvp.ui.activity.OwnerHomeActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".main.mvp.ui.activity.FeedDetailsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.CreatGroupActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.FeedCommentsOfCommentActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.CreatFeedAddUrlActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.SelectTopicActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.CreateTopicActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.GroupDetailsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.GroupSettingActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.TopicDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.VideoPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.FeedNewCommentActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.WatchImageActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.GroupMemberActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.OwnerFeedHistoryActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.ChatActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.app.mvc.UserBindActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.GroupSelectActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.mvp.ui.activity.UserSettingActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-        <activity
-            android:name=".main.app.mvc.UpdatePhoneNumber"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-
-        <activity
-            android:name=".zxing.android.CaptureActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppThemeHasActionBar.NoBar"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
-
-        <meta-data
-            android:name="TencentMapSDK"
-            android:value="3NEBZ-W7UCP-FIBD4-VM2FU-DKBPF-7GBHD" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="4030500" />
-        <meta-data
-            android:name="com.bytegem.snsmax.main.app.GlobalConfiguration"
-            android:value="ConfigModule" />
-        <!--<meta-data
-                android:name="design_width_in_dp"
-                android:value="750" />
-
-            <meta-data
-                android:name="design_height_in_dp"
-                android:value="1334" />-->
-
-        <meta-data
-            android:name="design_width_in_dp"
-            android:value="720" />
-        <meta-data
-            android:name="design_height_in_dp"
-            android:value="1080" />
-
-        <receiver
-            android:name=".main.app.receiver.JPushReceiver"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="replace">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-
-                <category android:name="com.bytegen.snsmax" /> <!-- JPush上注册的包名 -->
-            </intent-filter>
-        </receiver>
-        <service
-            android:name=".main.app.service.JPushService"
-            android:enabled="true"
-            android:exported="false"
-            android:process=":pushcore">
-            <intent-filter>
-                <action android:name="cn.jiguang.user.service.action" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name=".main.app.receiver.JPushReceiver"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="replace">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-
-                <category android:name="com.bytegen.snsmax" /> <!-- JPush上注册的包名 -->
-            </intent-filter>
-        </receiver>
-        <service
-            android:name=".main.app.service.JPushService"
-            android:enabled="true"
-            android:exported="false"
-            android:process=":pushcore">
-            <intent-filter>
-                <action android:name="cn.jiguang.user.service.action" />
-            </intent-filter>
-        </service>
-    </application>
+		<!--修改资料-->
+		<activity
+			android:name=".main.mvp.ui.activity.UserUpdateActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<!-- 搜索页面 -->
+		<activity
+			android:name=".main.mvp.ui.activity.SearchActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		
+		<!-- 我的圈子 -->
+		<activity
+			android:name=".main.mvp.ui.activity.MyCircleActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		
+		<!-- 我的圈子详情 -->
+		<activity
+			android:name=".main.mvp.ui.activity.MyCircleDetailsActivityActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		
+		<activity
+			android:name=".main.mvp.ui.activity.HomeActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<!-- 替换原生极光推送接收器 -->
+		<activity
+			android:name=".main.mvp.ui.activity.SettingsActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		
+		<!-- 腾讯地图配置 -->
+		<activity
+			android:name=".main.mvp.ui.activity.OwnerQRCodeActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<!--
+			 ATTENTION: This was auto-generated to add Google Play services to your project for
+				 App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+				-->
+		<activity
+			android:name=".main.mvp.ui.activity.AddressSelectActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		
+		<!-- Arms 配置 -->
+		<activity
+			android:name=".main.app.mvc.StartActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".main.mvp.ui.activity.LoginActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.RegisterActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		
+		<activity
+			android:name=".main.mvp.ui.activity.GroupCreatedActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.CreatNewsActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="false"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateHidden|adjustPan" />
+		<activity
+			android:name=".main.mvp.ui.activity.OwnerHomeActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="adjustNothing" />
+		<activity
+			android:name=".main.mvp.ui.activity.FeedDetailsActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.CreatGroupActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.FeedCommentsOfCommentActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.CreatFeedAddUrlActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.SelectTopicActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.CreateTopicActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.GroupDetailsActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.GroupSettingActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.TopicDetailActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.VideoPlayerActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.FeedNewCommentActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.WatchImageActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.GroupMemberActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.OwnerFeedHistoryActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.ChatActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.app.mvc.UserBindActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.GroupSelectActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.mvp.ui.activity.UserSettingActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		<activity
+			android:name=".main.app.mvc.UpdatePhoneNumber"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		
+		<activity
+			android:name=".zxing.android.CaptureActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+		
+		<meta-data
+			android:name="TencentMapSDK"
+			android:value="3NEBZ-W7UCP-FIBD4-VM2FU-DKBPF-7GBHD" />
+		<meta-data
+			android:name="com.google.android.gms.version"
+			android:value="4030500" />
+		<meta-data
+			android:name="com.bytegem.snsmax.main.app.GlobalConfiguration"
+			android:value="ConfigModule" />
+		<!--<meta-data
+				android:name="design_width_in_dp"
+				android:value="750" />
+			
+			<meta-data
+				android:name="design_height_in_dp"
+				android:value="1334" />-->
+		
+		<meta-data
+			android:name="design_width_in_dp"
+			android:value="720" />
+		<meta-data
+			android:name="design_height_in_dp"
+			android:value="1080" />
+		
+		<receiver
+			android:name=".main.app.receiver.JPushReceiver"
+			android:enabled="true"
+			android:exported="false"
+			tools:node="replace">
+			<intent-filter>
+				<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+				
+				<category android:name="com.bytegen.snsmax" /> <!-- JPush上注册的包名 -->
+			</intent-filter>
+		</receiver>
+		<service
+			android:name=".main.app.service.JPushService"
+			android:enabled="true"
+			android:exported="false"
+			android:process=":pushcore">
+			<intent-filter>
+				<action android:name="cn.jiguang.user.service.action" />
+			</intent-filter>
+		</service>
+		
+		<receiver
+			android:name=".main.app.receiver.JPushReceiver"
+			android:enabled="true"
+			android:exported="false"
+			tools:node="replace">
+			<intent-filter>
+				<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+				
+				<category android:name="com.bytegen.snsmax" /> <!-- JPush上注册的包名 -->
+			</intent-filter>
+		</receiver>
+		<service
+			android:name=".main.app.service.JPushService"
+			android:enabled="true"
+			android:exported="false"
+			android:process=":pushcore">
+			<intent-filter>
+				<action android:name="cn.jiguang.user.service.action" />
+			</intent-filter>
+		</service>
+	</application>
 </manifest>
