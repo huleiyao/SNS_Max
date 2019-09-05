@@ -62,9 +62,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public abstract void initView();
 
+    /**
+     * 初始化监听
+     */
+    public abstract void setListener();
+
     @Override
     protected void onDestroy() {
         unbinder.unbind();
         super.onDestroy();
     }
+
 }

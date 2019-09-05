@@ -56,7 +56,8 @@ public class UserUpdateActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    private void setListener() {
+    @Override
+    public void setListener() {
         btnBack.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
     }
