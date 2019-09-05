@@ -36,11 +36,11 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
         setListener();
     }
 
-    private void setListener() {
+    @Override
+    public void setListener() {
         barBack.setOnClickListener(this);
         btnCode.setOnClickListener(this);
     }
-
 
     @Override
     public void onClick(View view) {
@@ -60,7 +60,7 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(suc -> {
-                            NetDefaultBean a  = suc;
+                            NetDefaultBean a = suc;
                         }, err -> {
 
                         });

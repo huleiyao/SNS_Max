@@ -28,6 +28,7 @@ import com.bytegem.snsmax.main.mvp.ui.activity.MyCircleActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerFeedHistoryActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerHomeActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.OwnerQRCodeActivity;
+import com.bytegem.snsmax.main.mvp.ui.activity.ProposalActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.SettingsActivity;
 import com.bytegem.snsmax.main.mvp.ui.activity.UserSettingActivity;
 import com.bytegem.snsmax.zxing.android.CaptureActivity;
@@ -134,7 +135,7 @@ public class OwnerFragment extends BaseFragment<OwnerPresenter> implements Owner
                 showMessage("邀请分享");
                 break;
             case R.id.help_or_feedback:
-                showMessage("帮助与反馈");
+                launchActivity(new Intent(getContext(), ProposalActivity.class));
                 break;
         }
     }

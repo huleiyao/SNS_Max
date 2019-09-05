@@ -54,6 +54,11 @@ public class StartActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void setListener() {
+
+    }
+
 
     //1、首先声明一个数组permissions，将需要的权限都放在里面
     String[] permissions = new String[]{

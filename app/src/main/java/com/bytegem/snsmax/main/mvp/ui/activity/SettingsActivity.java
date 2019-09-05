@@ -68,8 +68,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         }
         setListener();
     }
-
-    private void setListener() {
+    @Override
+    public void setListener() {
         barBack.setOnClickListener(this);
         btnUserBind.setOnClickListener(this);
         btnUserAbout.setOnClickListener(this);
