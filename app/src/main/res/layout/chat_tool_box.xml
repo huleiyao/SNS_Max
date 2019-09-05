@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	tools:ignore="MissingDefaultResource">
+	
+	<RelativeLayout
+		android:id="@+id/messageToolBox"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/chat_input_hei"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:padding="4dp">
+		
+		<!-- 语音键盘切换的按钮 -->
+		<CheckBox
+			android:id="@+id/toolbox_btn_keybord_voice"
+			android:layout_width="@dimen/chat_input_icon_wh"
+			android:layout_height="@dimen/chat_input_icon_wh"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="2dp"
+			android:layout_marginRight="5dp"
+			android:layout_centerVertical="true"
+			android:background="@drawable/selector_chat_voice"
+			android:button="@null" />
+		
+		<!-- 文字输入框 -->
+		<com.rockerhieu.emojicon.EmojiconEditText
+			android:id="@+id/toolbox_et_message"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_toLeftOf="@id/toolbox_btn_face"
+			android:layout_toRightOf="@+id/toolbox_btn_keybord_voice"
+			android:background="@color/emoji_keyboard_bg_light"
+			android:inputType="textMultiLine"
+			android:maxHeight="60dp"
+			android:minHeight="35dp"
+			android:singleLine="false"
+			android:textSize="18sp"/>
+		
+		<!-- 语音输入框 -->
+		<com.bytegem.snsmax.main.app.mvc.chat.voice.manager.AudioRecordButton
+			android:id="@+id/toolbox_et_voice"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_alignTop="@+id/toolbox_et_message"
+			android:layout_alignBottom="@+id/toolbox_et_message"
+			android:layout_toLeftOf="@id/toolbox_btn_face"
+			android:clickable="true"
+			android:visibility="gone"
+			android:gravity="center"
+			android:layout_toRightOf="@+id/toolbox_btn_keybord_voice"
+			android:textColor="@color/color_3"
+			android:textSize="29sp"/>
+		
+		<CheckBox
+			android:id="@+id/toolbox_btn_face"
+			android:layout_width="@dimen/chat_input_icon_wh"
+			android:layout_height="@dimen/chat_input_icon_wh"
+			android:layout_marginLeft="2dp"
+			android:layout_marginRight="5dp"
+			android:layout_toLeftOf="@+id/toolbox_more_send_layout"
+			android:background="@drawable/selector_chat_face"
+			android:layout_centerVertical="true"
+			android:button="@null" />
+		
+		
+		<!-- 发送和更多按钮容器 -->
+		<FrameLayout
+			android:id="@+id/toolbox_more_send_layout"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true">
+			<CheckBox
+				android:id="@+id/toolbox_btn_more"
+				android:layout_width="@dimen/chat_input_icon_wh"
+				android:layout_height="@dimen/chat_input_icon_wh"
+				android:layout_marginLeft="2dp"
+				android:layout_marginRight="5dp"
+				android:background="@drawable/selector_chat_more"
+				android:button="@null"
+				android:layout_gravity=""/>
+			
+			<Button
+				android:id="@+id/toolbox_btn_send"
+				android:layout_width="wrap_content"
+				android:layout_height="@dimen/chat_input_icon_wh"
+				android:layout_alignParentRight="true"
+				android:layout_gravity="center_vertical"
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="2dp"
+				android:text="发送"
+				android:textColor="#ffffffff"
+				android:textSize="15sp"
+				android:visibility="gone"/>
+		</FrameLayout>
+	</RelativeLayout>
+	
+	<RelativeLayout
+		android:id="@+id/toolbox_layout_face"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:visibility="gone">
+		
+		<android.support.v4.view.ViewPager
+			android:id="@+id/toolbox_pagers_face"
+			android:layout_width="match_parent"
+			android:layout_height="160dp"/>
+		
+		<com.bytegem.snsmax.main.app.mvc.chat.widget.PagerSlidingTabStrip
+			android:id="@+id/toolbox_tabs"
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:layout_below="@+id/toolbox_pagers_face"
+			android:background="#ffffff"
+			android:visibility="visible"
+			app:pstsDividerColor="#a7a5a5"
+			app:pstsIndicatorColor="#ffffff"
+			app:pstsShouldExpand="true"
+			app:pstsTabPaddingLeftRight="14dip"
+			app:pstsUnderlineColor="#ffffff" />
+	</RelativeLayout>
+</LinearLayout>

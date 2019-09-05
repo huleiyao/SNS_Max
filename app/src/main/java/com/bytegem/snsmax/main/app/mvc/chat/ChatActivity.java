@@ -21,17 +21,19 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 
-import com.bytegem.snsmax.main.app.mvc.chat.adapters.ChatAdapter;
-import org.kymjs.chat.OnOperationListener;
-import org.kymjs.chat.bean.Emojicon;
-import org.kymjs.chat.bean.Faceicon;
-import org.kymjs.chat.bean.Message;
-import org.kymjs.chat.emoji.DisplayRules;
-import org.kymjs.chat.widget.KJChatKeyboard;
+import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.main.app.mvc.chat.adapter.ChatAdapter;
+import com.bytegem.snsmax.main.app.mvc.chat.bean.Emojicon;
+import com.bytegem.snsmax.main.app.mvc.chat.bean.Faceicon;
+import com.bytegem.snsmax.main.app.mvc.chat.bean.Message;
+import com.bytegem.snsmax.main.app.mvc.chat.emoji.DisplayRules;
+import com.bytegem.snsmax.main.app.mvc.chat.utils.OnOperationListener;
+import com.bytegem.snsmax.main.app.mvc.chat.voice.manager.MediaManager;
+import com.bytegem.snsmax.main.app.mvc.chat.widget.KJChatKeyboard;
+
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.ui.ViewInject;
 import org.kymjs.kjframe.utils.FileUtils;
@@ -59,14 +61,14 @@ public class ChatActivity extends KJActivity {
 
     @Override
     public void setRootView() {
-        setContentView(org.kymjs.chat.R.layout.activity_chat2);
+        setContentView(R.layout.activity_chat2);
     }
 
     @Override
     public void initWidget() {
         super.initWidget();
-        box = findViewById(org.kymjs.chat.R.id.chat_msg_input_board);
-        mRealListView = findViewById(org.kymjs.chat.R.id.chat_listview);
+        box = findViewById(R.id.chat_msg_input_board);
+        mRealListView = findViewById(R.id.chat_listview);
 
         mRealListView.setSelector(android.R.color.transparent);
         initMessageInputToolBox();
@@ -247,6 +249,12 @@ public class ChatActivity extends KJActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        MediaManager.release(); //停止播放语音
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) {
@@ -273,13 +281,10 @@ public class ChatActivity extends KJActivity {
      * @return 会隐藏输入法键盘的触摸事件监听器
      */
     private View.OnTouchListener getOnTouchListener() {
-        return new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                box.hideLayout();
-                box.hideKeyboard(aty);
-                return false;
-            }
+        return (v, event) -> {
+            box.hideLayout();
+            box.hideKeyboard(aty);
+            return false;
         };
     }
 
