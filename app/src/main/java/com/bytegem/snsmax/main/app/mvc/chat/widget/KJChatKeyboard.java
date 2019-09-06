@@ -30,12 +30,10 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.bytegem.snsmax.R;
-import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.mvc.chat.adapter.FaceCategroyAdapter;
 import com.bytegem.snsmax.main.app.mvc.chat.utils.OnOperationListener;
 import com.bytegem.snsmax.main.app.mvc.chat.utils.SoftKeyboardStateHelper;
 import com.bytegem.snsmax.main.app.mvc.chat.voice.manager.AudioRecordButton;
-import com.bytegem.snsmax.main.app.mvc.chat.voice.manager.MediaManager;
 
 import java.util.List;
 
@@ -92,6 +90,7 @@ public class KJChatKeyboard extends RelativeLayout implements
     private OnToolBoxListener mFaceListener;
     private SoftKeyboardStateHelper mKeyboardHelper;
     private int inputType = 0;//输入模式
+    AudioRecordButton.AudioFinishRecorderListener mFinishRecoredListener;
 
 
     public KJChatKeyboard(Context context) {
@@ -131,19 +130,31 @@ public class KJChatKeyboard extends RelativeLayout implements
     public void setInputType(int inputType) {
         this.inputType = inputType;
         try {
+            hideLayout();
             if (this.inputType == 0) { //文本
                 mVoiceMsg.setVisibility(GONE);
                 mEtMsg.setVisibility(VISIBLE);
-                hideLayout();
+                mKeybordVoice.setChecked(true);
+                changeLayout(LAYOUT_TYPE_HIDE);
                 showKeyboard(getContext());
             } else if (this.inputType == 1) { //语音
                 mVoiceMsg.setVisibility(VISIBLE);
-                mEtMsg.setVisibility(INVISIBLE);
+                mEtMsg.setVisibility(GONE);
+                mKeybordVoice.setChecked(false);
+                changeLayout(LAYOUT_TYPE_KEYBORAD_VOICE);
                 hideKeyboard(getContext());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 设置录制完成的监听
+     * @param listener
+     */
+    public void setAudioFinishRecorderListener(AudioRecordButton.AudioFinishRecorderListener listener) {
+        mFinishRecoredListener = listener;
     }
 
     private void initData() {
@@ -197,6 +208,9 @@ public class KJChatKeyboard extends RelativeLayout implements
         mVoiceMsg.setLongClickRecording(false);
         mVoiceMsg.setAudioFinishRecorderListener((seconds, filePath) -> {
             //录制完成的操作
+            if(mFinishRecoredListener != null){
+                mFinishRecoredListener.onFinished(seconds,filePath);
+            }
         });
     }
 
@@ -209,14 +223,9 @@ public class KJChatKeyboard extends RelativeLayout implements
     @Override
     protected void onDetachedFromWindow() {
         //切换模式
-        int saveValue = 0;
-        if (inputType == 0) {
-            saveValue = 1;
-        } else {
-        }
         context.getSharedPreferences(CONFIG_PATH_KEY, Context.MODE_PRIVATE)
                 .edit()
-                .putInt(CONFIG_INPUT_TYPE, saveValue)
+                .putInt(CONFIG_INPUT_TYPE, inputType)
                 .apply();
         super.onDetachedFromWindow();
     }
@@ -246,14 +255,11 @@ public class KJChatKeyboard extends RelativeLayout implements
             if (LAYOUT_TYPE_KEYBORAD_VOICE == which) {
                 //切换模式
                 if (inputType == 0) {
-                    mKeybordVoice.setChecked(true); //显示为语音图标
                     inputType = 1;
                 } else {
                     inputType = 0;
-                    mKeybordVoice.setChecked(false); //显示为键盘图标
                 }
                 setInputType(inputType);
-                changeLayout(which);
             } else if (isShow() && which == layoutType) {
                 hideLayout();
                 showKeyboard(context);
@@ -341,12 +347,11 @@ public class KJChatKeyboard extends RelativeLayout implements
      */
     public void hideKeyboard(Context context) {
         Activity activity = (Activity) context;
-        if (activity != null && activity.getCurrentFocus() != null) {
+        if (activity != null) {
             InputMethodManager imm = (InputMethodManager) activity
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm.isActive()) {
-                imm.hideSoftInputFromWindow(activity.getCurrentFocus()
-                        .getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(mEtMsg.getWindowToken(), 0);
             }
         }
     }

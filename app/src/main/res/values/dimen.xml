@@ -10,6 +10,6 @@
     <dimen name="toolBarHeight">96dp</dimen>
     
     <dimen name="chat_input_hei">76dp</dimen>
-    <dimen name="chat_input_icon_wh">45dp</dimen>
+    <dimen name="chat_input_icon_wh">55dp</dimen>
     
 </resources>

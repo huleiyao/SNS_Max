@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
 	android:padding="6dp"
-	tools:ignore="MissingDefaultResource">
+	tools:ignore="MissingDefaultResource|NotSibling">
 	
 	<TextView
 		android:id="@+id/chat_item_date"
@@ -37,6 +37,80 @@
 			<ImageView
 				android:id="@+id/chat_item_content_image"
 				style="@style/chat_item_image_content" />
+			
+			<!-- 语音消息 -->
+			<RelativeLayout
+				android:id="@+id/rl_chatvoice"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:clickable="true"
+				android:background="@drawable/chat_to_bg_selector"
+				android:padding="10dp">
+				
+				<ImageView
+					android:id="@+id/iea_iv_red"
+					android:layout_width="8dp"
+					android:layout_height="8dp"
+					android:layout_centerVertical="true"
+					android:layout_gravity="center_vertical"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="10dp"
+					android:src="@drawable/yuyin_tixing_red"
+					android:visibility="visible" />
+				<!--录音框-->
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@+id/iea_iv_red">
+					<!-- 时间 -->
+					<TextView
+						android:id="@+id/iea_tv_voicetime1"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignTop="@+id/iea_iv_voiceLine"
+						android:layout_alignBottom="@+id/iea_iv_voiceLine"
+						android:layout_gravity="center_vertical"
+						android:layout_marginLeft="8dp"
+						android:layout_toRightOf="@+id/iea_iv_voiceLine"
+						android:gravity="center_vertical"
+						android:text="60 ''"
+						android:textColor="#686666"
+						android:textSize="24sp" />
+					
+					<RelativeLayout
+						android:layout_width="wrap_content"
+						android:layout_height="50dp"
+						android:gravity="center_vertical"
+						android:orientation="horizontal"
+						android:padding="4dp">
+						<!-- android:background="@drawable/selector_voice_line" -->
+						<!--语音条-->
+						<ImageView
+							android:id="@+id/iea_iv_voiceLine"
+							android:layout_width="60dp"
+							android:layout_height="50dp"
+							android:layout_alignParentLeft="true"
+							android:layout_centerVertical="true"
+							android:lineSpacingExtra="2dp"
+							android:maxWidth="220dp"
+							android:minWidth="90dp"
+							android:paddingLeft="24dp"
+							android:paddingRight="12dp" />
+						<!--信号栏-->
+						<LinearLayout
+							android:id="@+id/iea_ll_singer"
+							android:layout_width="25dp"
+							android:layout_height="25dp"
+							android:layout_alignParentLeft="true"
+							android:layout_centerVertical="true"
+							android:layout_marginLeft="10dp"
+							android:background="@drawable/anim_yuyin_sign"
+							android:orientation="horizontal" />
+					</RelativeLayout>
+				</LinearLayout>
+			
+			</RelativeLayout>
 		</RelativeLayout>
 		
 		<ImageView
@@ -47,7 +121,8 @@
 			android:layout_toLeftOf="@+id/chat_item_layout_content"
 			android:background="@drawable/msg_state_fail_resend"
 			android:focusable="false"
-			android:visibility="gone" />
+			tools:ignore="NotSibling"
+			android:visibility="gone"/>
 		
 		<ProgressBar
 			android:id="@+id/chat_item_progress"
@@ -56,7 +131,9 @@
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_toLeftOf="@+id/chat_item_layout_content"
-			android:visibility="gone" />
+			android:visibility="gone"
+			tools:ignore="NotSibling" />
+	
 	</RelativeLayout>
 
 </LinearLayout>

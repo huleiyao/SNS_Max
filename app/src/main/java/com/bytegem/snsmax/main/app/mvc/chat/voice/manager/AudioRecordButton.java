@@ -98,7 +98,7 @@ public class AudioRecordButton extends AppCompatTextView
 
         //有同学反应长按响应时间反馈不及时，我们将这一块动作放到DOWN事件中。去onTouchEvent方法查看
         if(isLongClickRecording) {
-            setOnLongClickListener(v -> !startRecord());
+            setOnLongClickListener(v -> !startRecord(R.drawable.shape_chat_recording_down));
         }
 
     }
@@ -195,7 +195,7 @@ public class AudioRecordButton extends AppCompatTextView
             case MotionEvent.ACTION_DOWN:
                 if(!isLongClickRecording){
                     //触摸即开始录音
-                    startRecord();
+                    startRecord(R.drawable.shape_chat_recording_down);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -236,6 +236,7 @@ public class AudioRecordButton extends AppCompatTextView
                     mDialogManager.dimissDialog();
                 }
                 reset();// 恢复标志位
+                setBackgroundResource(R.drawable.shape_chat_recording_up);
                 break;
 
         }
@@ -244,8 +245,9 @@ public class AudioRecordButton extends AppCompatTextView
     }
 
     //开始录制，T:成功开启录制，F：没有录制权限
-    private boolean startRecord(){
+    private boolean startRecord(int bgResId){
         if (isHasRecordPromission()) {
+            setBackgroundResource(bgResId);
             mReady = true;
             mAudioManager.prepareAudio();
             changeState(STATE_RECORDING);
@@ -309,7 +311,7 @@ public class AudioRecordButton extends AppCompatTextView
                     setText(mContext.getString(R.string.long_click_record));//长按录音
                     break;
                 case STATE_RECORDING:
-                    setBackgroundColor(Color.rgb(0xcd, 0xcd, 0xcd));
+//                    setBackgroundColor(Color.rgb(0xcd, 0xcd, 0xcd));
                     setText(R.string.hang_up_finsh);//松开结束
                     if (isRecording) {
                         // 复写dialog.recording();

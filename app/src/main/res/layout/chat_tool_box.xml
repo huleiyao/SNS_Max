@@ -5,6 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
+	android:background="@color/white"
 	tools:ignore="MissingDefaultResource">
 	
 	<RelativeLayout
@@ -13,7 +14,8 @@
 		android:layout_height="@dimen/chat_input_hei"
 		android:gravity="center_vertical"
 		android:orientation="horizontal"
-		android:padding="4dp">
+		android:layout_marginBottom="@dimen/dp_10"
+		android:layout_marginTop="5dp">
 		
 		<!-- 语音键盘切换的按钮 -->
 		<CheckBox
@@ -22,7 +24,7 @@
 			android:layout_height="@dimen/chat_input_icon_wh"
 			android:layout_alignParentLeft="true"
 			android:layout_marginLeft="2dp"
-			android:layout_marginRight="5dp"
+			android:layout_marginRight="10dp"
 			android:layout_centerVertical="true"
 			android:background="@drawable/selector_chat_voice"
 			android:button="@null" />
@@ -32,6 +34,8 @@
 			android:id="@+id/toolbox_et_message"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
+			android:layout_alignParentTop="true"
+			android:layout_marginTop="4dp"
 			android:layout_toLeftOf="@id/toolbox_btn_face"
 			android:layout_toRightOf="@+id/toolbox_btn_keybord_voice"
 			android:background="@color/emoji_keyboard_bg_light"
@@ -39,7 +43,7 @@
 			android:maxHeight="60dp"
 			android:minHeight="35dp"
 			android:singleLine="false"
-			android:textSize="18sp"/>
+			android:textSize="29sp"/>
 		
 		<!-- 语音输入框 -->
 		<com.bytegem.snsmax.main.app.mvc.chat.voice.manager.AudioRecordButton
@@ -54,14 +58,16 @@
 			android:gravity="center"
 			android:layout_toRightOf="@+id/toolbox_btn_keybord_voice"
 			android:textColor="@color/color_3"
-			android:textSize="29sp"/>
+			android:text="@string/long_click_record"
+			android:textSize="29sp"
+			android:background="@drawable/shape_chat_recording_up"/>
 		
 		<CheckBox
 			android:id="@+id/toolbox_btn_face"
 			android:layout_width="@dimen/chat_input_icon_wh"
 			android:layout_height="@dimen/chat_input_icon_wh"
-			android:layout_marginLeft="2dp"
-			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:layout_marginRight="10dp"
 			android:layout_toLeftOf="@+id/toolbox_more_send_layout"
 			android:background="@drawable/selector_chat_face"
 			android:layout_centerVertical="true"
@@ -82,8 +88,7 @@
 				android:layout_marginLeft="2dp"
 				android:layout_marginRight="5dp"
 				android:background="@drawable/selector_chat_more"
-				android:button="@null"
-				android:layout_gravity=""/>
+				android:button="@null" />
 			
 			<Button
 				android:id="@+id/toolbox_btn_send"
@@ -94,8 +99,9 @@
 				android:layout_marginLeft="5dp"
 				android:layout_marginRight="2dp"
 				android:text="发送"
+				android:background="@drawable/selector_chat_send"
 				android:textColor="#ffffffff"
-				android:textSize="15sp"
+				android:textSize="25sp"
 				android:visibility="gone"/>
 		</FrameLayout>
 	</RelativeLayout>

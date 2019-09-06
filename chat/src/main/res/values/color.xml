@@ -20,6 +20,8 @@
     <color name="colorPrimary">#e35b5a</color>
 
     <color name="background_tab_pressed">#6633B5E5</color>
-
+    <color name="chat_clickable">#5e6ce7</color>
+    <color name="chat_clickable_no">#DD5e6ce7</color>
+    <color name="chat_recording_down">#c0c0c0</color>
     <color name="emoji_keyboard_bg_light">#f6f5f5</color>
 </resources>
