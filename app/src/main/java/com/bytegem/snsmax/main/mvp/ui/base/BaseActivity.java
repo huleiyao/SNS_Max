@@ -25,6 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         setStatusBar();
         initView();
+        setListener();
     }
 
     protected void setStatusBar() {

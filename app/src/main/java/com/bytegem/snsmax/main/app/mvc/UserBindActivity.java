@@ -28,7 +28,6 @@ public class UserBindActivity extends BaseActivity implements View.OnClickListen
         barTitle.setText("账号与绑定");
         btnUpdatePhone = findViewById(R.id.update_phone);
         btnWechatBind = findViewById(R.id.wechat_bind);
-        setListener();
     }
 
     @Override

@@ -38,9 +38,6 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	
-	<!-- 录音权限 -->
-	<uses-permission android:name="android.permission.RECORD_AUDIO" />
-	
 	
 	<application
 		android:name=".main.app.MApplication"
@@ -54,7 +51,24 @@
 		android:theme="@style/AppThemeHasActionBar"
 		tools:ignore="GoogleAppIndexingWarning"
 		tools:replace="theme,label,icon">
-		
+
+		<!--帮助反馈-->
+		<activity
+			android:name=".main.mvp.ui.activity.ProposalActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+
+		<!--帮助详情-->
+		<activity
+			android:name=".main.mvp.ui.activity.proposalDetailActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:hardwareAccelerated="true"
+			android:theme="@style/AppThemeHasActionBar.NoBar"
+			android:windowSoftInputMode="stateAlwaysHidden" />
+
+
 		<!-- 聊天界面 -->
 		<activity
 			android:name=".main.app.mvc.chat.ChatActivity"

@@ -66,7 +66,6 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setListener();
     }
     @Override
     public void setListener() {

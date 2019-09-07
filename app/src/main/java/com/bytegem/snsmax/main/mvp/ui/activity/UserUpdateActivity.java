@@ -47,7 +47,6 @@ public class UserUpdateActivity extends BaseActivity implements View.OnClickList
         setTxtTitle(strType);
         btnUpdate = findViewById(R.id.btn_user_update);
         edtUpdate = findViewById(R.id.edt_user_update);
-        setListener();
     }
 
     private void setTxtTitle(String strType) {

@@ -33,7 +33,6 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
         barTitle = findViewById(R.id.title_title);
         btnCode = findViewById(R.id.update_phone_code);
         barTitle.setText("修改手机");
-        setListener();
     }
 
     @Override

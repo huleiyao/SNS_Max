@@ -5,6 +5,8 @@ import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.bean.user.MyCircleDTO;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
+import com.bytegem.snsmax.main.mvp.model.HelperModel;
+import com.bytegem.snsmax.main.mvp.model.ProposalModel;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -62,7 +64,7 @@ public interface UserService {
     //通过id获取用户资料
     @GET("/users/{id}")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<DATAUser> getUserFromId(@Header("Authorization") String authorization,@Path("id") int id);
+    Observable<DATAUser> getUserFromId(@Header("Authorization") String authorization, @Path("id") int id);
 
     //取消/关注一个用户
     @PUT("/user/followings/{id}")
@@ -83,4 +85,15 @@ public interface UserService {
     @GET("/auth/logout")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<NetDefaultBean> signOut(@Header("Authorization") String authorization);
+
+    //获取帮助列表
+    @GET("/helps")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<HelperModel> getHelper(@Header("Authorization") String authorization);
+
+    //获取帮助详情
+    @GET("/helps/{id}")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<ProposalModel> getHelperDetails(@Header("Authorization") String authorization, @Path("id") int id);
+
 }
