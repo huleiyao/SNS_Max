@@ -23,18 +23,20 @@ import java.util.Date;
  * @author kymjs (http://www.kymjs.com/)
  */
 public class Message {
+    //消息类型分类
     public final static int MSG_TYPE_TEXT = 3;
     public final static int MSG_TYPE_PHOTO = 1;
     public final static int MSG_TYPE_FACE = 2;
     public final static int MSG_TYPE_VIOCE = 4; //语音
 
+    //消息状态集合
     public final static int MSG_STATE_SENDING = 3;
     public final static int MSG_STATE_SUCCESS = 1;
     public final static int MSG_STATE_FAIL = 2;
 
     public Long id;
-    public int type; // 0-text | 1-photo | 2-face | more type ...
-    public int state; // 0-sending | 1-success | 2-fail
+    public int type; // 0-text | 1-photo | 2-face | more type ... 消息类型
+    public int state; // 0-sending | 1-success | 2-fail 消息发送状态
     public String fromUserName;
     public String fromUserAvatar;
     public String toUserName;

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.bean.chat.ChatList;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ChatsAdapter;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
@@ -29,6 +30,7 @@ import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -80,6 +82,8 @@ public class MessagesFragment extends BaseFragment<MessageListPresenter> impleme
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         initList();
+        springView.callFreshDelay();
+        mPresenter.getUserChatList(true);
     }
 
     private void initList() {
@@ -91,22 +95,35 @@ public class MessagesFragment extends BaseFragment<MessageListPresenter> impleme
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-//                loadData(true);
+                mPresenter.getUserChatList(true);
             }
 
             @Override
             public void onLoadmore() {
-//                loadData(false);
+                mPresenter.getUserChatList(false);
             }
         });
 
         adapter.setOnItemChildClickListener(mPresenter);
         adapter.setOnItemClickListener(mPresenter);
-        ArrayList<MBaseBean> list = new ArrayList<>();
-        list.add(null);
-        list.add(null);
-        list.add(null);
+        ArrayList<ChatList.ChatListItem> list = new ArrayList<>();
         adapter.setNewData(list);
+    }
+
+    public void update(boolean isLoad, List<ChatList.ChatListItem> newData){
+        if(isLoad){
+            adapter.setNewData(newData);
+        }else{
+            adapter.addData(newData);
+        }
+    }
+
+    public ChatList.ChatListItem getChatListItem(int pos){
+        try{
+            return adapter.getData().get(pos);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     /**
@@ -152,13 +169,16 @@ public class MessagesFragment extends BaseFragment<MessageListPresenter> impleme
 
     @Override
     public void showLoading() {
-
     }
 
     @Override
     public void hideLoading() {
-
     }
+
+    public void onFinishFreshAndLoad() {
+        springView.onFinishFreshAndLoad();
+    }
+
 
     @Override
     public void showMessage(@NonNull String message) {
