@@ -17,6 +17,7 @@ package com.bytegem.snsmax.main.app.mvc.chat.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.support.v4.graphics.PathUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -30,6 +31,7 @@ import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Message;
 import com.bytegem.snsmax.main.app.mvc.chat.utils.UrlUtils;
 import com.bytegem.snsmax.main.app.mvc.chat.voice.manager.MediaManager;
+import com.bytegem.snsmax.main.app.utils.Utils;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.utils.StringUtils;
@@ -229,9 +231,9 @@ public class ChatAdapter extends BaseAdapter {
 
         //显示头像
         if (data.isSend) {
-            kjb.display(holder.img_avatar, data.fromUserAvatar);
+            kjb.display(holder.img_avatar, Utils.checkUrl(data.fromUserAvatar));
         } else {
-            kjb.display(holder.img_avatar, data.toUserAvatar);
+            kjb.display(holder.img_avatar, Utils.checkUrl(data.toUserAvatar));
         }
 
         if (listener != null) {
@@ -252,7 +254,7 @@ public class ChatAdapter extends BaseAdapter {
         }
 
         //消息发送的状态
-        switch (data.type) {
+        switch (data.state) {
             case Message.MSG_STATE_FAIL:
                 holder.progress.setVisibility(View.GONE);
                 holder.img_sendfail.setVisibility(View.VISIBLE);

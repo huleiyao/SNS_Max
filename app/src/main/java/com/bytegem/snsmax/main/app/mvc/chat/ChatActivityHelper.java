@@ -1,5 +1,6 @@
 package com.bytegem.snsmax.main.app.mvc.chat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -7,7 +8,11 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ListView;
 
+import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.chat.ChatList;
+import com.bytegem.snsmax.main.app.bean.chat.ChatMessageSendResp;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.app.mvc.chat.adapter.ChatAdapter;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Emojicon;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Faceicon;
@@ -28,12 +33,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 /**
  * 界面帮助类。帮助处理界面以及业务等
  */
+@SuppressLint("CheckResult")
 public class ChatActivityHelper {
     ChatActivity act;
     List<Message> messageDatas = new ArrayList();
+    public MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+    String roomId; //当前房间的房间id
+    List<ChatList.ChatListItemUserInfo> userInfos = new ArrayList(); //当前房间的用户集合
 
     private ChatAdapter adapter;
 
@@ -43,42 +57,49 @@ public class ChatActivityHelper {
 
     /**
      * 发送文本消息
+     *
      * @param message
      */
-    void sendStringMessage(Message message){
+    void sendStringMessage(Message message) {
         addMessageToList(message);
+        //开始发送信息
+        sendRemoteTextMessage(message);
     }
 
     /**
      * 发送图片消息
+     *
      * @param message
      */
-    void sendPhotoMessage(Message message){
+    void sendPhotoMessage(Message message) {
         addMessageToList(message);
     }
 
     /**
      * 发送语音消息
+     *
      * @param message
      */
-    void sendVoiceMessage(Message message){
+    void sendVoiceMessage(Message message) {
         addMessageToList(message);
     }
 
     /**
      * 添加消息到列表
+     *
      * @param message
      */
-    public void addMessageToList(List<Message> message){
+    public void addMessageToList(List<Message> message) {
         messageDatas.addAll(message);
         notifyDataSetChanged();
     }
 
     /**
      * 添加消息到列表
+     *
      * @param message
      */
-    public void addMessageToList(Message message){
+    public void addMessageToList(Message message) {
         messageDatas.add(message);
         notifyDataSetChanged();
     }
@@ -86,7 +107,7 @@ public class ChatActivityHelper {
     /**
      * 刷新消息
      */
-    public void notifyDataSetChanged(){
+    public void notifyDataSetChanged() {
         adapter.refresh(messageDatas);
     }
 
@@ -100,7 +121,7 @@ public class ChatActivityHelper {
      */
     public Message createSendTextMessage(String toUserName, String toUserAvatar, String content) {
         DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
-        if(userinfo == null || userinfo.getData()== null){
+        if (userinfo == null || userinfo.getData() == null) {
             return null;
         }
         return new Message(
@@ -119,7 +140,7 @@ public class ChatActivityHelper {
      */
     public Message createSendPhotoMessage(String toUserName, String toUserAvatar, File file) {
         DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
-        if(userinfo == null || userinfo.getData()== null){
+        if (userinfo == null || userinfo.getData() == null) {
             return null;
         }
         return new Message(
@@ -138,7 +159,7 @@ public class ChatActivityHelper {
      */
     public Message createSendFaceMessage(String toUserName, String toUserAvatar, Faceicon content) {
         DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
-        if(userinfo == null || userinfo.getData()== null){
+        if (userinfo == null || userinfo.getData() == null) {
             return null;
         }
         return new Message(
@@ -152,12 +173,12 @@ public class ChatActivityHelper {
      *
      * @param toUserName   接收的用户名称
      * @param toUserAvatar 接收的用户头像地址
-     * @param voice      语音消息的位置路径
+     * @param voice        语音消息的位置路径
      * @return 消息体
      */
     public Message createSendVoiceMessage(String toUserName, String toUserAvatar, File voice) {
         DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
-        if(userinfo == null || userinfo.getData()== null){
+        if (userinfo == null || userinfo.getData() == null) {
             return null;
         }
         return new Message(
@@ -169,24 +190,24 @@ public class ChatActivityHelper {
     /**
      * 初始化键盘输入相关操作
      */
-    void initMessageInputToolBox(KJChatKeyboard box, ListView mRealListView){
+    void initMessageInputToolBox(KJChatKeyboard box, ListView mRealListView) {
         //语音发送的消息
         box.setAudioFinishRecorderListener((seconds, filePath) -> {
-            Message message = createSendVoiceMessage(act.getToUserName(),act.getToUserAvatar(),new File(filePath));
+            Message message = createSendVoiceMessage(act.getToUserName(), act.getToUserAvatar(), new File(filePath));
             message.second = (int) seconds;
             sendVoiceMessage(message);
         });
         box.setOnOperationListener(new OnOperationListener() {
             @Override
             public void send(String content) {
-                Message message = createSendTextMessage(act.getToUserName(),act.getToUserAvatar(),content);
+                Message message = createSendTextMessage(act.getToUserName(), act.getToUserAvatar(), content);
                 sendStringMessage(message);
             }
 
             @Override
             public void selectedFace(Faceicon content) {
-                Message message = createSendFaceMessage(act.getToUserName(),act.getToUserAvatar(),content);
-                if(message != null) {
+                Message message = createSendFaceMessage(act.getToUserName(), act.getToUserAvatar(), content);
+                if (message != null) {
                     addMessageToList(message);
                 }
             }
@@ -231,9 +252,23 @@ public class ChatActivityHelper {
     }
 
     /**
+     * 初始化相关的Intent
+     */
+    void initIntent(Intent it){
+        roomId = String.valueOf(it.getIntExtra(act.ROOM_ID,0));
+        String userInfoJson =it.getStringExtra(act.USREINFO_KEY);
+        ChatList.ChatListItemUserInfo[] userin = HttpMvcHelper.getGson().fromJson(userInfoJson,ChatList.ChatListItemUserInfo[].class);
+        if(userin != null) {
+            for (int i = 0; i < userin.length; i++) {
+                userInfos.add(userin[i]);
+            }
+        }
+    }
+
+    /**
      * 初始化列表
      */
-    void initListView(){
+    void initListView() {
 //        byte[] emoji = new byte[]{
 //                (byte) 0xF0, (byte) 0x9F, (byte) 0x98, (byte) 0x81
 //        };
@@ -338,11 +373,56 @@ public class ChatActivityHelper {
      *
      * @return 会隐藏输入法键盘的触摸事件监听器
      */
+    @SuppressLint("ClickableViewAccessibility")
     private View.OnTouchListener getOnTouchListener(KJChatKeyboard box) {
         return (v, event) -> {
             box.hideLayout();
             box.hideKeyboard(act);
             return false;
         };
+    }
+
+    /*
+     * 发送文本信息
+     * @param message
+     */
+    private void sendRemoteTextMessage(Message message) {
+        ChatList.ChatListContentMessage messageContent = new ChatList.ChatListContentMessage();
+        messageContent.type = ChatList.TYPE_TEXT;
+        messageContent.text = message.content;
+        HttpMvcHelper.obtainRetrofitService(CommunityService.class)
+                .sendMessage(MApplication.getTokenOrType(), roomId, HttpMvcHelper.getGson().toJson(messageContent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(succ->{
+                    message.toUserAvatar =userAvatar(succ);
+                    //发送成功。将消息状态更改为已发送
+                    updateSendStatus(message,Message.MSG_STATE_SUCCESS);
+                },error->{
+                    updateSendStatus(message,Message.MSG_STATE_FAIL);
+                });
+    }
+
+    //根据返回类型在本地查找用户头像
+    private String userAvatar(ChatMessageSendResp resp){
+        if(resp == null || resp.data == null){
+            return "";
+        }
+        for (ChatList.ChatListItemUserInfo userInfo : userInfos) {
+            if(userInfo.equals(resp.data.user_id)){
+                return userInfo.avatar;
+            }
+        }
+        return "";
+    }
+
+    /*
+     * 更新指定消息的状态
+     * @param message
+     * @param newStatus
+     */
+    private void updateSendStatus(Message message,int newStatus){
+        message.state = newStatus;
+        adapter.notifyDataSetChanged();
     }
 }

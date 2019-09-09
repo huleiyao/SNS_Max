@@ -17,6 +17,7 @@ package com.bytegem.snsmax.main.app.mvc.chat;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.icu.text.IDNA;
 import android.net.Uri;
 import android.view.KeyEvent;
 import android.widget.ListView;
@@ -38,6 +39,8 @@ import java.io.File;
 public class ChatActivity extends KJActivity {
 
     public static final int REQUEST_CODE_GETIMAGE_BYSDCARD = 0x1;
+    public static final String USREINFO_KEY = "USREINFO_KEY";
+    public static final String ROOM_ID = "ROOM_ID";
 
     private ChatActivityHelper helper;
     KJChatKeyboard box;
@@ -58,14 +61,15 @@ public class ChatActivity extends KJActivity {
         mRealListView.setSelector(android.R.color.transparent);
         helper.initMessageInputToolBox(box,mRealListView);
         helper.initListView();
+        helper.initIntent(getIntent());
     }
 
     public String getToUserName(){
-        return "123456";
+        return helper.roomId;
     }
 
     public String getToUserAvatar(){
-        return "123";
+        return "";
     }
 
     @Override

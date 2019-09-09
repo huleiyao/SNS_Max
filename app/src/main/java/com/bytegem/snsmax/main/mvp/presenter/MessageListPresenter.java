@@ -1,22 +1,32 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.blankj.utilcode.util.ToastUtils;
+import com.bytegem.snsmax.main.app.bean.chat.ChatList;
 import com.bytegem.snsmax.main.app.mvc.chat.ChatActivity;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import javax.inject.Inject;
 
 import com.bytegem.snsmax.main.mvp.contract.MessageListContract;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 
 /**
@@ -42,9 +52,35 @@ public class MessageListPresenter extends BasePresenter<MessageListContract.Mode
     @Inject
     AppManager mAppManager;
 
+    int page = 1;
+
     @Inject
     public MessageListPresenter(MessageListContract.Model model, MessageListContract.View rootView) {
         super(model, rootView);
+    }
+
+    @SuppressLint("CheckResult")
+    public void getUserChatList(boolean isLoad) {
+        if (isLoad) {
+            page = 1;
+        }
+        mModel.getUserChatList(page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
+                .doFinally(()->{
+                    mRootView.onFinishFreshAndLoad();
+                })
+                .subscribe(new ErrorHandleSubscriber<ChatList>(mErrorHandler) {
+                    @Override
+                    public void onNext(ChatList chatList) {
+                        if (chatList.data != null && chatList.data.size() > 0) {
+                            mRootView.update(isLoad, chatList.data);
+                            page += 1;
+                        }
+                        mRootView.onFinishFreshAndLoad();
+                    }
+                });
     }
 
     @Override
@@ -64,6 +100,14 @@ public class MessageListPresenter extends BasePresenter<MessageListContract.Mode
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 //        mRootView.launchActivity(new Intent(mApplication, ChatActivity.class));
-        ((Fragment)mRootView).getActivity().startActivity(new Intent(mApplication, ChatActivity.class));
+        ChatList.ChatListItem item = mRootView.getChatListItem(position);
+        if(item == null){
+            ToastUtils.showShort("未找到相关记录");
+            return;
+        }
+        Intent it = new Intent(mApplication, ChatActivity.class);
+        it.putExtra(ChatActivity.USREINFO_KEY, HttpMvcHelper.getGson().toJson(item.members));
+        it.putExtra(ChatActivity.ROOM_ID, item.id);
+        ((Fragment) mRootView).getActivity().startActivity(it);
     }
 }

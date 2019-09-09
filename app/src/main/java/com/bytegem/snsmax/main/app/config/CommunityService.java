@@ -1,5 +1,7 @@
 package com.bytegem.snsmax.main.app.config;
 
+import com.bytegem.snsmax.main.app.bean.chat.ChatList;
+import com.bytegem.snsmax.main.app.bean.chat.ChatMessageSendResp;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
 import com.bytegem.snsmax.main.app.bean.feed.DataFeed;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeeds;
@@ -10,17 +12,35 @@ import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface CommunityService {
     String getCommentsListAndSendComment = "/feeds/{id}/comments";
     String getCommentsCommentListAndSendCommentComment = "/comments/{id}/children";
+
+    //发送消息
+    @FormUrlEncoded
+    @Headers({"Content-Type:application/x-www-form-urlencoded", "Accept:application/json"})
+    @PUT("/user/chat-rooms/{roomid}/messages")
+    Observable<ChatMessageSendResp> sendMessage(
+            @Header("Authorization") String authorization,
+            @Path("roomid") String roomid,
+            @Field("contents") String contents);
+
+    //获取聊天列表（房间列表）
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @GET("/user/chat-rooms")
+    Observable<ChatList> getUserChatList(@Header("Authorization") String authorization, @Query("page") int page);
 
     //获取推荐动态列表
     @Headers({"Content-Type:application/json", "Accept:application/json"})
