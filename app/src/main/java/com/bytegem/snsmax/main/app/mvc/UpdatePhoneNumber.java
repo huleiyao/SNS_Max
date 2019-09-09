@@ -11,6 +11,7 @@ import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
 
+import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -21,6 +22,8 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
     private TextView barTitle;
     private RelativeLayout barBack;
     private TextView btnCode;
+    @BindView(R.id.update_phone_number)
+    TextView btnphone;
 
     @Override
     public int getLayoutId() {

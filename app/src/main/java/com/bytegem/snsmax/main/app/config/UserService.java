@@ -7,6 +7,7 @@ import com.bytegem.snsmax.main.app.bean.user.MyCircleDTO;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.mvp.model.HelperModel;
 import com.bytegem.snsmax.main.mvp.model.ProposalModel;
+import com.bytegem.snsmax.main.mvp.model.UserBindModel;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -95,5 +96,10 @@ public interface UserService {
     @GET("/helps/{id}")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<ProposalModel> getHelperDetails(@Header("Authorization") String authorization, @Path("id") int id);
+
+    //获取手机微信绑定状态
+    @GET("/user/binds")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<UserBindModel> getUserBind(@Header("Authorization") String authorization);
 
 }

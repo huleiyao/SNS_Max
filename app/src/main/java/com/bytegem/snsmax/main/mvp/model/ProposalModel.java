@@ -1,7 +1,7 @@
 package com.bytegem.snsmax.main.mvp.model;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
-import com.bytegem.snsmax.main.app.bean.ProposalBean;
+import com.bytegem.snsmax.main.app.bean.help.ProposalBean;
 
 public class ProposalModel extends MBaseBean {
 

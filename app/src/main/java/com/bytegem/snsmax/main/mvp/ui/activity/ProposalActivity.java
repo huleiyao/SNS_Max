@@ -51,6 +51,7 @@ public class ProposalActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void setListener() {
         btnBack.setOnClickListener(this);
+        btnProposal.setOnClickListener(this);
         listHelper.setOnItemClickListener(this);
     }
 
@@ -59,6 +60,11 @@ public class ProposalActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.title_back:
                 finish();
+                break;
+            case R.id.btn_proposal:
+                Intent intent = new Intent();
+                intent.setClass(context, UserProposalActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -84,7 +90,7 @@ public class ProposalActivity extends BaseActivity implements View.OnClickListen
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent();
         intent.setClass(context, proposalDetailActivity.class);
-        intent.putExtra("proposal_id", helperList.get(position).getId()+"");
+        intent.putExtra("proposal_id", helperList.get(position).getId() + "");
         startActivity(intent);
     }
 }

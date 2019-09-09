@@ -9,12 +9,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.View.SwitchButton;
-import com.bytegem.snsmax.common.utils.M;
-import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.mvc.UserBindActivity;
 import com.bytegem.snsmax.main.app.mvc.utils.AppUtils;
@@ -29,8 +26,6 @@ import java.math.BigDecimal;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 public class SettingsActivity extends BaseActivity implements View.OnClickListener {
 
@@ -126,7 +121,6 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(suc -> {
-                            NetDefaultBean a = suc;
                             UserInfoUtils.setTokenAndType("", "");
                             Intent intent = new Intent();
                             intent.setClass(context, LoginActivity.class);

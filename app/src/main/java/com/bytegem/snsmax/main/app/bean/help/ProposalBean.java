@@ -1,4 +1,4 @@
-package com.bytegem.snsmax.main.app.bean;
+package com.bytegem.snsmax.main.app.bean.help;
 
 import com.bytegem.snsmax.common.bean.MBaseBean;
 
