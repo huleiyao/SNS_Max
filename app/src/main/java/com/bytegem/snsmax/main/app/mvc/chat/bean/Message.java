@@ -27,7 +27,7 @@ public class Message {
     public final static int MSG_TYPE_TEXT = 3;
     public final static int MSG_TYPE_PHOTO = 1;
     public final static int MSG_TYPE_FACE = 2;
-    public final static int MSG_TYPE_VIOCE = 4; //语音
+    public final static int MSG_TYPE_AUDIO = 4; //语音
 
     //消息状态集合
     public final static int MSG_STATE_SENDING = 3;
@@ -35,7 +35,7 @@ public class Message {
     public final static int MSG_STATE_FAIL = 2;
 
     public Long id;
-    public int type; // 0-text | 1-photo | 2-face | more type ... 消息类型
+    public int type; // 0-文本 | 1-图片 | 2-face | 4-语音 ... 消息类型
     public int state; // 0-sending | 1-success | 2-fail 消息发送状态
     public String fromUserName;
     public String fromUserAvatar;

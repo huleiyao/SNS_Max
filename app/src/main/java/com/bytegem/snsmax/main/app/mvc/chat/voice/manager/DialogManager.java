@@ -41,6 +41,8 @@ public class DialogManager {
         tipsTxt2 = (TextView) view.findViewById(R.id.dm_tv_txt2);
 
         mDialog.show();
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
 
     }
 

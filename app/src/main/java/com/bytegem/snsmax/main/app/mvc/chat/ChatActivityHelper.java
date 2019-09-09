@@ -2,24 +2,27 @@ package com.bytegem.snsmax.main.app.mvc.chat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ListView;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.chat.ChatList;
 import com.bytegem.snsmax.main.app.bean.chat.ChatMessageSendResp;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.config.CommunityService;
+import com.bytegem.snsmax.main.app.config.UpdataImageService;
 import com.bytegem.snsmax.main.app.mvc.chat.adapter.ChatAdapter;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Emojicon;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Faceicon;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Message;
 import com.bytegem.snsmax.main.app.mvc.chat.emoji.DisplayRules;
 import com.bytegem.snsmax.main.app.mvc.chat.utils.OnOperationListener;
-import com.bytegem.snsmax.main.app.mvc.chat.voice.manager.AudioRecordButton;
 import com.bytegem.snsmax.main.app.mvc.chat.widget.KJChatKeyboard;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
@@ -31,11 +34,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
@@ -72,7 +76,7 @@ public class ChatActivityHelper {
      * @param message
      */
     void sendPhotoMessage(Message message) {
-        addMessageToList(message);
+        sendRemoteMediaMessage(message);
     }
 
     /**
@@ -80,8 +84,8 @@ public class ChatActivityHelper {
      *
      * @param message
      */
-    void sendVoiceMessage(Message message) {
-        addMessageToList(message);
+    void sendAudioMessage(Message message) {
+        sendRemoteMediaMessage(message);
     }
 
     /**
@@ -182,7 +186,7 @@ public class ChatActivityHelper {
             return null;
         }
         return new Message(
-                Message.MSG_TYPE_VIOCE, Message.MSG_STATE_SENDING, userinfo.getData().getName(), userinfo.getData().getAvatar(), toUserName,
+                Message.MSG_TYPE_AUDIO, Message.MSG_STATE_SENDING, userinfo.getData().getName(), userinfo.getData().getAvatar(), toUserName,
                 toUserAvatar, voice.getAbsolutePath(), true, false, new Date(System.currentTimeMillis())
         );
     }
@@ -195,7 +199,7 @@ public class ChatActivityHelper {
         box.setAudioFinishRecorderListener((seconds, filePath) -> {
             Message message = createSendVoiceMessage(act.getToUserName(), act.getToUserAvatar(), new File(filePath));
             message.second = (int) seconds;
-            sendVoiceMessage(message);
+            sendAudioMessage(message);
         });
         box.setOnOperationListener(new OnOperationListener() {
             @Override
@@ -254,11 +258,11 @@ public class ChatActivityHelper {
     /**
      * 初始化相关的Intent
      */
-    void initIntent(Intent it){
-        roomId = String.valueOf(it.getIntExtra(act.ROOM_ID,0));
-        String userInfoJson =it.getStringExtra(act.USREINFO_KEY);
-        ChatList.ChatListItemUserInfo[] userin = HttpMvcHelper.getGson().fromJson(userInfoJson,ChatList.ChatListItemUserInfo[].class);
-        if(userin != null) {
+    void initIntent(Intent it) {
+        roomId = String.valueOf(it.getIntExtra(act.ROOM_ID, 0));
+        String userInfoJson = it.getStringExtra(act.USREINFO_KEY);
+        ChatList.ChatListItemUserInfo[] userin = HttpMvcHelper.getGson().fromJson(userInfoJson, ChatList.ChatListItemUserInfo[].class);
+        if (userin != null) {
             for (int i = 0; i < userin.length; i++) {
                 userInfos.add(userin[i]);
             }
@@ -394,22 +398,191 @@ public class ChatActivityHelper {
                 .sendMessage(MApplication.getTokenOrType(), roomId, HttpMvcHelper.getGson().toJson(messageContent))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(succ->{
-                    message.toUserAvatar =userAvatar(succ);
+                .subscribe(succ -> {
+                    message.toUserAvatar = userAvatar(succ);
                     //发送成功。将消息状态更改为已发送
-                    updateSendStatus(message,Message.MSG_STATE_SUCCESS);
-                },error->{
-                    updateSendStatus(message,Message.MSG_STATE_FAIL);
+                    updateSendStatus(message, Message.MSG_STATE_SUCCESS);
+                }, error -> {
+                    updateSendStatus(message, Message.MSG_STATE_FAIL);
                 });
     }
 
+    /*
+     * 发送媒体消息，也就是除了文本消息之外的消息
+     * @param message
+     */
+    private void sendRemoteMediaMessage(Message message) {
+        //第一步。上传临时文件到服务器获取地址
+        String[] imgExt = {"jpg", "jpeg", "png", "webp", "gif"};
+        String[] voiceExt = {"mpeg", "mp4"};
+        String messExt = FileUtils.getFileExtension(message.content);
+        String tempType = "";
+        //检查是否为图片类型
+        for (String s : imgExt) {
+            if (s.equals(messExt)) {
+                tempType = "image";
+                break;
+            }
+        }
+        if ("amr".equals(messExt)) {
+            tempType = "audio";
+        }
+        if ("".equals(tempType)) {
+            for (String s : voiceExt) {
+                if (s.equals(messExt)) {
+                    tempType = "video";
+                    break;
+                }
+            }
+        }
+        String minType = getMediaMessageMimeType(message);
+        if ("".equals(minType)) {
+            ToastUtils.showShort("不支持的文件格式:" + messExt);
+            return;
+        }
+        File tempCover = M.getTempFile(MApplication.getInstance(), minType);
+        if(tempCover == null){
+            ToastUtils.showShort("文件处理失败");
+            return;
+        }
+        addMessageToList(message);
+        uploadMediaTempFile(
+                tempType,
+                tempCover,
+                new File(message.content).length(),
+                M.getFileMD5(new File(message.content))
+        )
+                .flatMap(fileSignBean -> updataFile(fileSignBean, message))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(succ -> {
+                    message.toUserAvatar = userAvatar(succ);
+                    //发送成功。将消息状态更改为已发送
+                    updateSendStatus(message, Message.MSG_STATE_SUCCESS);
+                }, error -> {
+                    updateSendStatus(message, Message.MSG_STATE_FAIL);
+                });
+    }
+
+    /*
+     * 检查消息所对应的的类型的类型
+     * @param message
+     * @return 在发送的消息体中的类型:text、image、audio
+     */
+    private String getCheckMessageType(Message message) {
+        if (message.type == Message.MSG_TYPE_PHOTO) {
+            return ChatList.TYPE_IMAGE;
+        }
+        if (message.type == Message.MSG_TYPE_AUDIO) {
+            return ChatList.TYPE_AUDIO;
+        }
+        return ChatList.TYPE_TEXT;
+    }
+
+    /*
+     * 上传临时文件到服务器。并且获得路径
+     *
+     * @param type 类型:仅支持 image - 图片和 video - 视频， audio - 音频。
+     * @param file 必须，上传一个 10KB 以内的任意尺寸同需要上传文件同 MIME 文件，支持的文件有 jpg,jpeg,png,webp,gif,mp4
+     * @param length 必须，需要上传的图片真实文件尺寸，单位 Byte。
+     *               如果 type=video 则设置上限为 10485760 Byte（10MiB）如果 type=image 则设置上限为 3145728 byte（3MiB）
+     * @param md5 必须，需要上传的图片真实的 32 位 MD5 摘要。
+     * @return
+     */
+    private Observable<FileSignBean> uploadMediaTempFile(String type, File file, long length, String md5) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("factor", file.getName(), requestBody);
+        return HttpMvcHelper
+                .obtainRetrofitService(UpdataImageService.class)
+                .getImageSign(
+                        MApplication.getTokenOrType()
+                        , MultipartBody.Part.createFormData("type", type)
+                        , part
+                        , MultipartBody.Part.createFormData("length", length + "")
+                        , MultipartBody.Part.createFormData("md5", md5)
+                );
+    }
+
+    /*
+     * 上传文件到服务器并且发送该消息，实际上融合了上传文件和发送消息在一起
+     *
+     * @param fileSignBean 上传临时文件返回的对象
+     * @param message      消息对象
+     * @return
+     */
+    private Observable<ChatMessageSendResp> updataFile(FileSignBean fileSignBean, Message message) {
+        String path = fileSignBean.getPath();
+        if (path.indexOf("/") == 0)
+            path = path.substring(1);
+        final String remoPath = path;
+        return HttpMvcHelper
+                .obtainRetrofitService(CommunityService.class)
+                .updataImage(
+                        fileSignBean.getHeaders().getAuthorization()
+                        , fileSignBean.getHeaders().getHost()
+                        , fileSignBean.getHeaders().getMd5()
+                        , fileSignBean.getHeaders().getCos()
+                        , getMediaMessageMimeType(message)
+                        , RequestBody.create(MediaType.parse("application/otcet-stream"), new File(message.content))
+                        , path
+                )
+                .flatMap(mBaseBean -> {
+                    ChatList.ChatListContentMessage messageContent = new ChatList.ChatListContentMessage();
+                    messageContent.type = getCheckMessageType(message);
+                    messageContent.text = remoPath;
+                    //更新图片为网络图片
+//                    message.content = remoPath;
+                    return HttpMvcHelper
+                            .obtainRetrofitService(CommunityService.class)
+                            .sendMessage(
+                                    HttpMvcHelper.getTokenOrType(),
+                                    roomId,
+                                    HttpMvcHelper.getGson().toJson(messageContent)
+                            );
+                });
+
+    }
+
+    /*
+     * 获取媒体消息的文件类型
+     * @return
+     */
+    private String getMediaMessageMimeType(Message message) {
+        String type = "";
+        String ext = FileUtils.getFileExtension(message.content);
+        switch (ext) {
+            case "png":
+                type = "image/png";
+                break;
+            case "jpeg":
+                type = "image/jpeg";
+                break;
+            case "jpg":
+                type = "image/jpg";
+                break;
+            case "gif":
+                type = "image/gif";
+                break;
+            case "amr":
+                type = "audio/basic";
+                break;
+            case "mpeg":
+                type = "video/mpeg";
+                break;
+            case "mp4":
+                type = "video/mp4";
+                break;
+        }
+        return type;
+    }
+
     //根据返回类型在本地查找用户头像
-    private String userAvatar(ChatMessageSendResp resp){
-        if(resp == null || resp.data == null){
+    private String userAvatar(ChatMessageSendResp resp) {
+        if (resp == null || resp.data == null) {
             return "";
         }
         for (ChatList.ChatListItemUserInfo userInfo : userInfos) {
-            if(userInfo.equals(resp.data.user_id)){
+            if (userInfo.equals(resp.data.user_id)) {
                 return userInfo.avatar;
             }
         }
@@ -421,7 +594,7 @@ public class ChatActivityHelper {
      * @param message
      * @param newStatus
      */
-    private void updateSendStatus(Message message,int newStatus){
+    private void updateSendStatus(Message message, int newStatus) {
         message.state = newStatus;
         adapter.notifyDataSetChanged();
     }

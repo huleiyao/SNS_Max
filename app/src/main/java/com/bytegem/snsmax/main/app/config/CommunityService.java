@@ -1,5 +1,7 @@
 package com.bytegem.snsmax.main.app.config;
 
+import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.chat.ChatList;
 import com.bytegem.snsmax.main.app.bean.chat.ChatMessageSendResp;
 import com.bytegem.snsmax.main.app.bean.feed.LISTFeedComments;
@@ -9,6 +11,7 @@ import com.bytegem.snsmax.main.app.bean.feed.DATAFeedComment;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -24,9 +27,36 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+import static com.bytegem.snsmax.main.app.Api.FILE_UPDATA_DOMAIN_NAME;
+import static me.jessyan.retrofiturlmanager.RetrofitUrlManager.DOMAIN_NAME_HEADER;
+
 public interface CommunityService {
     String getCommentsListAndSendComment = "/feeds/{id}/comments";
     String getCommentsCommentListAndSendCommentComment = "/comments/{id}/children";
+
+    //获取签名信息
+    @Multipart
+    @POST("/cos/make-put-sign")
+    @Headers({/*"Content-Type:application/json",*/ "Accept:application/json"})
+    Observable<FileSignBean> getImageSign(
+            @Header("Authorization") String authorization
+            , @Part MultipartBody.Part type
+            , @Part MultipartBody.Part file
+            , @Part MultipartBody.Part length
+            , @Part MultipartBody.Part md5
+    );
+
+    @Headers({DOMAIN_NAME_HEADER + FILE_UPDATA_DOMAIN_NAME})
+    @PUT("{path}")
+    Observable<Void> updataImage(
+            @Header("Authorization") String authorization
+            , @Header("Host") String host
+            , @Header("Content-MD5") String md5
+            , @Header("x-cos-acl") String cos
+            , @Header("Content-Type") String mimetype
+            , @Body RequestBody file
+            , @Path("path") String path
+    );
 
     //发送消息
     @FormUrlEncoded

@@ -17,7 +17,6 @@ package com.bytegem.snsmax.main.app.mvc.chat.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
-import android.support.v4.graphics.PathUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -159,7 +158,7 @@ public class ChatAdapter extends BaseAdapter {
                 holder.tv_chatcontent = UrlUtils.handleText(holder.tv_chatcontent, data
                         .content);
             }
-        } else if (data.type == Message.MSG_TYPE_VIOCE) { //语音消息
+        } else if (data.type == Message.MSG_TYPE_AUDIO) { //语音消息
             holder.img_chatimage.setVisibility(View.GONE);
             holder.tv_chatcontent.setVisibility(View.GONE);
             holder.rl_chatvoice.setVisibility(View.VISIBLE);
@@ -246,7 +245,7 @@ public class ChatAdapter extends BaseAdapter {
                     case Message.MSG_TYPE_FACE: //不知道
                         listener.onFaceClick(position);
                         break;
-                    case Message.MSG_TYPE_VIOCE: //语音
+                    case Message.MSG_TYPE_AUDIO: //语音
                         listener.onFaceClick(position);
                         break;
                 }
