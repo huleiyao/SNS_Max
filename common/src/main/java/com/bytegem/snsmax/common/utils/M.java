@@ -58,14 +58,11 @@ public class M {
                 case "image/jpg":
                     tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "jpg.jpg"));
                     break;
-                case "audio/basic":
-                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "amr.amr"));
+                case "audio/mpeg":
+                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "mpeg.mpeg"));
                     break;
                 case "image/gif":
                     tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "gif.gif"));
-                    break;
-                case "video/mpeg":
-                    tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "mp4.mp4"));
                     break;
                 case "video/mp4":
                     tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "mp4.mp4"));

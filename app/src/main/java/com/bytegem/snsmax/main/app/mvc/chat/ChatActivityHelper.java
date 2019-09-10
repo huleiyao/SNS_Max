@@ -424,7 +424,7 @@ public class ChatActivityHelper {
                 break;
             }
         }
-        if ("amr".equals(messExt)) {
+        if ("mpeg".equals(messExt)) {
             tempType = "audio";
         }
         if ("".equals(tempType)) {
@@ -563,11 +563,8 @@ public class ChatActivityHelper {
             case "gif":
                 type = "image/gif";
                 break;
-            case "amr":
-                type = "audio/basic";
-                break;
             case "mpeg":
-                type = "video/mpeg";
+                type = "audio/mpeg";
                 break;
             case "mp4":
                 type = "video/mp4";

@@ -148,7 +148,7 @@ public class AudioRecordButton extends AppCompatTextView
                     mDialogManager.updateVoiceLevel(mAudioManager.getVoiceLevel(7));
                     break;
                 case MSG_DIALOG_DIMISS:
-
+                    mDialogManager.dimissDialog();
                     break;
                 case MSG_VOICE_STOP:
                     isOverTime = true;//超时
@@ -220,7 +220,7 @@ public class AudioRecordButton extends AppCompatTextView
                 if (!isRecording || mTime < 0.8f) {
                     mDialogManager.tooShort();
                     mAudioManager.cancel();
-                    mStateHandler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS, 1300);// 持续1.3s
+                    mStateHandler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS, 950);// 持续0.95s
                 } else if (mCurrentState == STATE_RECORDING) {//正常录制结束
                     if (isOverTime) return super.onTouchEvent(event);//超时
                     mDialogManager.dimissDialog();

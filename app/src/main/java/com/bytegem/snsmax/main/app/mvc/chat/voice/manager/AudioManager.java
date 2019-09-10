@@ -74,7 +74,9 @@ public class AudioManager {
             // 设置meidaRecorder的音频源是麦克风
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             // 设置文件音频的输出格式为amr
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+//            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+//             设置文件音频的输出格式为 mpeg
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             // 设置音频的编码格式为amr。这里采用AAC主要为了适配IOS，保证在IOS上可以正常播放。
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
@@ -103,7 +105,7 @@ public class AudioManager {
      * @return
      */
     private String generalFileName() {
-        return UUID.randomUUID().toString() + ".amr";
+        return UUID.randomUUID().toString() + ".mpeg";
     }
 
     // 获得声音的level
