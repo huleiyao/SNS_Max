@@ -12,11 +12,11 @@ public class DateFormConvert {
      * @param utcStr
      */
     public static Date utc2LocalData(String utcStr){
-        SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        df2.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
+            SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            df2.setTimeZone(TimeZone.getTimeZone("UTC"));
             return df2.parse(utcStr);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
