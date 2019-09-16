@@ -307,6 +307,13 @@
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
 
         <activity
+            android:name=".main.app.mvc.UpdatePhoneNumberDetail"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+
+        <activity
             android:name=".zxing.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"

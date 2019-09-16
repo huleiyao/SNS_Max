@@ -1,6 +1,8 @@
 package com.bytegem.snsmax.main.app.mvc;
 
+import android.content.Intent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -8,8 +10,10 @@ import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.config.UserService;
+import com.bytegem.snsmax.main.app.mvc.utils.NumberUtil;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
+import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,12 +22,20 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListener {
-
-    private TextView barTitle;
-    private RelativeLayout barBack;
-    private TextView btnCode;
+    @BindView(R.id.title_back)
+    RelativeLayout barBack;
+    @BindView(R.id.title_title)
+    TextView barTitle;
+    @BindView(R.id.update_phone_code)
+    TextView btnCode;
+    @BindView(R.id.txt_history_phone)
+    TextView txtPhone;
     @BindView(R.id.update_phone_number)
-    TextView btnphone;
+    TextView btnPhone;
+    @BindView(R.id.edt_phone_code)
+    EditText editCode;
+    Intent intent;
+    private String strPhoneNum;
 
     @Override
     public int getLayoutId() {
@@ -32,16 +44,17 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
 
     @Override
     public void initView() {
-        barBack = findViewById(R.id.title_back);
-        barTitle = findViewById(R.id.title_title);
-        btnCode = findViewById(R.id.update_phone_code);
         barTitle.setText("修改手机");
+        intent = getIntent();
+        strPhoneNum = intent.getStringExtra("phone");
+        txtPhone.setText(NumberUtil.settingPhone(strPhoneNum));
     }
 
     @Override
     public void setListener() {
         barBack.setOnClickListener(this);
         btnCode.setOnClickListener(this);
+        btnPhone.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +63,15 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
             case R.id.title_back:
                 finish();
                 break;
+            case R.id.update_phone_number:
+                //跳转修改手机号页面
+                if (editCode.getText().length() > 0) {
+                    intent.setClass(this, UpdatePhoneNumberDetail.class);
+                    intent.putExtra("historyCode", editCode.getText());
+                    startActivity(intent);
+                }
+                editCode.setText("");
+                break;
             case R.id.update_phone_code:
                 HttpMvcHelper
                         .obtainRetrofitService(UserService.class)
@@ -57,14 +79,14 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
                                 MediaType.parse("application/json; charset=utf-8"),
                                 M.getMapString(
                                         "phone_number"
-                                        , "15882633651"
+                                        , strPhoneNum
                                 )))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(suc -> {
-                            NetDefaultBean a = suc;
+                            ArmsUtils.snackbarText("发送成功");
                         }, err -> {
-
+                            ArmsUtils.snackbarText("发送失败");
                         });
                 break;
             default:
