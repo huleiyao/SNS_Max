@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="160dp"
+	android:layout_height="@dimen/chat_input_ext_hei"
 	android:orientation="vertical"
 	tools:ignore="MissingDefaultResource">
 	
 	<android.support.v4.view.ViewPager
 		android:id="@+id/frag_pager_face"
 		android:layout_width="match_parent"
-		android:layout_height="150dp"/>
+		android:layout_height="@dimen/chat_input_ext_top_content"/>
 	
 	<RadioGroup
 		android:id="@+id/frag_point"
 		android:layout_width="match_parent"
-		android:layout_height="10dp"
+		android:layout_height="@dimen/chat_input_ext_point"
 		android:layout_marginBottom="6dip"
 		android:background="#00000000"
 		android:gravity="center"

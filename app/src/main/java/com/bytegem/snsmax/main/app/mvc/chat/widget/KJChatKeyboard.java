@@ -29,6 +29,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.mvc.chat.adapter.FaceCategroyAdapter;
 import com.bytegem.snsmax.main.app.mvc.chat.utils.OnOperationListener;

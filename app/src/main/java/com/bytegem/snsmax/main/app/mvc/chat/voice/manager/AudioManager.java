@@ -3,6 +3,9 @@ package com.bytegem.snsmax.main.app.mvc.chat.voice.manager;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.mvc.chat.voice.utils.Constant;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -76,7 +79,7 @@ public class AudioManager {
             // 设置文件音频的输出格式为amr
 //            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
 //             设置文件音频的输出格式为 mpeg
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
             // 设置音频的编码格式为amr。这里采用AAC主要为了适配IOS，保证在IOS上可以正常播放。
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
@@ -105,7 +108,7 @@ public class AudioManager {
      * @return
      */
     private String generalFileName() {
-        return UUID.randomUUID().toString() + ".mpeg";
+        return UUID.randomUUID().toString() + M.RECORD_EXT_NAME;
     }
 
     // 获得声音的level

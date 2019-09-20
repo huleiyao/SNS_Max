@@ -15,6 +15,8 @@
  */
 package com.bytegem.snsmax.main.app.mvc.chat.adapter;
 
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
@@ -35,6 +37,12 @@ public class EmojiAdapter extends KJAdapter<Emojicon> {
 
     public EmojiAdapter(AbsListView view, Collection<Emojicon> mDatas) {
         super(view, mDatas, R.layout.chat_item_emoji);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = super.getView(position, convertView, parent);
+        return view;
     }
 
     @Override

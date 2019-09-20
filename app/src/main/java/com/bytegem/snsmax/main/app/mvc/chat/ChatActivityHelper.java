@@ -23,6 +23,7 @@ import com.bytegem.snsmax.main.app.mvc.chat.bean.Faceicon;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Message;
 import com.bytegem.snsmax.main.app.mvc.chat.emoji.DisplayRules;
 import com.bytegem.snsmax.main.app.mvc.chat.utils.OnOperationListener;
+import com.bytegem.snsmax.main.app.mvc.chat.voice.utils.Constant;
 import com.bytegem.snsmax.main.app.mvc.chat.widget.KJChatKeyboard;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
@@ -413,8 +414,9 @@ public class ChatActivityHelper {
      */
     private void sendRemoteMediaMessage(Message message) {
         //第一步。上传临时文件到服务器获取地址
+        String audioExtName = M.RECORD_EXT_NAME.substring(1);
         String[] imgExt = {"jpg", "jpeg", "png", "webp", "gif"};
-        String[] voiceExt = {"mpeg", "mp4"};
+        String[] voiceExt = {"mp4"};
         String messExt = FileUtils.getFileExtension(message.content);
         String tempType = "";
         //检查是否为图片类型
@@ -424,7 +426,7 @@ public class ChatActivityHelper {
                 break;
             }
         }
-        if ("mpeg".equals(messExt)) {
+        if (audioExtName.equals(messExt)) {
             tempType = "audio";
         }
         if ("".equals(tempType)) {
@@ -441,7 +443,7 @@ public class ChatActivityHelper {
             return;
         }
         File tempCover = M.getTempFile(MApplication.getInstance(), minType);
-        if(tempCover == null){
+        if (tempCover == null) {
             ToastUtils.showShort("文件处理失败");
             return;
         }

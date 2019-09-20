@@ -12,6 +12,11 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 
 public class M {
+    /* 音频文件扩展名称 */
+    public static final String RECORD_EXT_NAME = ".acc";
+    /* 音频上传时候的格式 */
+    public static final String RECORD_WEB_SEND_FROM = "audio/" + RECORD_EXT_NAME;
+
     public static String getMapString(Object... parameter) {
         HashMap<Object, Object> map = new HashMap<>();
         for (int i = 0; i < parameter.length / 2; i++)
@@ -58,7 +63,7 @@ public class M {
                 case "image/jpg":
                     tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "jpg.jpg"));
                     break;
-                case "audio/mpeg":
+                case RECORD_WEB_SEND_FROM:
                     tempCover = new File(AssetsFileUtils.copyBigDataBase(context, "mpeg.mpeg"));
                     break;
                 case "image/gif":

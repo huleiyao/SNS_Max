@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class EmojiPageFragment extends SupportFragment {
 
-    private static final int ITEM_PAGE_COUNT = 28;
+    public static final int ITEM_PAGE_COUNT = 21;
 
     private ViewPager mPagerFace;
     private LinearLayout pagePointLayout;

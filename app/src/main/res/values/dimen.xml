@@ -11,5 +11,10 @@
     
     <dimen name="chat_input_hei">76dp</dimen>
     <dimen name="chat_input_icon_wh">55dp</dimen>
+    <dimen name="chat_input_ext_hei">360dp</dimen>
+    <dimen name="chat_input_ext_point">10dp</dimen><!-- 表情的底部指示器的高度 -->
+    <dimen name="chat_input_ext_top_content">350dp</dimen><!-- 表情的顶部内容高度 -->
+    <dimen name="chat_input_ext_item_emoji_hei">116dp</dimen><!-- 表情的item的高度 -->
+    <dimen name="chat_input_ext_item_outher_hei">175dp</dimen><!-- 其他扩展功能的item的高度 -->
     
 </resources>
