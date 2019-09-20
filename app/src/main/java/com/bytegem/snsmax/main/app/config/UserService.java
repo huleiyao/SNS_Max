@@ -1,5 +1,6 @@
 package com.bytegem.snsmax.main.app.config;
 
+import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
@@ -20,6 +21,7 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UserService {
     //发送手机验证码
@@ -102,4 +104,8 @@ public interface UserService {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<UserBindModel> getUserBind(@Header("Authorization") String authorization);
 
+    //提交修改手机号
+    @PATCH("/user/phone")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<NetDefaultBean> updatePhone(@Header("Authorization") String authorization, @Body RequestBody requestBody);
 }

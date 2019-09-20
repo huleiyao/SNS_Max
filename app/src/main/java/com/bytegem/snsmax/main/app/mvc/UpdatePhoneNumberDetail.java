@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.bean.usertype.UserTypeDetailBean;
 import com.bytegem.snsmax.main.app.config.UserService;
 import com.bytegem.snsmax.main.app.mvc.utils.NumberUtil;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
@@ -85,7 +86,22 @@ public class UpdatePhoneNumberDetail extends BaseActivity implements View.OnClic
                 break;
             case R.id.update_new_number:
                 //提交新手机号以及双验证码
-
+                if (edtNewCode.getText().length()>0){
+//                    HttpMvcHelper
+//                            .obtainCacheService(UserService.class)
+//                            .updatePhone(RequestBody.create(
+//                                    MediaType.parse("application/json; charset=utf-8"),
+//                                    M.getMapString("code", strHistoryCode,
+//                                            "new", ""
+//                                    )))
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(suc -> {
+//                                ArmsUtils.snackbarText("发送成功");
+//                            }, err -> {
+//                                ArmsUtils.snackbarText("发送失败");
+//                            });
+                }
                 break;
             default:
                 break;

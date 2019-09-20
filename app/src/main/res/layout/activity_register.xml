@@ -17,6 +17,7 @@
             android:id="@+id/to_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="44dp"
             android:text="登录"
             android:textColor="@color/color_5D68EA"
             android:textSize="32sp" />

@@ -1,6 +1,8 @@
 package com.bytegem.snsmax.main.app.mvc;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -36,6 +38,7 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
     EditText editCode;
     Intent intent;
     private String strPhoneNum;
+    TimeCount timeCount = new TimeCount(60000, 100);
 
     @Override
     public int getLayoutId() {
@@ -71,8 +74,10 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
                     startActivity(intent);
                 }
                 editCode.setText("");
+                timeCount.onFinish();
                 break;
             case R.id.update_phone_code:
+                timeCount.start();
                 HttpMvcHelper
                         .obtainRetrofitService(UserService.class)
                         .getCode(RequestBody.create(
@@ -93,4 +98,25 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
                 break;
         }
     }
+
+    class TimeCount extends CountDownTimer {
+
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            btnCode.setClickable(false);
+            btnCode.setText("(" + millisUntilFinished / 1000 + ") 秒后可重新发送");
+        }
+
+        @Override
+        public void onFinish() {
+            btnCode.setText("重新获取验证码");
+            btnCode.setClickable(true);
+        }
+    }
+
+
 }
