@@ -52,8 +52,6 @@ import okhttp3.RequestBody;
  */
 @SuppressLint("CheckResult")
 public class ChatActivityHelper {
-    private final String messageFiled = "\"contents\":";
-
     ChatActivity act;
     List<Message> messageDatas = new ArrayList();
     public MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
@@ -459,6 +457,19 @@ public class ChatActivityHelper {
         };
     }
 
+    //创建消息发送体
+    private RequestBody getSendMessageBody(ChatList.ChatListContentMessage messageContent) {
+//        return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
+//                , messageFiled + M.getMapString(
+//                        "type", messageContent.type,
+//                        "text", messageContent.text));
+        //    String messageFiled = "\"contents\":";
+        final String messageFiled = "";
+        return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
+                , messageFiled + M.getMapString(
+                        "contents", messageContent));
+    }
+
     /*
      * 发送文本信息
      * @param message
@@ -470,10 +481,7 @@ public class ChatActivityHelper {
         HttpMvcHelper.obtainRetrofitService(CommunityService.class)
                 .sendMessage(MApplication.getTokenOrType(),
                         roomId,
-                        RequestBody.create(MediaType.parse("application/json; charset=utf-8")
-                                , messageFiled + M.getMapString(
-                                        "type", messageContent.type,
-                                        "text", messageContent.text)))
+                        getSendMessageBody(messageContent))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(succ -> {
@@ -616,8 +624,7 @@ public class ChatActivityHelper {
                             .sendMessage(
                                     HttpMvcHelper.getTokenOrType(),
                                     roomId,
-                                    RequestBody.create(MediaType.parse("application/json; charset=utf-8")
-                                            , messageFiled + M.getMapString("contents", messageContent))
+                                    getSendMessageBody(messageContent)
                             );
                 });
 
