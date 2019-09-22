@@ -1,16 +1,19 @@
 package com.bytegem.snsmax.main.mvp.presenter;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -72,6 +75,22 @@ public class OwnerHomePresenter extends BasePresenter<OwnerHomeContract.Model, O
                         if (data != null && data.getData() != null)
                             mRootView.initUserData(data.getData());
                     }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void sendMessage(){
+        mRootView.showLoading();
+        mModel.sendUserMessage(UserInfoUtils.getUserInfo(HttpMvcHelper.getGson()).getData().getId())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(suc->{
+                    mRootView.getSendMessageSucc(suc);
+                    mRootView.hideLoading();
+                },err->{
+                    mRootView.showMessage("获取房间信息异常");
+                    mRootView.hideLoading();
                 });
     }
 

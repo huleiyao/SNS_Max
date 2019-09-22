@@ -79,7 +79,7 @@ public class ChatList extends MBaseBean {
         /**
          * 用户id
          */
-        public String id;
+        public int id;
         /**
          * 电话号码
          */

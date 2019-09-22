@@ -6,6 +6,8 @@ import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.app.bean.chat.ChatList;
 import com.bytegem.snsmax.main.app.utils.DateFormConvert;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -15,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ChatsAdapter extends BaseQuickAdapter<ChatList.ChatListItem, BaseViewHolder> {
+
+    private int userId = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson()).getData().getId();
 
     public ChatsAdapter() {
         super(R.layout.item_chat_list);
@@ -51,8 +55,22 @@ public class ChatsAdapter extends BaseQuickAdapter<ChatList.ChatListItem, BaseVi
                 }
             }
         }catch (Exception e){}
+        String name = "";
+        if(!bean.is_group){
+            for (ChatList.ChatListItemUserInfo member : bean.members) {
+                if(userId != -1 && !(member.id == userId)){
+                    name = member.name;
+                }
+            }
+            if("".equals(name)){
+                name = "-";
+            }
+        }else{
+            name ="--";
+        }
         Date date = DateFormConvert.utc2LocalData(bean.last_message.created_at);
         viewHolder.setText(R.id.chat_item_time, date == null ? "--" : StringUtils.friendlyTime(df.format(date))) //时间
+                .setText(R.id.chat_item_user_name, name) //名称
                 .setText(R.id.chat_item_user_tag, msg) //最近的消息
                 .setText(R.id.chat_item_message_count, count); //
         if("0".equals(count)){
