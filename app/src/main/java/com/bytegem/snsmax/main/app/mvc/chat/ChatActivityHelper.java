@@ -29,6 +29,7 @@ import com.bytegem.snsmax.main.app.mvc.chat.widget.KJChatKeyboard;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.bytegem.snsmax.main.app.utils.Utils;
+import com.google.gson.Gson;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.kymjs.kjframe.ui.ViewInject;
@@ -459,15 +460,9 @@ public class ChatActivityHelper {
 
     //创建消息发送体
     private RequestBody getSendMessageBody(ChatList.ChatListContentMessage messageContent) {
-//        return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
-//                , messageFiled + M.getMapString(
-//                        "type", messageContent.type,
-//                        "text", messageContent.text));
-        //    String messageFiled = "\"contents\":";
-        final String messageFiled = "";
+        ChatList.SendMessageBean sendMessage = new ChatList.SendMessageBean(messageContent);
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
-                , messageFiled + M.getMapString(
-                        "contents", messageContent));
+                , new Gson().toJson(sendMessage));
     }
 
     /*

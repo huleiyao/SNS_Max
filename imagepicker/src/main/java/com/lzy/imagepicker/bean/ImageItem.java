@@ -24,6 +24,8 @@ public class ImageItem implements Serializable, Parcelable {
     public String mimeType;   //图片的类型
     public long addTime;      //图片的创建时间
 
+
+    public String sericeSaveUrl;      //上传服务器之后保存在服务器的位置
     public String videoCoverPath;//用于视频时，这里保存视频的第一图
     /** 图片的路径和创建时间相同就认为是同一张图片 */
     @Override

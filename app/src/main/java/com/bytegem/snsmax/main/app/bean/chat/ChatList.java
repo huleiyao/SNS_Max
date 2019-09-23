@@ -236,4 +236,15 @@ public class ChatList extends MBaseBean {
          */
         public int total;
     }
+
+    /**
+     * 发送消息的时候的结构体
+     */
+    public static class SendMessageBean{
+        public ChatListContentMessage contents;
+
+        public SendMessageBean(ChatListContentMessage contents){
+            this.contents = contents;
+        }
+    }
 }

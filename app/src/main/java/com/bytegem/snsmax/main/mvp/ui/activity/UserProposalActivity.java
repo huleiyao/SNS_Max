@@ -1,5 +1,6 @@
 package com.bytegem.snsmax.main.mvp.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.BottomSheetDialog;
@@ -10,10 +11,23 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.common.bean.MBaseBean;
+import com.bytegem.snsmax.common.utils.M;
+import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.FileSignBean;
+import com.bytegem.snsmax.main.app.config.UpdataImageService;
+import com.bytegem.snsmax.main.app.config.UserService;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
+import com.bytegem.snsmax.main.app.utils.Utils;
+import com.bytegem.snsmax.main.mvp.model.HelperModel;
+import com.bytegem.snsmax.main.mvp.ui.adapter.HelperAdapter;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImagePickerAdapter;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
+import com.bytegem.snsmax.main.mvp.ui.dialog.loadingDialog.ShapeLoadingDialog;
+import com.jess.arms.utils.RxLifecycleUtils;
 import com.lzy.imagepicker.GlideImageLoader;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
@@ -21,9 +35,22 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
 import com.lzy.imagepicker.view.CropImageView;
 
+import java.io.EOFException;
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class UserProposalActivity extends BaseActivity implements View.OnClickListener, ImagePickerAdapter.OnRecyclerViewItemClickListener {
 
@@ -51,6 +78,7 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
     private ArrayList<ImageItem> selImageList;
     private int maxImgCount = 9;
 
+    private ShapeLoadingDialog loadingDialog;
 
     @Override
     public int getLayoutId() {
@@ -93,7 +121,7 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
                 changeUserCoverBottomSheetDialog.dismiss();
                 break;
             case R.id.btn_proposal_submit:
-                ToastUtils.showShort("反馈意见提交");
+                uploadImages(selImageList);
                 break;
             default:
                 break;
@@ -179,12 +207,111 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    //上传文件
+    @SuppressLint("CheckResult")
     private void uploadImages(ArrayList<ImageItem> imageItems) {
-
+        if(loadingDialog != null){
+            loadingDialog.dismiss();
+        }
+        loadingDialog = new ShapeLoadingDialog(this);
+        loadingDialog.show();
+        Completable[] arrCompl = new Completable[imageItems.size()];
+        for (int i = 0; i < imageItems.size(); i++) {
+            arrCompl[i] = getSign(imageItems.get(i));
+        }
+        Observable<HelperModel> subObver = null;
+        if (arrCompl.length > 0) {
+            subObver = Completable.mergeArray(arrCompl)
+                    .toObservable()
+                    .flatMap(s-> submitHelper());
+        } else {
+            subObver = submitHelper();
+        }
+        subObver
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(helperModel -> {
+                    ToastUtils.showShort("提交成功");
+                    loadingDialog.dismiss();
+                },err->{
+                    loadingDialog.dismiss();
+                    if(err instanceof IllegalArgumentException){
+                        ToastUtils.showShort(err.toString());
+                    }else{
+                        ToastUtils.showShort("意见反馈提交失败");
+                    }
+                });
     }
 
-    private void uploadDetails(){
+    //上传临时资源换取服务器地址
+    private Completable getSign(ImageItem imageItem) {
+        String minType = getMediaMessageMimeType(imageItem.path);
+        File tempCover = M.getTempFile(this, minType);
+        if (!tempCover.exists()) {
+            throw new IllegalArgumentException("文件[" + tempCover.getAbsolutePath() + "]不存在,请检查");
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), tempCover);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("factor", tempCover.getName(), requestBody);
+        return HttpMvcHelper
+                .obtainRetrofitService(UpdataImageService.class)
+                .getImageSign(
+                        MApplication.getTokenOrType()
+                        , MultipartBody.Part.createFormData("type", "image")
+                        , part
+                        , MultipartBody.Part.createFormData("length", ""+imageItem.size)
+                        , MultipartBody.Part.createFormData("md5", M.getFileMD5(new File(imageItem.path)))
+                )
+                .flatMap(fileSignBean -> updataCover(fileSignBean,imageItem))
+                .ignoreElements();
+    }
 
+    //上传实际的文件
+    private Observable<MBaseBean> updataCover(FileSignBean fileSignBean, ImageItem imageItem) {
+        String path = fileSignBean.getPath();
+        if (path.indexOf("/") == 0)
+            path = path.substring(1);
+        imageItem.sericeSaveUrl = path;
+        return HttpMvcHelper
+                .obtainRetrofitService(UpdataImageService.class)
+                .updataImage(
+                        fileSignBean.getHeaders().getAuthorization()
+                        , fileSignBean.getHeaders().getHost()
+                        , fileSignBean.getHeaders().getMd5()
+                        , fileSignBean.getHeaders().getCos()
+                        , imageItem.mimeType
+                        , RequestBody.create(MediaType.parse("application/otcet-stream"), new File(imageItem.path))
+                        , path
+                );
+    }
+
+    //提交意见和反馈
+    private Observable<HelperModel> submitHelper() {
+        return HttpMvcHelper
+                .obtainRetrofitService(UserService.class)
+                .getHelper(HttpMvcHelper.getTokenOrType())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /*
+     * 获取媒体消息的文件类型
+     * @return
+     */
+    private String getMediaMessageMimeType(String fileName) {
+        String type = "";
+        String ext = FileUtils.getFileExtension(fileName);
+        switch (ext) {
+            case "png":
+                type = "image/png";
+                break;
+            case "jpeg":
+                type = "image/jpeg";
+                break;
+            case "jpg":
+                type = "image/jpg";
+                break;
+        }
+        return type;
     }
 
 }
