@@ -1,11 +1,9 @@
 package com.bytegem.snsmax.main.app.config;
 
-import com.bytegem.snsmax.common.bean.MBaseBean;
-import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
+import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.bean.user.MyCircleDTO;
-import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.mvp.model.HelperModel;
 import com.bytegem.snsmax.main.mvp.model.ProposalModel;
 import com.bytegem.snsmax.main.mvp.model.UserBindModel;
@@ -21,7 +19,6 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface UserService {
     //发送手机验证码
@@ -47,12 +44,12 @@ public interface UserService {
     //绑定手机号，未绑定的才可使用
     @PUT("/user/phone")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<NetDefaultBean> bindPhone(@Header("Authorization") String authorization, @Body RequestBody requestBody);
+    Observable<Void> bindPhone(@Header("Authorization") String authorization, @Body RequestBody requestBody);
 
     //更换手机号
     @PATCH("/user/phone")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<NetDefaultBean> changePhone(@Header("Authorization") String authorization, @Body RequestBody requestBody);
+    Observable<Void> changePhone(@Header("Authorization") String authorization, @Body RequestBody requestBody);
 
     //更新用户信息
     @PATCH("/user")
@@ -104,8 +101,4 @@ public interface UserService {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<UserBindModel> getUserBind(@Header("Authorization") String authorization);
 
-    //提交修改手机号
-    @PATCH("/user/phone")
-    @Headers({"Content-Type:application/json", "Accept:application/json"})
-    Observable<NetDefaultBean> updatePhone(@Header("Authorization") String authorization, @Body RequestBody requestBody);
 }

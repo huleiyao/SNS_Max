@@ -70,7 +70,8 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
                 //跳转修改手机号页面
                 if (editCode.getText().length() > 0) {
                     intent.setClass(this, UpdatePhoneNumberDetail.class);
-                    intent.putExtra("historyCode", editCode.getText());
+                    String a = editCode.getText().toString();
+                    intent.putExtra("historyCode", editCode.getText().toString());
                     startActivity(intent);
                 }
                 editCode.setText("");

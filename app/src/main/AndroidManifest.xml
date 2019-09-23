@@ -51,6 +51,13 @@
         android:theme="@style/AppThemeHasActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="theme,label,icon">
+        <!--绑定手机号-->
+        <activity
+            android:name=".main.app.mvc.BindPhoneNumber"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppThemeHasActionBar.NoBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <!--反馈提交-->
         <activity

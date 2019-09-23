@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class M {
     /* 音频文件扩展名称 */
@@ -18,7 +19,7 @@ public class M {
     public static final String RECORD_WEB_SEND_FROM = "audio/" + RECORD_EXT_NAME;
 
     public static String getMapString(Object... parameter) {
-        HashMap<Object, Object> map = new HashMap<>();
+        HashMap<Object, Object> map = new LinkedHashMap<>();
         for (int i = 0; i < parameter.length / 2; i++)
             map.put(parameter[i * 2], parameter[i * 2 + 1]);
 //        if (PreferenceUtil.onlyLogibnKey != null && !PreferenceUtil.onlyLogibnKey.isEmpty()) {

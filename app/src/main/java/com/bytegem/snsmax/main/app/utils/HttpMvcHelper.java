@@ -47,9 +47,9 @@ public class HttpMvcHelper{
      * @param <T>   RxCache service 类型
      * @return RxCache service
      */
-    public static <T> T obtainCacheService(@NonNull Class<T> cache) {
-        return repositoryManager.obtainCacheService(cache);
-    }
+//    public static <T> T obtainCacheService(@NonNull Class<T> cache) {
+//        return repositoryManager.obtainCacheService(cache);
+//    }
 
     /**
      * 清理所有缓存

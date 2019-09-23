@@ -64,9 +64,14 @@ public class UserBindActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.btn_phone:
-                intent.setClass(context, UpdatePhoneNumber.class);
-                intent.putExtra("phone", userBindModel.getPhone().getNumber());
-                startActivity(intent);
+                if (btnPhone.getText().equals("绑定手机号")) {
+                    intent.setClass(context, BindPhoneNumber.class);
+                    startActivity(intent);
+                } else {
+                    intent.setClass(context, UpdatePhoneNumber.class);
+                    intent.putExtra("phone", userBindModel.getPhone().getNumber());
+                    startActivity(intent);
+                }
                 break;
             case R.id.btn_wechat:
                 break;
