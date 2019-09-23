@@ -8,6 +8,8 @@ import com.bytegem.snsmax.main.app.mvc.chat.voice.utils.Constant;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 //录音核心类
@@ -119,7 +121,6 @@ public class AudioManager {
                 // 取证+1，否则去不到7
                 return maxLevel * mRecorder.getMaxAmplitude() / 32768 + 1;
             } catch (Exception e) {
-
             }
         }
 
