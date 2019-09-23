@@ -65,9 +65,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     @OnClick({R.id.home_search})
-    void click(View v){
-        switch (v.getId()){
-            case R.id.home_search:{
+    void click(View v) {
+        switch (v.getId()) {
+            case R.id.home_search: {
                 //跳转到动态搜索
                 SearchActivity.goToSearch((IView) getActivity(), SearchActivityPresenter.SearchType.dynamic);
                 break;
