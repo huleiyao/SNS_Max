@@ -36,6 +36,7 @@ import org.kymjs.kjframe.ui.ViewInject;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -462,7 +463,9 @@ public class ChatActivityHelper {
     private RequestBody getSendMessageBody(ChatList.ChatListContentMessage messageContent) {
         ChatList.SendMessageBean sendMessage = new ChatList.SendMessageBean(messageContent);
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
-                , new Gson().toJson(sendMessage));
+                , new Gson().toJson(sendMessage).getBytes(Charset.forName("UTF-8")));
+//        return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
+//                , new Gson().toJson(sendMessage));
     }
 
     /*

@@ -8,8 +8,10 @@ import android.view.View;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.main.app.bean.chat.ChatList;
+import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.mvc.chat.ChatActivity;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
@@ -22,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import javax.inject.Inject;
 

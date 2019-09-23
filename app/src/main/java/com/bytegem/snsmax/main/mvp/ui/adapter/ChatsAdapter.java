@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class ChatsAdapter extends BaseQuickAdapter<ChatList.ChatListItem, BaseViewHolder> {
 
-    private int userId = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson()).getData().getId();
+    private int userId = 0;
 
     public ChatsAdapter() {
         super(R.layout.item_chat_list);
@@ -27,6 +27,13 @@ public class ChatsAdapter extends BaseQuickAdapter<ChatList.ChatListItem, BaseVi
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     protected void convert(BaseViewHolder viewHolder, ChatList.ChatListItem bean) {
+        try {
+            if(userId == 0) {
+                userId = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson()).getData().getId();
+            }
+        }catch (Exception e){
+            userId = -1;
+        }
 //        viewHolder.setText(R.id.area_name, bean);
         GlideLoaderUtil.LoadCircleImage(mContext,
                 "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560157380928&di=a5fcba2094b5d96612a2a77b4873115e&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F9b671d17b52639d35e7c76c23f79fbabebe769d43140-xjB5Tw_fw658"
@@ -57,12 +64,16 @@ public class ChatsAdapter extends BaseQuickAdapter<ChatList.ChatListItem, BaseVi
         }catch (Exception e){}
         String name = "";
         if(!bean.is_group){
-            for (ChatList.ChatListItemUserInfo member : bean.members) {
-                if(userId != -1 && !(member.id == userId)){
-                    name = member.name;
+            if(userId > 0) {
+                for (ChatList.ChatListItemUserInfo member : bean.members) {
+                    if (!(member.id == userId)) {
+                        name = member.name;
+                    }
                 }
-            }
-            if("".equals(name)){
+                if ("".equals(name)) {
+                    name = "-";
+                }
+            }else{
                 name = "-";
             }
         }else{
