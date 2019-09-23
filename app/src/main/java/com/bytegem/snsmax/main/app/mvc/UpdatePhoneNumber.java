@@ -79,21 +79,25 @@ public class UpdatePhoneNumber extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.update_phone_code:
                 timeCount.start();
-                HttpMvcHelper
-                        .obtainRetrofitService(UserService.class)
-                        .getCode(RequestBody.create(
-                                MediaType.parse("application/json; charset=utf-8"),
-                                M.getMapString(
-                                        "phone_number"
-                                        , strPhoneNum
-                                )))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(suc -> {
-                            ArmsUtils.snackbarText("发送成功");
-                        }, err -> {
-                            ArmsUtils.snackbarText("发送失败");
-                        });
+                if (NumberUtil.isMobileNO(strPhoneNum)) {
+                    HttpMvcHelper
+                            .obtainRetrofitService(UserService.class)
+                            .getCode(RequestBody.create(
+                                    MediaType.parse("application/json; charset=utf-8"),
+                                    M.getMapString(
+                                            "phone_number"
+                                            , strPhoneNum
+                                    )))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(suc -> {
+                                ArmsUtils.snackbarText("发送成功");
+                            }, err -> {
+                                ArmsUtils.snackbarText("发送失败");
+                            });
+                } else {
+                    ArmsUtils.snackbarText("请输入合法手机号");
+                }
                 break;
             default:
                 break;
