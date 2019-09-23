@@ -13,6 +13,7 @@ import com.bytegem.snsmax.common.utils.M;
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.FileSignBean;
 import com.bytegem.snsmax.main.app.bean.chat.ChatList;
+import com.bytegem.snsmax.main.app.bean.chat.ChatListResp;
 import com.bytegem.snsmax.main.app.bean.chat.ChatMessageSendResp;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.config.CommunityService;
@@ -27,6 +28,8 @@ import com.bytegem.snsmax.main.app.mvc.chat.voice.utils.Constant;
 import com.bytegem.snsmax.main.app.mvc.chat.widget.KJChatKeyboard;
 import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
+import com.bytegem.snsmax.main.app.utils.Utils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.kymjs.kjframe.ui.ViewInject;
 import org.kymjs.kjframe.utils.KJLoger;
@@ -37,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -55,6 +59,7 @@ public class ChatActivityHelper {
     List<ChatList.ChatListItemUserInfo> userInfos = new ArrayList(); //当前房间的用户集合
 
     private ChatAdapter adapter;
+    DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
 
     ChatActivityHelper(ChatActivity act) {
         this.act = act;
@@ -117,6 +122,50 @@ public class ChatActivityHelper {
     }
 
     /**
+     * 创建下载的消息构建
+     *
+     * @param content
+     * @return
+     */
+    public Message createDownMessage(ChatListResp.ChatListDataResp content) {
+        if (userinfo == null || userinfo.getData() == null) {
+            return null;
+        }
+        int type = 0;
+        boolean isSend = userinfo.getData().getId() == content.user_id;
+        String text = "";
+        switch (content.contents.type) {
+            case "text":
+                type = Message.MSG_TYPE_TEXT;
+                text = content.contents.text;
+                break;
+            case "image":
+                type = Message.MSG_TYPE_PHOTO;
+                text = Utils.checkUrl(content.contents.text);
+                break;
+            case "audio":
+                type = Message.MSG_TYPE_AUDIO;
+                text = Utils.checkUrl(content.contents.text);
+                break;
+            default:
+                break;
+        }
+        String toUserName = "";
+        String fromUserName = "";
+        String toUserAvater = "";
+        String fromUserAvater = "";
+        toUserName = act.getToUserName();
+        toUserAvater = act.getToUserAvatar();
+        fromUserName = userinfo.getData().getName();
+        fromUserAvater = userinfo.getData().getAvatar();
+        return new Message(
+                type, Message.MSG_STATE_SUCCESS, fromUserName, fromUserAvater, toUserName,
+                toUserAvater, text,
+                isSend, true, Utils.parseServerTime(content.created_at, null)
+        );
+    }
+
+    /**
      * 创建发送纯文本消息
      *
      * @param toUserName   接收的用户名称
@@ -125,7 +174,6 @@ public class ChatActivityHelper {
      * @return 消息体
      */
     public Message createSendTextMessage(String toUserName, String toUserAvatar, String content) {
-        DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
         if (userinfo == null || userinfo.getData() == null) {
             return null;
         }
@@ -144,7 +192,6 @@ public class ChatActivityHelper {
      * @return 消息体
      */
     public Message createSendPhotoMessage(String toUserName, String toUserAvatar, File file) {
-        DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
         if (userinfo == null || userinfo.getData() == null) {
             return null;
         }
@@ -163,7 +210,6 @@ public class ChatActivityHelper {
      * @return 消息体
      */
     public Message createSendFaceMessage(String toUserName, String toUserAvatar, Faceicon content) {
-        DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
         if (userinfo == null || userinfo.getData() == null) {
             return null;
         }
@@ -182,10 +228,6 @@ public class ChatActivityHelper {
      * @return 消息体
      */
     public Message createSendVoiceMessage(String toUserName, String toUserAvatar, File voice) {
-        DATAUser userinfo = UserInfoUtils.getUserInfo(HttpMvcHelper.getGson());
-        if (userinfo == null || userinfo.getData() == null) {
-            return null;
-        }
         return new Message(
                 Message.MSG_TYPE_AUDIO, Message.MSG_STATE_SENDING, userinfo.getData().getName(), userinfo.getData().getAvatar(), toUserName,
                 toUserAvatar, voice.getAbsolutePath(), true, false, new Date(System.currentTimeMillis())
@@ -268,6 +310,7 @@ public class ChatActivityHelper {
                 userInfos.add(userin[i]);
             }
         }
+        getMessageList();
     }
 
     /**
@@ -317,6 +360,33 @@ public class ChatActivityHelper {
 
         adapter = new ChatAdapter(act, messageDatas, getOnChatItemClickListener());
         act.mRealListView.setAdapter(adapter);
+    }
+
+    //获取聊天记录信息
+    public void getMessageList() {
+        HttpMvcHelper
+                .obtainRetrofitService(CommunityService.class)
+                .getMessageList(HttpMvcHelper.getTokenOrType(), roomId, "asc")
+                .map(item -> {
+                    //数据转换
+                    List<Message> list = new ArrayList();
+                    if (item.data != null) {
+                        for (ChatListResp.ChatListDataResp datum : item.data) {
+                            Message mess = createDownMessage(datum);
+                            list.add(mess);
+                        }
+                    }
+                    return list;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(succ -> {
+                    messageDatas.clear();
+                    messageDatas.addAll(succ);
+                    adapter.notifyDataSetChanged();
+                }, err -> {
+                    ToastUtils.showShort("获取历史消息异常");
+                });
     }
 
     /**
@@ -387,6 +457,19 @@ public class ChatActivityHelper {
         };
     }
 
+    //创建消息发送体
+    private RequestBody getSendMessageBody(ChatList.ChatListContentMessage messageContent) {
+//        return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
+//                , messageFiled + M.getMapString(
+//                        "type", messageContent.type,
+//                        "text", messageContent.text));
+        //    String messageFiled = "\"contents\":";
+        final String messageFiled = "";
+        return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
+                , messageFiled + M.getMapString(
+                        "contents", messageContent));
+    }
+
     /*
      * 发送文本信息
      * @param message
@@ -396,7 +479,9 @@ public class ChatActivityHelper {
         messageContent.type = ChatList.TYPE_TEXT;
         messageContent.text = message.content;
         HttpMvcHelper.obtainRetrofitService(CommunityService.class)
-                .sendMessage(MApplication.getTokenOrType(), roomId, HttpMvcHelper.getGson().toJson(messageContent))
+                .sendMessage(MApplication.getTokenOrType(),
+                        roomId,
+                        getSendMessageBody(messageContent))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(succ -> {
@@ -539,7 +624,7 @@ public class ChatActivityHelper {
                             .sendMessage(
                                     HttpMvcHelper.getTokenOrType(),
                                     roomId,
-                                    HttpMvcHelper.getGson().toJson(messageContent)
+                                    getSendMessageBody(messageContent)
                             );
                 });
 

@@ -3,7 +3,9 @@ package com.bytegem.snsmax.main.mvp.model;
 import android.app.Application;
 
 import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.app.bean.messages.ChatRoomResp;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
+import com.bytegem.snsmax.main.app.config.CommunityService;
 import com.bytegem.snsmax.main.app.config.UserService;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
@@ -51,6 +53,14 @@ public class OwnerHomeModel extends BaseModel implements OwnerHomeContract.Model
         else return mRepositoryManager
                 .obtainRetrofitService(UserService.class)
                 .getUserFromId(MApplication.getTokenOrType(), id);
+    }
+
+    @Override
+    public Observable<ChatRoomResp> sendUserMessage(int userId) {
+        return mRepositoryManager
+                .obtainRetrofitService(CommunityService.class)
+                .getChatRoom(MApplication.getTokenOrType(), userId);
+
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +17,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.common.adapter.VPFragmentAdapter;
 import com.bytegem.snsmax.common.bean.FragmentBean;
+import com.bytegem.snsmax.main.app.bean.messages.ChatRoomResp;
 import com.bytegem.snsmax.main.app.bean.user.UserBean;
+import com.bytegem.snsmax.main.app.mvc.chat.ChatActivity;
 import com.bytegem.snsmax.main.app.utils.GlideLoaderUtil;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
 import com.bytegem.snsmax.main.app.utils.Utils;
 import com.bytegem.snsmax.main.di.component.DaggerOwnerHomeComponent;
 import com.bytegem.snsmax.main.mvp.contract.OwnerHomeContract;
@@ -86,11 +90,14 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
     private int id;
     private String title = "";
 
-    @OnClick({R.id.more})
+    @OnClick({R.id.more,R.id.user_info_send_message})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.more:
                 launchActivity(new Intent(this, UserSettingActivity.class));
+                break;
+            case R.id.user_info_send_message:
+                mPresenter.sendMessage();
                 break;
         }
     }
@@ -198,4 +205,14 @@ public class OwnerHomeActivity extends BaseActivity<OwnerHomePresenter> implemen
     public void killMyself() {
         finish();
     }
+
+    @Override
+    public void getSendMessageSucc(ChatRoomResp messageInfo) {
+        Intent it = new Intent(this, ChatActivity.class);
+        it.putExtra(ChatActivity.USREINFO_KEY, HttpMvcHelper.getGson().toJson(messageInfo.data.members));
+        it.putExtra(ChatActivity.ROOM_ID, messageInfo.data.id);
+        launchActivity(it);
+    }
+
+
 }

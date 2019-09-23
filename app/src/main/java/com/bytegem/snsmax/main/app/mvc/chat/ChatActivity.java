@@ -23,6 +23,7 @@ import android.view.KeyEvent;
 import android.widget.ListView;
 
 import com.bytegem.snsmax.R;
+import com.bytegem.snsmax.main.app.bean.chat.ChatList;
 import com.bytegem.snsmax.main.app.mvc.chat.bean.Message;
 import com.bytegem.snsmax.main.app.mvc.chat.voice.manager.MediaManager;
 import com.bytegem.snsmax.main.app.mvc.chat.widget.KJChatKeyboard;
@@ -65,10 +66,20 @@ public class ChatActivity extends KJActivity {
     }
 
     public String getToUserName(){
-        return helper.roomId;
+        for (ChatList.ChatListItemUserInfo userInfo : helper.userInfos) {
+            if(!(userInfo.id == helper.userinfo.getData().getId())){
+                return userInfo.name;
+            }
+        }
+        return "";
     }
 
     public String getToUserAvatar(){
+        for (ChatList.ChatListItemUserInfo userInfo : helper.userInfos) {
+            if(!(userInfo.id == helper.userinfo.getData().getId())){
+                return userInfo.avatar;
+            }
+        }
         return "";
     }
 

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bytegem.snsmax.R;
 import com.bytegem.snsmax.main.mvp.ui.adapter.ImagePickerAdapter;
 import com.bytegem.snsmax.main.mvp.ui.base.BaseActivity;
@@ -38,6 +39,8 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
     TextView txtProposalType;
     @BindView(R.id.rev_proposal_load_image)
     RecyclerView revLoadImage;
+    @BindView(R.id.btn_proposal_submit)
+    TextView submit;
     BottomSheetDialog changeUserCoverBottomSheetDialog;
     Context context;
     public static final int IMAGE_ITEM_ADD = -1;
@@ -63,6 +66,7 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void setListener() {
         btnBack.setOnClickListener(this);
+        submit.setOnClickListener(this);
         adapter.setOnItemClickListener(this);
     }
 
@@ -87,6 +91,9 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.tv_cancel:
                 changeUserCoverBottomSheetDialog.dismiss();
+                break;
+            case R.id.btn_proposal_submit:
+                ToastUtils.showShort("反馈意见提交");
                 break;
             default:
                 break;
