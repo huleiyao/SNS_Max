@@ -60,21 +60,15 @@ public interface CommunityService {
             , @Path("path") String path
     );
 
-//    //发送消息
-//    @FormUrlEncoded
-//    @Headers({"Content-Type:application/x-www-form-urlencoded", "Accept:application/json"})
-//    @PUT("/user/chat-rooms/{roomid}/messages")
-//    Observable<ChatMessageSendResp> sendMessage(
-//            @Header("Authorization") String authorization,
-//            @Path("roomid") String roomid,
-//            @Field("contents") String contents);
-    //发送消息
+    //    //发送消息
     @Headers({"Content-Type:application/x-www-form-urlencoded", "Accept:application/json"})
     @PUT("/user/chat-rooms/{roomid}/messages")
     Observable<ChatMessageSendResp> sendMessage(
             @Header("Authorization") String authorization,
             @Path("roomid") String roomid,
-            @Body RequestBody contents);
+            @Query("contents") String contents
+//            @Body RequestBody contents
+    );
 
     //获取房间聊天记录
     @Headers({"Content-Type:application/x-www-form-urlencoded", "Accept:application/json"})

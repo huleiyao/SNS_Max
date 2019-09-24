@@ -67,11 +67,12 @@ public class MessageListPresenter extends BasePresenter<MessageListContract.Mode
         if (isLoad) {
             page = 1;
         }
-        mModel.getUserChatList(page)
+        mModel.getUserData()
+                .flatMap(userDto -> mModel.getUserChatList(page))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
-                .doFinally(()->{
+                .doFinally(() -> {
                     mRootView.onFinishFreshAndLoad();
                 })
                 .subscribe(new ErrorHandleSubscriber<ChatList>(mErrorHandler) {
@@ -104,7 +105,7 @@ public class MessageListPresenter extends BasePresenter<MessageListContract.Mode
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 //        mRootView.launchActivity(new Intent(mApplication, ChatActivity.class));
         ChatList.ChatListItem item = mRootView.getChatListItem(position);
-        if(item == null){
+        if (item == null) {
             ToastUtils.showShort("未找到相关记录");
             return;
         }

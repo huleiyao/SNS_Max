@@ -1,6 +1,7 @@
 package com.bytegem.snsmax.main.mvp.contract;
 
 import com.bytegem.snsmax.main.app.bean.chat.ChatList;
+import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
@@ -33,6 +34,8 @@ public interface MessageListContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
+        //获取用户信息
+        Observable<DATAUser> getUserData();
         Observable<ChatList> getUserChatList(int page);
     }
 }

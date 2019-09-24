@@ -4,7 +4,11 @@ import android.app.Application;
 
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.bean.chat.ChatList;
+import com.bytegem.snsmax.main.app.bean.user.DATAUser;
 import com.bytegem.snsmax.main.app.config.CommunityService;
+import com.bytegem.snsmax.main.app.config.UserService;
+import com.bytegem.snsmax.main.app.utils.HttpMvcHelper;
+import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -52,6 +56,18 @@ public class MessageListModel extends BaseModel implements MessageListContract.M
     @Override
     public Observable<ChatList> getUserChatList(int page) {
         return mRepositoryManager.obtainRetrofitService(CommunityService.class)
-                .getUserChatList(MApplication.getTokenOrType(),page);
+                .getUserChatList(MApplication.getTokenOrType(), page);
+    }
+
+    @Override
+    public Observable<DATAUser> getUserData() {
+        DATAUser userinfo = UserInfoUtils.getUserInfo(mGson);
+        if (userinfo == null && userinfo.getData() != null) {
+            return Observable.just(userinfo);
+        } else {
+            return mRepositoryManager.obtainRetrofitService(UserService.class)
+                    .getUser(HttpMvcHelper.getTokenOrType())
+                    .doOnNext(item -> UserInfoUtils.saveUserInfo(item,mGson));
+        }
     }
 }

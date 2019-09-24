@@ -38,6 +38,7 @@ import com.lzy.imagepicker.view.CropImageView;
 import java.io.EOFException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import io.reactivex.Completable;
@@ -79,6 +80,7 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
     private int maxImgCount = 9;
 
     private ShapeLoadingDialog loadingDialog;
+    private int finishCount = 0; //图片上传已完成数量
 
     @Override
     public int getLayoutId() {
@@ -207,44 +209,86 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    //上传文件
+    //提交数据
     @SuppressLint("CheckResult")
-    private void uploadImages(ArrayList<ImageItem> imageItems) {
-        if(loadingDialog != null){
-            loadingDialog.dismiss();
+    private synchronized void submitData() {
+        for (ImageItem imageItem : selImageList) {
+            if (imageItem.sericeSaveUrl == null || "".equals(imageItem.sericeSaveUrl)) {
+                if (finishCount >= selImageList.size() - 1) {
+                    ToastUtils.showShort("图片上传失败,请重试!");
+                    loadingDialog.dismiss();
+                }
+                return;
+            }
         }
-        loadingDialog = new ShapeLoadingDialog(this);
-        loadingDialog.show();
-        Completable[] arrCompl = new Completable[imageItems.size()];
-        for (int i = 0; i < imageItems.size(); i++) {
-            arrCompl[i] = getSign(imageItems.get(i));
+        if (finishCount < selImageList.size()) {
+            return;
         }
-        Observable<HelperModel> subObver = null;
-        if (arrCompl.length > 0) {
-            subObver = Completable.mergeArray(arrCompl)
-                    .toObservable()
-                    .flatMap(s-> submitHelper());
-        } else {
-            subObver = submitHelper();
+        String[] imgs = new String[selImageList.size()];
+        for (int i = 0; i < selImageList.size(); i++) {
+            imgs[i] = selImageList.get(i).sericeSaveUrl;
         }
-        subObver
+        RequestBody requestBody = RequestBody.create(
+                MediaType.parse("application/json; charset=utf-8"),
+                M.getMapString(
+                        "title", edtProposalTitle.getText().toString(),
+                        "body", edtProposalDetails.getText().toString(),
+                        "images", imgs
+                )
+        );
+        HttpMvcHelper
+                .obtainRetrofitService(UserService.class)
+                .feedback(HttpMvcHelper.getTokenOrType(), requestBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(helperModel -> {
-                    ToastUtils.showShort("提交成功");
                     loadingDialog.dismiss();
-                },err->{
-                    loadingDialog.dismiss();
-                    if(err instanceof IllegalArgumentException){
-                        ToastUtils.showShort(err.toString());
+                    ToastUtils.showShort("反馈已收到,感谢您的反馈");
+                }, err -> {
+                    if(err.toString().contains("Null is not a valid element")){
+                        ToastUtils.showShort("反馈已收到,感谢您的反馈");
+                        finish();
                     }else{
-                        ToastUtils.showShort("意见反馈提交失败");
+                        ToastUtils.showShort("反馈提交失败");
                     }
+                    loadingDialog.dismiss();
                 });
+
     }
 
+    //上传文件
+    @SuppressLint("CheckResult")
+    private void uploadImages(ArrayList<ImageItem> imageItems) {
+        if (edtProposalTitle.getText().toString().isEmpty() || edtProposalTitle.getText().toString().length() < 10) {
+            ToastUtils.showShort("标题不能为空并且不小于10个字符");
+            return;
+        }
+        if (edtProposalDetails.getText().toString().isEmpty()) {
+            ToastUtils.showShort("请输入反馈内容");
+            return;
+        }
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
+        finishCount = 0;
+        loadingDialog = new ShapeLoadingDialog(this);
+        loadingDialog.show();
+        if (imageItems.size() > 0) {
+            for (int i = 0; i < imageItems.size(); i++) {
+                if(imageItems.get(i).sericeSaveUrl == null || "".equals(imageItems.get(i).sericeSaveUrl)){
+                    getSign(imageItems.get(i));
+                }else{
+                    finishCount++;
+                    submitData();
+                }
+            }
+        } else {
+            submitData();
+        }
+    }
     //上传临时资源换取服务器地址
-    private Completable getSign(ImageItem imageItem) {
+    @SuppressLint("CheckResult")
+    private void getSign(ImageItem imageItem) {
         String minType = getMediaMessageMimeType(imageItem.path);
         File tempCover = M.getTempFile(this, minType);
         if (!tempCover.exists()) {
@@ -252,17 +296,35 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), tempCover);
         MultipartBody.Part part = MultipartBody.Part.createFormData("factor", tempCover.getName(), requestBody);
-        return HttpMvcHelper
+        //表示成功
+        final String[] path = new String[1];
+        HttpMvcHelper
                 .obtainRetrofitService(UpdataImageService.class)
                 .getImageSign(
                         MApplication.getTokenOrType()
                         , MultipartBody.Part.createFormData("type", "image")
                         , part
-                        , MultipartBody.Part.createFormData("length", ""+imageItem.size)
+                        , MultipartBody.Part.createFormData("length", "" + imageItem.size)
                         , MultipartBody.Part.createFormData("md5", M.getFileMD5(new File(imageItem.path)))
                 )
-                .flatMap(fileSignBean -> updataCover(fileSignBean,imageItem))
-                .ignoreElements();
+                .flatMap(fileSignBean -> {
+                    path[0] = fileSignBean.getPath();
+                    if (path[0].indexOf("/") == 0)
+                        path[0] = path[0].substring(1);
+                    return updataCover(fileSignBean, imageItem);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mBaseBean -> {
+                    finishCount++;
+                    submitData();
+                }, err -> {
+                    finishCount++;
+                    if (err instanceof EOFException) {
+                        imageItem.sericeSaveUrl = path[0];
+                    }
+                    submitData();
+                });
     }
 
     //上传实际的文件
@@ -282,15 +344,6 @@ public class UserProposalActivity extends BaseActivity implements View.OnClickLi
                         , RequestBody.create(MediaType.parse("application/otcet-stream"), new File(imageItem.path))
                         , path
                 );
-    }
-
-    //提交意见和反馈
-    private Observable<HelperModel> submitHelper() {
-        return HttpMvcHelper
-                .obtainRetrofitService(UserService.class)
-                .getHelper(HttpMvcHelper.getTokenOrType())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /*

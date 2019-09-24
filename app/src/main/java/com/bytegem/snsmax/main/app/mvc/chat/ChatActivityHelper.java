@@ -459,13 +459,31 @@ public class ChatActivityHelper {
         };
     }
 
-    //创建消息发送体
+    //创建消息发送体.RequestBody方式
     private RequestBody getSendMessageBody(ChatList.ChatListContentMessage messageContent) {
         ChatList.SendMessageBean sendMessage = new ChatList.SendMessageBean(messageContent);
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
                 , new Gson().toJson(sendMessage).getBytes(Charset.forName("UTF-8")));
 //        return RequestBody.create(MediaType.parse("application/json; charset=utf-8")
 //                , new Gson().toJson(sendMessage));
+    }
+
+    //创建消息发送体,Field方式
+    private String getSendMessageField(ChatList.ChatListContentMessage messageContent) {
+        ChatList.SendMessageBean sendMessage = new ChatList.SendMessageBean(messageContent);
+        return new Gson().toJson(sendMessage);
+    }
+
+    //获取网络请求的数据源
+    private Observable<ChatMessageSendResp> getRetrofitObser(ChatList.ChatListContentMessage messageContent) {
+        return HttpMvcHelper
+                .obtainRetrofitService(CommunityService.class)
+                .sendMessage(
+                        HttpMvcHelper.getTokenOrType(),
+                        roomId,
+//                        getSendMessageBody(messageContent)
+                        getSendMessageField(messageContent)
+                );
     }
 
     /*
@@ -476,10 +494,7 @@ public class ChatActivityHelper {
         ChatList.ChatListContentMessage messageContent = new ChatList.ChatListContentMessage();
         messageContent.type = ChatList.TYPE_TEXT;
         messageContent.text = message.content;
-        HttpMvcHelper.obtainRetrofitService(CommunityService.class)
-                .sendMessage(MApplication.getTokenOrType(),
-                        roomId,
-                        getSendMessageBody(messageContent))
+        getRetrofitObser(messageContent)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(succ -> {
@@ -617,13 +632,7 @@ public class ChatActivityHelper {
                     messageContent.text = remoPath;
                     //更新图片为网络图片
 //                    message.content = remoPath;
-                    return HttpMvcHelper
-                            .obtainRetrofitService(CommunityService.class)
-                            .sendMessage(
-                                    HttpMvcHelper.getTokenOrType(),
-                                    roomId,
-                                    getSendMessageBody(messageContent)
-                            );
+                    return getRetrofitObser(messageContent);
                 });
 
     }

@@ -1,5 +1,6 @@
 package com.bytegem.snsmax.main.app.config;
 
+import com.bytegem.snsmax.common.bean.MBaseBean;
 import com.bytegem.snsmax.main.app.bean.NetDefaultBean;
 import com.bytegem.snsmax.main.app.bean.login.LoginData;
 import com.bytegem.snsmax.main.app.bean.user.DATAUser;
@@ -12,6 +13,8 @@ import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -90,6 +93,12 @@ public interface UserService {
     @GET("/helps")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<HelperModel> getHelper(@Header("Authorization") String authorization);
+
+    //提交反馈
+    @POST("/feedback")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<MBaseBean> feedback(@Header("Authorization") String authorization,
+                                   @Body RequestBody req);
 
     //获取帮助详情
     @GET("/helps/{id}")
