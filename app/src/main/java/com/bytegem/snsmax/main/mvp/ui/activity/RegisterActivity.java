@@ -3,6 +3,7 @@ package com.bytegem.snsmax.main.mvp.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,9 +12,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bytegem.snsmax.main.app.MApplication;
+import com.bytegem.snsmax.main.mvp.contract.WXConstants;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -23,6 +26,9 @@ import com.bytegem.snsmax.main.mvp.contract.RegisterContract;
 import com.bytegem.snsmax.main.mvp.presenter.RegisterPresenter;
 
 import com.bytegem.snsmax.R;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 
 import butterknife.BindView;
@@ -53,6 +59,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @BindView(R.id.register_code)
     EditText register_code;
     boolean isStartTimer = false;
+    private IWXAPI wxAPI;
 
     @OnClick({R.id.to_login, R.id.register_get_code, R.id.register_next, R.id.register_wechat_login, R.id.register_agreement})
     void onClick(View view) {
@@ -83,11 +90,37 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
                 mPresenter.register(phone_, code_);
                 break;
             case R.id.register_wechat_login:
-
+                WXELogin();
                 break;
             case R.id.register_agreement:
 
                 break;
+        }
+    }
+
+    private void WXELogin() {
+
+        if (!wxAPI.isWXAppInstalled()) {
+            Toast.makeText(this, "检测到手机未安装微信", Toast.LENGTH_SHORT).show();
+        } else {
+            SendAuth.Req req = new SendAuth.Req();
+            req.scope = "snsapi_userinfo";
+            req.state = String.valueOf(System.currentTimeMillis());
+            wxAPI.sendReq(req);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sp = getSharedPreferences("Wxcode", MODE_PRIVATE);
+        String code = sp.getString("code", "");
+        if (!code.isEmpty()) {
+            mPresenter.Wxregister(code);
+            SharedPreferences.Editor editor = getSharedPreferences("Wxcode", MODE_PRIVATE).edit();
+            editor.clear();
+            editor.commit();
         }
     }
 
@@ -146,7 +179,8 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        wxAPI = WXAPIFactory.createWXAPI(this, WXConstants.WECHAT_APPID, true);
+        wxAPI.registerApp(WXConstants.WECHAT_APPID);
     }
 
     MaterialDialog materialDialog;

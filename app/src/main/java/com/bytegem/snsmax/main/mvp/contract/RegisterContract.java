@@ -37,5 +37,7 @@ public interface RegisterContract {
         Observable<NetDefaultBean> getCode(String jsonData);
 
         Observable<LoginData> register(String jsonData);
+
+        Observable<LoginData> Wxregister(String jsonData);
     }
 }

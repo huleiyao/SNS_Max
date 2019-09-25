@@ -57,6 +57,14 @@ public class RegisterModel extends BaseModel implements RegisterContract.Model {
                 .register(RequestBody.create(mediaType, jsonData));
     }
 
+
+    @Override
+    public Observable<LoginData> Wxregister(String jsonData){
+        return mRepositoryManager
+                .obtainRetrofitService(UserService.class)
+                .wxregister(RequestBody.create(mediaType, jsonData));
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

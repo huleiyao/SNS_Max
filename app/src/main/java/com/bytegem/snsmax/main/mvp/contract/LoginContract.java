@@ -37,5 +37,7 @@ public interface LoginContract {
         Observable<NetDefaultBean> getCode(String jsonData);
 
         Observable<LoginData> login(String jsonData);
+
+        Observable<LoginData> wxlogin(String jsonData);
     }
 }

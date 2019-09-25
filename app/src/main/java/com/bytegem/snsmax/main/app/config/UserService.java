@@ -34,6 +34,11 @@ public interface UserService {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<LoginData> login(@Body RequestBody requestBody);
 
+    //微信登录
+    @POST("/wx/auth")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LoginData> wxlogin(@Body RequestBody requestBody);
+
     //刷新token
     @GET("/auth/refresh")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
@@ -43,6 +48,11 @@ public interface UserService {
     @POST("/auth/register")
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     Observable<LoginData> register(@Body RequestBody requestBody);
+
+    //微信注册
+    @POST("/wx/register")
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    Observable<LoginData> wxregister(@Body RequestBody requestBody);
 
     //绑定手机号，未绑定的才可使用
     @PUT("/user/phone")

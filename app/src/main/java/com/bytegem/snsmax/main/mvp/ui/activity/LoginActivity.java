@@ -12,9 +12,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bytegem.snsmax.main.app.MApplication;
 import com.bytegem.snsmax.main.app.utils.UserInfoUtils;
+import com.bytegem.snsmax.main.mvp.contract.WXConstants;
 import com.bytegem.snsmax.main.mvp.ui.dialog.loadingDialog.ShapeLoadingDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -25,6 +27,9 @@ import com.bytegem.snsmax.main.mvp.contract.LoginContract;
 import com.bytegem.snsmax.main.mvp.presenter.LoginPresenter;
 
 import com.bytegem.snsmax.R;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 
 import butterknife.BindView;
@@ -55,6 +60,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @BindView(R.id.login_code)
     EditText login_code;
     boolean isStartTimer = false;
+    private IWXAPI wxAPI;
+
+
     @OnClick({R.id.to_register, R.id.login_get_code, R.id.login, R.id.login_wechat_login})
     void onClick(View view) {
         String phone_ = login_phone_number.getText().toString();
@@ -84,16 +92,45 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 mPresenter.login(phone_, code_);
                 break;
             case R.id.login_wechat_login:
-                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-                MApplication.getInstance().setToken(sharedPreferences.getString("token", null));
-                MApplication.getInstance().setTokenType(sharedPreferences.getString("token_type", null));
-                if (MApplication.getInstance().getToken() == null || MApplication.getInstance().getToken_type() == null)
-                    showMessage("没登陆过，需要先登录一次");
-                else
-                    toHome();
+//                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+//                MApplication.getInstance().setToken(sharedPreferences.getString("token", null));
+//                MApplication.getInstance().setTokenType(sharedPreferences.getString("token_type", null));
+//                if (MApplication.getInstance().getToken() == null || MApplication.getInstance().getToken_type() == null)
+//                    showMessage("没登陆过，需要先登录一次");
+//                else
+//                    toHome();
+                WXELogin();
                 break;
         }
     }
+
+
+    private void WXELogin() {
+
+        if (!wxAPI.isWXAppInstalled()) {
+            Toast.makeText(this, "检测到手机未安装微信", Toast.LENGTH_SHORT).show();
+        } else {
+            SendAuth.Req req = new SendAuth.Req();
+            req.scope = "snsapi_userinfo";
+            req.state = String.valueOf(System.currentTimeMillis());
+            wxAPI.sendReq(req);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sp = getSharedPreferences("Wxcode", MODE_PRIVATE);
+        String code = sp.getString("code", "");
+        if (!code.isEmpty()) {
+            mPresenter.Wxlogin(code);
+            SharedPreferences.Editor editor = getSharedPreferences("Wxcode", MODE_PRIVATE).edit();
+            editor.clear();
+            editor.commit();
+        }
+    }
+
 
     @Override
     public void toHome() {
@@ -150,6 +187,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        wxAPI = WXAPIFactory.createWXAPI(this, WXConstants.WECHAT_APPID, true);
+        wxAPI.registerApp(WXConstants.WECHAT_APPID);
 
     }
 

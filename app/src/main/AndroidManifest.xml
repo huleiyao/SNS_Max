@@ -179,7 +179,12 @@
             android:hardwareAccelerated="true"
             android:theme="@style/AppThemeHasActionBar.NoBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeHasActionBar.NoBar" />
         <activity
             android:name=".main.mvp.ui.activity.GroupCreatedActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

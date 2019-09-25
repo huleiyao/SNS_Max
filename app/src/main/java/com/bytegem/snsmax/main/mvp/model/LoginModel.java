@@ -59,6 +59,13 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
     }
 
     @Override
+    public Observable<LoginData> wxlogin(String jsonData) {
+        return mRepositoryManager
+                .obtainRetrofitService(UserService.class)
+                .login(RequestBody.create(mediaType, jsonData));
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         this.mGson = null;
